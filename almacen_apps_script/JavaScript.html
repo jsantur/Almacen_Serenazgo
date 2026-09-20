@@ -138,7 +138,7 @@ function renderProducts(){
     const hay = [p.codigo,p.categoria,p.naturaleza,p.tipo,p.modelo,p.marca,p.color,p.talla,p.presentacion,p.genero,p.unidad,p.ubicacion,p.condicion,p.descripcion].join(' ').toLowerCase();
     return (!q || hay.includes(q)) && (!fam || p.categoria === fam) && (!nature || p.naturaleza === nature);
   });
-  document.getElementById('productsTable').innerHTML = rows.length ? rows.map(p => { const inv = state.inventory.find(i => i.codigo === p.codigo); return `<tr><td><strong>${esc(p.codigo)}</strong></td><td>${esc(p.categoria)}</td><td>${naturePill(p.naturaleza)}</td><td>${esc(p.tipo)}</td><td>${esc([p.marca,p.modelo].filter(Boolean).join(' · ') || '—')}</td><td>${esc(p.color || '—')}</td><td>${esc(p.talla || 'NO APLICA')}</td><td>${esc(p.presentacion || '—')}</td><td>${esc(p.unidad)}</td><td>${esc(p.ubicacion || '—')}</td><td>${esc(p.condicion)}</td><td><strong>${inv ? fmt(inv.stock) : '0'}</strong></td><td>${inv ? statusPill(inv.estado) : statusPill('AGOTADO')}</td><td class="actions-cell"><button class="btn btn-secondary" onclick="openKardex('${js(p.codigo)}')">Kardex</button></td></tr>`; }).join('') : '<tr><td colspan="14" class="empty">Sin productos para los filtros seleccionados.</td></tr>';
+  document.getElementById('productsTable').innerHTML = rows.length ? rows.map(p => { const inv = state.inventory.find(i => i.codigo === p.codigo); return `<tr><td><strong>${esc(p.codigo)}</strong></td><td>${esc(p.categoria)}</td><td>${naturePill(p.naturaleza)}</td><td>${esc(p.tipo)}</td><td>${esc([p.marca,p.modelo].filter(Boolean).join(' · ') || '—')}</td><td>${esc(p.color || '—')}</td><td>${esc(p.talla || 'NO APLICA')}</td><td>${esc(p.presentacion || '—')}</td><td>${esc(p.unidad)}</td><td>${esc(p.ubicacion || '—')}</td><td>${esc(p.condicion)}</td><td><strong>${inv ? fmt(inv.stock) : '0'}</strong></td><td>${inv ? statusPill(inv.estado) : statusPill('AGOTADO')}</td><td class="actions-cell"><button class="btn btn-secondary" onclick="openProductCode('${js(p.codigo)}')">Código</button><button class="btn btn-secondary" onclick="openKardex('${js(p.codigo)}')">Kardex</button></td></tr>`; }).join('') : '<tr><td colspan="14" class="empty">Sin productos para los filtros seleccionados.</td></tr>';
 }
 
 function populateSelectors(){
@@ -291,4 +291,28 @@ function closeModal(){document.getElementById('modal').classList.add('hidden');}
 function esc(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
 function escAttr(v){return esc(v);}
 function js(v){return String(v??'').replace(/\\/g,'\\\\').replace(/'/g,"\\'");}
+function openProductCode(code){
+  var p = state.products.find(function(x){return x.codigo === code;});
+  if(!p){toast('Producto no encontrado.');return;}
+  var bc = p.barcodeUrl || ('https://barcode.tec-it.com/barcode.ashx?data='+encodeURIComponent(p.codigo)+'&code=Code128&translate-esc=true');
+  var qr = p.qrUrl || ('https://api.qrserver.com/v1/create-qr-code/?size=220x220&data='+encodeURIComponent(p.codigo));
+  var mt = document.getElementById('modalTitle'); if(mt) mt.textContent = 'Identificacion · ' + p.codigo;
+  var mb = document.getElementById('modalBody'); if(!mb) return;
+  var mm = [p.tipo, p.categoria, p.naturaleza, [p.marca,p.modelo].filter(Boolean).join(' · '), p.color||'—', p.talla||p.presentacion||'—'].map(esc).join(' · ');
+  var pres = esc(p.presentacion||'NO APLICA');
+  var und = esc(p.unidad);
+  var cod = esc(p.codigo);
+  var bcA = escAttr(bc), qrA = escAttr(qr);
+  var h = '';
+  h += '<div class="code-card">';
+  h +=   '<div class="code-meta"><strong>'+cod+'</strong><span>'+mm+'</span></div>';
+  h +=   '<div class="code-grid">';
+  h +=     '<div><div class="code-label">Codigo de barras</div><img class="barcode-img" src="'+bcA+'" alt="Codigo de barras"><a class="btn btn-secondary" href="'+bcA+'" target="_blank">Abrir</a></div>';
+  h +=     '<div><div class="code-label">Codigo QR</div><img class="qr-img" src="'+qrA+'" alt="QR"><a class="btn btn-secondary" href="'+qrA+'" target="_blank">Abrir</a></div>';
+  h +=   '</div>';
+  h +=   '<div class="scan-note">Un lector de codigos puede enviar el SKU como teclado. Presentacion: <strong>'+pres+'</strong> · Unidad: <strong>'+und+'</strong>.</div>';
+  h += '</div>';
+  mb.innerHTML = h;
+  var m = document.getElementById('modal'); if(m) m.classList.remove('hidden');
+}
 </script>
