@@ -56,6 +56,22 @@ const TYPE_META = {
   'PORTA CLIP': {cat:'EQUIPAMIENTO DE OFICINA', nature:'INVENTARIABLE', unit:'UNIDAD', gender:'NO APLICA', placeholder:'Organizador'}
 };
 
+var DEFAULT_LISTS = {
+  naturalezas:['INVENTARIABLE','CONSUMIBLE'],
+  generos:['VARÓN','DAMA','UNISEX','NO APLICA'],
+  unidades:['UNIDAD','PAR','JUEGO / KIT','CAJA','PAQUETE','RESMA','MILLAR','ROLLO','LITRO','GALÓN','KILOGRAMO'],
+  condiciones:['NUEVO','USADO / REUTILIZABLE','EN MANTENIMIENTO/LAVADO','DADO DE BAJA'],
+  motivos:['Compra','Entrega a personal','Devolución','Reposición','Ajuste físico','Regularización','Pérdida/Merma','Otro'],
+  tallas:['XS','S','M','L','XL','XXL','36','37','38','39','40','41','42','43','44','45','Única','NO APLICA'],
+  presentaciones:['NO APLICA','1 L','A4 · 500 hojas','Caja x 50','Paquete x 100']
+};
+function _mergeLists(defaults, dynamic){
+  var seen = {}, res = [], i, v;
+  for(i=0;i<defaults.length;i++){ v=String(defaults[i]||''); if(v && !seen[v]){ seen[v]=1; res.push(v); } }
+  if(dynamic && dynamic.length){ for(i=0;i<dynamic.length;i++){ v=String(dynamic[i]||''); if(v && !seen[v]){ seen[v]=1; res.push(v); } } }
+  return res;
+}
+
 window.addEventListener('load', () => {
   setToday();
   document.querySelectorAll('.nav-item').forEach(btn => btn.addEventListener('click', () => navigate(btn.dataset.section)));
@@ -142,23 +158,23 @@ function renderProducts(){
 }
 
 function populateSelectors(){
-  const skuOptions = state.products.map(p => `<option value="${escAttr(p.codigo)}">${esc(p.codigo)} — ${esc(p.tipo)} · ${esc(p.modelo || p.marca || '')} · ${esc(p.color || '')} · ${esc(p.talla || p.presentacion || '')}</option>`).join('');
-  ['mvCodigo','kxCodigo'].forEach(id => { const el = document.getElementById(id); if(el) el.innerHTML = '<option value="">Seleccionar…</option>' + skuOptions; });
-  const l = state.lists || {};
-  fillSelect('prCategoria', l.categorias?.length ? l.categorias : []);
-  fillSelect('prNaturaleza', l.naturalezas?.length ? l.naturalezas : ['INVENTARIABLE','CONSUMIBLE']);
-  fillSelect('prTipo', l.tipos?.length ? l.tipos : [], true);
-  fillSelect('prGenero', l.generos?.length ? l.generos : ['VARÓN','DAMA','UNISEX','NO APLICA']);
-  fillSelect('prUnidad', l.unidades?.length ? l.unidades : ['UNIDAD','PAR','JUEGO / KIT','CAJA','PAQUETE','RESMA','MILLAR','ROLLO','LITRO','GALÓN','KILOGRAMO']);
-  fillSelect('prCondicion', l.condiciones?.length ? l.condiciones : ['NUEVO','USADO / REUTILIZABLE','EN MANTENIMIENTO/LAVADO','DADO DE BAJA']);
-  fillSelect('mvCondicion', l.condiciones?.length ? l.condiciones : ['NUEVO','USADO / REUTILIZABLE','EN MANTENIMIENTO/LAVADO','DADO DE BAJA']);
-  fillSelect('mvMotivo', l.motivos?.length ? l.motivos : ['Compra','Entrega a personal','Devolución','Reposición','Ajuste físico','Regularización','Otro'], true);
-  fillFilter('productFamilyFilter', l.categorias?.length ? l.categorias : []);
-  fillFilter('productNatureFilter', l.naturalezas?.length ? l.naturalezas : ['INVENTARIABLE','CONSUMIBLE']);
-  const dl = document.getElementById('prTallaList');
-  if (dl) dl.innerHTML = (l.tallas || []).map(v => `<option value="${escAttr(v)}"></option>`).join('');
-  const pl = document.getElementById('prPresentacionList');
-  if (pl) pl.innerHTML = (l.presentaciones || []).map(v => `<option value="${escAttr(v)}"></option>`).join('');
+  var skuOptions = state.products.map(function(p){ return '<option value="'+escAttr(p.codigo)+'">'+esc(p.codigo)+' — '+esc(p.tipo)+' · '+esc(p.modelo || p.marca || '')+' · '+esc(p.color || '')+' · '+esc(p.talla || p.presentacion || '')+'</option>'; }).join('');
+  ['mvCodigo','kxCodigo'].forEach(function(id){ var el = document.getElementById(id); if(el) el.innerHTML = '<option value="">Seleccionar…</option>' + skuOptions; });
+  var l = state.lists || {};
+  fillSelect('prCategoria', _mergeLists(Object.keys(TYPE_META).map(function(k){ return TYPE_META[k].cat; }), l.categorias));
+  fillSelect('prNaturaleza', _mergeLists(DEFAULT_LISTS.naturalezas, l.naturalezas));
+  fillSelect('prTipo', _mergeLists(Object.keys(TYPE_META), l.tipos), true);
+  fillSelect('prGenero', _mergeLists(DEFAULT_LISTS.generos, l.generos));
+  fillSelect('prUnidad', _mergeLists(DEFAULT_LISTS.unidades, l.unidades));
+  fillSelect('prCondicion', _mergeLists(DEFAULT_LISTS.condiciones, l.condiciones));
+  fillSelect('mvCondicion', _mergeLists(DEFAULT_LISTS.condiciones, l.condiciones));
+  fillSelect('mvMotivo', _mergeLists(DEFAULT_LISTS.motivos, l.motivos), true);
+  fillFilter('productFamilyFilter', _mergeLists(Object.keys(TYPE_META).map(function(k){ return TYPE_META[k].cat; }), l.categorias));
+  fillFilter('productNatureFilter', _mergeLists(DEFAULT_LISTS.naturalezas, l.naturalezas));
+  var dl = document.getElementById('prTallaList');
+  if (dl) dl.innerHTML = _mergeLists(DEFAULT_LISTS.tallas, l.tallas).map(function(v){ return '<option value="'+escAttr(v)+'"></option>'; }).join('');
+  var pl = document.getElementById('prPresentacionList');
+  if (pl) pl.innerHTML = _mergeLists(DEFAULT_LISTS.presentaciones, l.presentaciones).map(function(v){ return '<option value="'+escAttr(v)+'"></option>'; }).join('');
 }
 
 function fillSelect(id, values, extraOther){
@@ -238,12 +254,12 @@ function downloadText(filename, text, type){
 
 function bindProductSkuPreview(){ ['prTipo','prModelo','prMarca','prColor','prTalla','prPresentacion'].forEach(id => { const el = document.getElementById(id); if(el) ['input','change'].forEach(evt => el.addEventListener(evt, updateSkuPreview)); }); }
 function applyProductTypeMeta(){
-  const raw=document.getElementById('prTipo')?.value||''; const key=stripAccents(raw).toUpperCase(); const meta=TYPE_META[key];
-  const model=document.getElementById('prModelo'), cat=document.getElementById('prCategoria'), nat=document.getElementById('prNaturaleza'), gen=document.getElementById('prGenero'), unit=document.getElementById('prUnidad');
+  var raw=(document.getElementById('prTipo')||{}).value||''; var key=stripAccents(raw).toUpperCase(); var meta=TYPE_META[key];
+  var model=document.getElementById('prModelo'), cat=document.getElementById('prCategoria'), nat=document.getElementById('prNaturaleza'), gen=document.getElementById('prGenero'), unit=document.getElementById('prUnidad');
   if(model && meta){ model.placeholder='Ej.: '+meta.placeholder+' / variante'; }
-  if(meta){ if(cat && state.lists.categorias?.includes(meta.cat)) cat.value=meta.cat; if(nat && state.lists.naturalezas?.includes(meta.nature)) nat.value=meta.nature; if(gen && state.lists.generos?.includes(meta.gender)) gen.value=meta.gender; if(unit && state.lists.unidades?.includes(meta.unit)) unit.value=meta.unit; }
-  const hint=document.getElementById('productSmartHint');
-  if(hint) hint.textContent = meta ? `Sugerencia: ${meta.cat} · ${meta.nature} · ${meta.unit}. Puedes modificarla cuando una variante concreta lo necesite.` : 'Selecciona un tipo para recibir una sugerencia de familia, naturaleza y unidad.';
+  if(meta){ if(cat) cat.value=meta.cat; if(nat) nat.value=meta.nature; if(gen) gen.value=meta.gender; if(unit) unit.value=meta.unit; }
+  var hint=document.getElementById('productSmartHint');
+  if(hint) hint.textContent = meta ? ('Sugerencia: '+meta.cat+' · '+meta.nature+' · '+meta.unit+'. Puedes modificarla cuando una variante concreta lo necesite.') : 'Selecciona un tipo para recibir una sugerencia de familia, naturaleza y unidad.';
   updateSkuPreview();
 }
 function updateSkuPreview(){
