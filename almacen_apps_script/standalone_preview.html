@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Almacén Pro — Prendas & Equipamiento (Preview)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800&display=swap" rel="stylesheet">
+
+<style>
+:root{--bg:#f4f6f8;--panel:#fff;--text:#17202a;--muted:#6b7684;--line:#e5e9ee;--primary:#0f766e;--primary-dark:#0b5d57;--warning:#c98a00;--danger:#b42318;--shadow:0 10px 30px rgba(16,24,40,.06)}
+*{box-sizing:border-box}body{margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var(--text)}button,input,select,textarea{font:inherit}.app-shell{display:flex;min-height:100vh}.sidebar{width:260px;background:#10222d;color:#fff;padding:22px 16px;display:flex;flex-direction:column;position:sticky;top:0;height:100vh}.brand{display:flex;gap:12px;align-items:center;padding:8px 8px 26px}.brand-mark{width:38px;height:38px;border-radius:11px;background:#e4f5f2;color:#0f766e;display:grid;place-items:center;font-weight:800}.brand-title{font-weight:800}.brand-subtitle{font-size:12px;color:#a9b8c4;margin-top:2px}.nav{display:flex;flex-direction:column;gap:5px}.nav-item{border:0;background:transparent;color:#d5dee4;text-align:left;padding:11px 12px;border-radius:9px;cursor:pointer;display:flex;gap:10px;align-items:center;transition:background .15s,color .15s}.nav-item:hover,.nav-item.active{background:#1c3948;color:#fff}.nav-item span{width:22px;text-align:center}.sidebar-footer{margin-top:auto;font-size:12px;color:#a9b8c4}.sheet-link{display:block;color:#cfe9e5;text-decoration:none;padding:10px 8px}.sheet-link:hover{text-decoration:underline}.version{padding:0 8px}.main{flex:1;min-width:0}.topbar{height:86px;background:rgba(255,255,255,.95);border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 32px;position:sticky;top:0;z-index:10;backdrop-filter:blur(8px)}.eyebrow{font-size:11px;font-weight:800;letter-spacing:.11em;color:var(--muted)}h1{font-size:25px;margin:3px 0 0}h2{margin:0 0 5px;font-size:23px}h3{margin:0;font-size:16px}.topbar-actions,.actions,.form-actions{display:flex;gap:10px;align-items:center}.badge{font-size:12px;padding:8px 11px;border-radius:999px;background:#eaf5f3;color:var(--primary);font-weight:700}.section{display:none;padding:28px 32px 40px;animation:fadeIn .3s ease}.section.active{display:block}@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}.section-head{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;margin-bottom:20px}.section-head p{margin:0;color:var(--muted)}.btn{border:0;border-radius:9px;padding:10px 14px;cursor:pointer;font-weight:700;transition:background .15s,transform .1s}.btn:active{transform:scale(.97)}.btn-primary{background:var(--primary);color:white}.btn-primary:hover{background:var(--primary-dark)}.btn-secondary{background:#eef2f5;color:#2c3a46}.btn-secondary:hover{background:#e2e8ed}.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:18px}.metric-card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:19px;display:flex;gap:14px;align-items:center;box-shadow:var(--shadow);transition:transform .15s,box-shadow .15s}.metric-card:hover{transform:translateY(-2px);box-shadow:0 14px 36px rgba(16,24,40,.1)}.metric-icon{width:42px;height:42px;border-radius:11px;display:grid;place-items:center;background:#eaf5f3;color:var(--primary);font-size:20px}.metric-card.warning .metric-icon{background:#fff6da;color:var(--warning)}.metric-card.danger .metric-icon{background:#fff0ef;color:var(--danger)}.metric-label{color:var(--muted);font-size:12px;margin-bottom:4px}.metric-value{font-size:26px;font-weight:800}.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:18px}.panel{background:var(--panel);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);overflow:hidden;margin-bottom:18px}.panel-head{padding:16px 18px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:12px}.muted{color:var(--muted);font-size:12px}.table-wrap{overflow:auto}table{width:100%;border-collapse:collapse;min-width:760px}th,td{padding:12px 14px;border-bottom:1px solid var(--line);text-align:left;font-size:13px;white-space:nowrap}th{font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);background:#fbfcfd;position:sticky;top:0;z-index:1}tr:last-child td{border-bottom:0}tr:hover td{background:#f8fafb}.status{display:inline-flex;align-items:center;padding:5px 8px;border-radius:999px;font-size:11px;font-weight:800}.status.normal{background:#eaf7ef;color:#157347}.status.low{background:#fff6da;color:#8a5c00}.status.out{background:#fff0ef;color:#a61b10}.move-in{color:#157347;font-weight:800}.move-out{color:#b42318;font-weight:800}.toolbar{display:flex;gap:10px;margin-bottom:14px}.input{width:100%;border:1px solid #d7dde4;background:#fff;border-radius:9px;padding:10px 11px;outline:none;transition:border-color .15s,box-shadow .15s}.input:focus{border-color:#8bc7c0;box-shadow:0 0 0 3px rgba(15,118,110,.10)}.select{cursor:pointer}.toolbar .input{max-width:460px}.toolbar .select{max-width:210px}.form-panel{padding:20px}.form-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.form-grid.compact{grid-template-columns:2fr 1fr 1fr auto}.form-grid label{font-size:12px;color:#52606d;font-weight:700}.form-grid .input{margin-top:6px;color:var(--text);font-weight:500}.full{grid-column:1/-1}.form-actions{justify-content:flex-end;margin-top:18px}.align-end{display:flex;align-items:end}.product-summary{background:#eef7f5;border:1px solid #cbe8e3;padding:14px 16px;border-radius:12px;margin-bottom:18px}.product-summary strong{color:var(--primary)}.empty{text-align:center;color:var(--muted);padding:30px!important}.small{max-width:220px}.loading-overlay{position:fixed;inset:0;background:rgba(255,255,255,.78);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:100;font-weight:700;color:#334155;backdrop-filter:blur(4px)}.spinner{width:38px;height:38px;border:4px solid #e4eaee;border-top-color:var(--primary);border-radius:50%;animation:spin .8s linear infinite;margin-bottom:10px}@keyframes spin{to{transform:rotate(360deg)}}.toast{position:fixed;right:24px;bottom:24px;background:#18232d;color:#fff;padding:12px 15px;border-radius:10px;box-shadow:0 12px 35px rgba(0,0,0,.2);opacity:0;transform:translateY(12px);pointer-events:none;transition:.2s;z-index:200;max-width:380px}.toast.show{opacity:1;transform:none}.modal{position:fixed;inset:0;background:rgba(15,23,42,.4);display:grid;place-items:center;z-index:150;padding:20px;backdrop-filter:blur(2px)}.hidden{display:none!important}.modal-card{background:#fff;width:min(720px,100%);border-radius:16px;box-shadow:0 25px 70px rgba(0,0,0,.25);overflow:hidden}.modal-head{display:flex;align-items:center;justify-content:space-between;padding:16px 18px;border-bottom:1px solid var(--line)}.icon-btn{border:0;background:transparent;font-size:28px;color:var(--muted);cursor:pointer}.modal-card form{padding:20px}
+
+/* Preview banner */
+.preview-banner{background:linear-gradient(135deg,#0f766e,#0b5d57);color:#fff;padding:10px 20px;text-align:center;font-size:13px;font-weight:600;letter-spacing:.03em}
+.preview-banner a{color:#b2f5ea;text-decoration:underline}
+
+@media(max-width:1100px){.sidebar{width:220px}.cards{grid-template-columns:repeat(2,1fr)}.grid-2{grid-template-columns:1fr}.form-grid,.form-grid.compact{grid-template-columns:repeat(2,1fr)}.align-end{align-items:stretch}.topbar{padding:0 20px}.section{padding:24px 20px}}
+@media(max-width:760px){.app-shell{display:block}.sidebar{position:static;width:100%;height:auto;padding:10px 12px}.brand{padding:4px 4px 8px}.nav{display:grid;grid-template-columns:repeat(5,1fr)}.nav-item{justify-content:center;flex-direction:column;font-size:10px;padding:8px}.nav-item span{width:auto}.sidebar-footer{display:none}.topbar{height:auto;padding:16px;gap:10px;align-items:flex-start}.topbar-actions{flex-direction:column;align-items:flex-end}.cards{grid-template-columns:1fr 1fr}.section{padding:18px 14px}.form-grid,.form-grid.compact{grid-template-columns:1fr}.full{grid-column:auto}.section-head{flex-direction:column}.actions{width:100%;justify-content:stretch}.actions .btn{flex:1}.toolbar{flex-direction:column}.toolbar .input,.toolbar .select{max-width:none}}
+</style>
+</head>
+<body>
+
+  <div class="preview-banner">
+    ⚡ Vista previa local — los datos son de demostración. Para la versión funcional, despliega en <a href="https://script.google.com" target="_blank">Google Apps Script</a>.
+  </div>
+
+  <div id="appShell" class="app-shell">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-mark">AP</div>
+        <div>
+          <div class="brand-title">Almacén Pro</div>
+          <div class="brand-subtitle">Prendas & Equipamiento</div>
+        </div>
+      </div>
+      <nav class="nav">
+        <button class="nav-item active" data-section="dashboard"><span>▦</span>Dashboard</button>
+        <button class="nav-item" data-section="inventario"><span>📦</span>Inventario</button>
+        <button class="nav-item" data-section="movimientos"><span>↕</span>Movimientos</button>
+        <button class="nav-item" data-section="kardex"><span>▤</span>Kardex</button>
+        <button class="nav-item" data-section="productos"><span>＋</span>Productos</button>
+      </nav>
+      <div class="sidebar-footer">
+        <a id="sheetLink" class="sheet-link" href="#" target="_blank">Abrir Google Sheet ↗</a>
+        <div class="version">v1.0.0 — Preview</div>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <div>
+          <div class="eyebrow">CONTROL DE ALMACÉN</div>
+          <h1 id="pageTitle">Dashboard</h1>
+        </div>
+        <div class="topbar-actions">
+          <span id="systemBadge" class="badge">Preview local</span>
+          <button class="btn btn-primary" onclick="openQuickMovement()">＋ Registrar movimiento</button>
+        </div>
+      </header>
+
+      <div id="loading" class="loading-overlay" style="display:none"><div class="spinner"></div><div>Cargando sistema…</div></div>
+
+      <section id="section-dashboard" class="section active">
+        <div class="section-head">
+          <div>
+            <h2>Resumen del almacén</h2>
+            <p>Vista general del stock, alertas y movimientos recientes.</p>
+          </div>
+          <button class="btn btn-secondary" onclick="refreshApp()">⟳ Actualizar</button>
+        </div>
+        <div class="cards">
+          <div class="metric-card"><div class="metric-icon">◫</div><div><div class="metric-label">SKUs activos</div><div id="mSkus" class="metric-value">0</div></div></div>
+          <div class="metric-card"><div class="metric-icon">▣</div><div><div class="metric-label">Stock total</div><div id="mStock" class="metric-value">0</div></div></div>
+          <div class="metric-card warning"><div class="metric-icon">⚠</div><div><div class="metric-label">Stock bajo</div><div id="mLow" class="metric-value">0</div></div></div>
+          <div class="metric-card danger"><div class="metric-icon">×</div><div><div class="metric-label">Agotados</div><div id="mOut" class="metric-value">0</div></div></div>
+        </div>
+        <div class="grid-2">
+          <div class="panel">
+            <div class="panel-head"><h3>Alertas de inventario</h3><span class="muted">Stock mínimo</span></div>
+            <div class="table-wrap"><table><thead><tr><th>SKU</th><th>Prenda</th><th>Talla</th><th>Stock</th><th>Estado</th></tr></thead><tbody id="dashboardAlerts"></tbody></table></div>
+          </div>
+          <div class="panel">
+            <div class="panel-head"><h3>Movimientos recientes</h3><span id="mMoves30" class="muted"></span></div>
+            <div class="table-wrap"><table><thead><tr><th>Fecha</th><th>SKU</th><th>Movimiento</th><th>Cantidad</th></tr></thead><tbody id="dashboardMoves"></tbody></table></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="section-inventario" class="section">
+        <div class="section-head"><div><h2>Inventario</h2><p>Stock calculado automáticamente a partir del Kardex.</p></div><div class="actions"><button class="btn btn-secondary" onclick="downloadInventory()">⇩ CSV</button><button class="btn btn-primary" onclick="openQuickMovement()">＋ Movimiento</button></div></div>
+        <div class="toolbar"><input id="inventorySearch" class="input" placeholder="Buscar código, prenda, modelo, color o talla…" oninput="renderInventory()"><select id="inventoryStatus" class="input select" onchange="renderInventory()"><option value="">Todos los estados</option><option value="NORMAL">Normal</option><option value="STOCK BAJO">Stock bajo</option><option value="AGOTADO">Agotado</option></select></div>
+        <div class="panel"><div class="table-wrap"><table><thead><tr><th>Código</th><th>Prenda</th><th>Modelo</th><th>Color</th><th>Talla</th><th>Unidad</th><th>Stock</th><th>Mín.</th><th>Estado</th><th></th></tr></thead><tbody id="inventoryTable"></tbody></table></div></div>
+      </section>
+
+      <section id="section-movimientos" class="section">
+        <div class="section-head"><div><h2>Registrar movimiento</h2><p>Entradas, salidas y ajustes con validación de stock.</p></div></div>
+        <div class="panel form-panel">
+          <form id="movementForm" onsubmit="submitMovement(event)">
+            <div class="form-grid">
+              <label>Fecha<input id="mvFecha" name="fecha" class="input" type="date" required></label>
+              <label>Producto / SKU<select id="mvCodigo" name="codigo" class="input select" required></select></label>
+              <label>Tipo<select id="mvTipo" name="tipoMovimiento" class="input select" required><option value="ENTRADA">Entrada</option><option value="SALIDA">Salida</option><option value="AJUSTE_POSITIVO">Ajuste +</option><option value="AJUSTE_NEGATIVO">Ajuste −</option></select></label>
+              <label>Cantidad<input name="cantidad" class="input" type="number" min="0.01" step="0.01" required></label>
+              <label>Motivo<select id="mvMotivo" name="motivo" class="input select" required></select></label>
+              <label>Origen / Destino<input name="origenDestino" class="input" placeholder="Proveedor, área, persona…"></label>
+              <label class="full">Observación<textarea name="observacion" class="input" rows="3" placeholder="Detalle del movimiento"></textarea></label>
+            </div>
+            <div class="form-actions"><button type="reset" class="btn btn-secondary">Limpiar</button><button type="submit" class="btn btn-primary">Guardar movimiento</button></div>
+          </form>
+        </div>
+        <div class="panel"><div class="panel-head"><h3>Últimos movimientos</h3><span class="muted">Máximo 150 en vista</span></div><div class="table-wrap"><table><thead><tr><th>Fecha</th><th>SKU</th><th>Movimiento</th><th>Cantidad</th><th>Motivo</th><th>Origen/Destino</th></tr></thead><tbody id="movementsTable"></tbody></table></div></div>
+      </section>
+
+      <section id="section-kardex" class="section">
+        <div class="section-head"><div><h2>Kardex por SKU</h2><p>Consulta el historial y saldo corrido de una variante.</p></div></div>
+        <div class="panel">
+          <div class="form-grid compact">
+            <label>Producto / SKU<select id="kxCodigo" class="input select"></select></label>
+            <label>Desde<input id="kxDesde" class="input" type="date"></label>
+            <label>Hasta<input id="kxHasta" class="input" type="date"></label>
+            <div class="align-end"><button class="btn btn-primary" onclick="loadKardex()">Consultar Kardex</button></div>
+          </div>
+        </div>
+        <div id="kardexProduct" class="product-summary hidden"></div>
+        <div class="panel"><div class="panel-head"><h3>Movimientos</h3><span id="kxStock" class="muted"></span></div><div class="table-wrap"><table><thead><tr><th>Fecha</th><th>Movimiento</th><th>Entrada</th><th>Salida</th><th>Saldo</th><th>Motivo</th><th>Origen/Destino</th><th>Observación</th></tr></thead><tbody id="kardexTable"><tr><td colspan="8" class="empty">Selecciona un SKU para consultar.</td></tr></tbody></table></div></div>
+      </section>
+
+      <section id="section-productos" class="section">
+        <div class="section-head"><div><h2>Productos / SKUs</h2><p>Cada combinación de prenda + características + talla tiene un código único.</p></div></div>
+        <div class="panel form-panel">
+          <form id="productForm" onsubmit="submitProduct(event)">
+            <div class="form-grid">
+              <label>Código único<input name="codigo" class="input" placeholder="Ej.: CHA-TAC-NEG-L" required></label>
+              <label>Tipo<select id="prTipo" name="tipo" class="input select" required></select></label>
+              <label>Modelo<input name="modelo" class="input" placeholder="Ej.: Táctico / Institucional" required></label>
+              <label>Color<input name="color" class="input" placeholder="Ej.: Negro"></label>
+              <label>Talla<input name="talla" class="input" placeholder="S, M, L, XL, 3XL, Única" required></label>
+              <label>Unidad<select id="prUnidad" name="unidad" class="input select"></select></label>
+              <label>Stock inicial<input name="stockInicial" class="input" type="number" min="0" step="0.01" value="0"></label>
+              <label>Stock mínimo<input name="stockMinimo" class="input" type="number" min="0" step="0.01" value="0"></label>
+              <label class="full">Descripción<input name="descripcion" class="input" placeholder="Detalle de la variante"></label>
+            </div>
+            <div class="form-actions"><button type="reset" class="btn btn-secondary">Limpiar</button><button type="submit" class="btn btn-primary">Crear SKU</button></div>
+          </form>
+        </div>
+        <div class="panel"><div class="panel-head"><h3>Catálogo activo</h3><input id="productSearch" class="input small" placeholder="Buscar…" oninput="renderProducts()"></div><div class="table-wrap"><table><thead><tr><th>Código</th><th>Tipo</th><th>Modelo</th><th>Color</th><th>Talla</th><th>Unidad</th><th>Mín.</th><th></th></tr></thead><tbody id="productsTable"></tbody></table></div></div>
+      </section>
+    </main>
+  </div>
+
+  <div id="toast" class="toast"></div>
+  <div id="modal" class="modal hidden"><div class="modal-card"><div class="modal-head"><h3>Registrar movimiento</h3><button class="icon-btn" onclick="closeModal()">×</button></div><div id="modalBody"></div></div></div>
+
+<script>
+// ============================================================
+// DEMO DATA — replicates the seed data from Code.gs
+// ============================================================
+const DEMO_PRODUCTS = [
+  { codigo:'POL-INS-S',   tipo:'Polaca',  modelo:'Institucional', color:'',      talla:'S',   descripcion:'Prenda institucional', unidad:'UNIDAD', stockMin:2,  activo:'SI' },
+  { codigo:'POL-INS-M',   tipo:'Polaca',  modelo:'Institucional', color:'',      talla:'M',   descripcion:'Prenda institucional', unidad:'UNIDAD', stockMin:5,  activo:'SI' },
+  { codigo:'POL-INS-L',   tipo:'Polaca',  modelo:'Institucional', color:'',      talla:'L',   descripcion:'Prenda institucional', unidad:'UNIDAD', stockMin:5,  activo:'SI' },
+  { codigo:'POL-INS-XL',  tipo:'Polaca',  modelo:'Institucional', color:'',      talla:'XL',  descripcion:'Prenda institucional', unidad:'UNIDAD', stockMin:5,  activo:'SI' },
+  { codigo:'POL-INS-XXL', tipo:'Polaca',  modelo:'Institucional', color:'',      talla:'XXL', descripcion:'Prenda institucional', unidad:'UNIDAD', stockMin:5,  activo:'SI' },
+  { codigo:'POL-INS-3XL', tipo:'Polaca',  modelo:'Institucional', color:'',      talla:'3XL', descripcion:'Prenda institucional', unidad:'UNIDAD', stockMin:3,  activo:'SI' },
+  { codigo:'POL-INS-4XL', tipo:'Polaca',  modelo:'Institucional', color:'',      talla:'4XL', descripcion:'Prenda institucional', unidad:'UNIDAD', stockMin:2,  activo:'SI' },
+  { codigo:'CHA-TAC-NEG-S', tipo:'Chaleco', modelo:'Táctico',    color:'Negro', talla:'S',   descripcion:'Chaleco táctico negro', unidad:'UNIDAD', stockMin:2,  activo:'SI' },
+  { codigo:'CHA-TAC-NEG-M', tipo:'Chaleco', modelo:'Táctico',    color:'Negro', talla:'M',   descripcion:'Chaleco táctico negro', unidad:'UNIDAD', stockMin:2,  activo:'SI' },
+  { codigo:'CHA-TAC-NEG-L', tipo:'Chaleco', modelo:'Táctico',    color:'Negro', talla:'L',   descripcion:'Chaleco táctico negro', unidad:'UNIDAD', stockMin:3,  activo:'SI' },
+  { codigo:'MGA-PRO-NEG-L', tipo:'Manga',   modelo:'Protección', color:'Negro', talla:'L',   descripcion:'Par de manga',          unidad:'PAR',    stockMin:1,  activo:'SI' }
+];
+
+const DEMO_STOCK = {
+  'POL-INS-S':3,'POL-INS-M':11,'POL-INS-L':23,'POL-INS-XL':21,'POL-INS-XXL':23,
+  'POL-INS-3XL':8,'POL-INS-4XL':3,
+  'CHA-TAC-NEG-S':2,'CHA-TAC-NEG-M':3,'CHA-TAC-NEG-L':17,
+  'MGA-PRO-NEG-L':0
+};
+
+const DEMO_MOVEMENTS = [
+  { fecha:'2026-09-01', codigo:'POL-INS-S',     tipoMovimiento:'SALDO_INICIAL',  cantidad:5,  motivo:'Carga de demostración', origenDestino:'Almacén',         observacion:'Revisar y reemplazar por inventario real' },
+  { fecha:'2026-09-01', codigo:'POL-INS-M',     tipoMovimiento:'SALDO_INICIAL',  cantidad:15, motivo:'Carga de demostración', origenDestino:'Almacén',         observacion:'Revisar y reemplazar por inventario real' },
+  { fecha:'2026-09-01', codigo:'POL-INS-L',     tipoMovimiento:'SALDO_INICIAL',  cantidad:25, motivo:'Carga de demostración', origenDestino:'Almacén',         observacion:'Revisar y reemplazar por inventario real' },
+  { fecha:'2026-09-01', codigo:'POL-INS-XL',    tipoMovimiento:'SALDO_INICIAL',  cantidad:25, motivo:'Carga de demostración', origenDestino:'Almacén',         observacion:'Revisar y reemplazar por inventario real' },
+  { fecha:'2026-09-01', codigo:'POL-INS-XXL',   tipoMovimiento:'SALDO_INICIAL',  cantidad:25, motivo:'Carga de demostración', origenDestino:'Almacén',         observacion:'Revisar y reemplazar por inventario real' },
+  { fecha:'2026-09-01', codigo:'POL-INS-3XL',   tipoMovimiento:'SALDO_INICIAL',  cantidad:10, motivo:'Carga de demostración', origenDestino:'Almacén',         observacion:'Revisar y reemplazar por inventario real' },
+  { fecha:'2026-09-01', codigo:'POL-INS-4XL',   tipoMovimiento:'SALDO_INICIAL',  cantidad:5,  motivo:'Carga de demostración', origenDestino:'Almacén',         observacion:'Revisar y reemplazar por inventario real' },
+  { fecha:'2026-09-01', codigo:'CHA-TAC-NEG-S', tipoMovimiento:'SALDO_INICIAL',  cantidad:4,  motivo:'Carga de demostración', origenDestino:'Almacén',         observacion:'Revisar y reemplazar por inventario real' },
+  { fecha:'2026-09-01', codigo:'CHA-TAC-NEG-M', tipoMovimiento:'SALDO_INICIAL',  cantidad:5,  motivo:'Carga de demostración', origenDestino:'Almacén',         observacion:'Revisar y reemplazar por inventario real' },
+  { fecha:'2026-09-01', codigo:'CHA-TAC-NEG-L', tipoMovimiento:'SALDO_INICIAL',  cantidad:20, motivo:'Carga de demostración', origenDestino:'Almacén',         observacion:'Revisar y reemplazar por inventario real' },
+  { fecha:'2026-09-05', codigo:'POL-INS-S',     tipoMovimiento:'SALIDA',         cantidad:2,  motivo:'Entrega a personal',    origenDestino:'Área Operaciones',observacion:'Entrega mensual' },
+  { fecha:'2026-09-05', codigo:'POL-INS-M',     tipoMovimiento:'SALIDA',         cantidad:4,  motivo:'Entrega a personal',    origenDestino:'Área Operaciones',observacion:'Entrega mensual' },
+  { fecha:'2026-09-05', codigo:'POL-INS-L',     tipoMovimiento:'SALIDA',         cantidad:2,  motivo:'Entrega a personal',    origenDestino:'Área Seguridad',  observacion:'Reposición' },
+  { fecha:'2026-09-06', codigo:'POL-INS-XL',    tipoMovimiento:'SALIDA',         cantidad:4,  motivo:'Entrega a personal',    origenDestino:'Área Logística',  observacion:'' },
+  { fecha:'2026-09-08', codigo:'POL-INS-XXL',   tipoMovimiento:'SALIDA',         cantidad:2,  motivo:'Entrega a personal',    origenDestino:'Área Seguridad',  observacion:'' },
+  { fecha:'2026-09-08', codigo:'POL-INS-3XL',   tipoMovimiento:'SALIDA',         cantidad:2,  motivo:'Entrega a personal',    origenDestino:'Área Seguridad',  observacion:'' },
+  { fecha:'2026-09-08', codigo:'POL-INS-4XL',   tipoMovimiento:'SALIDA',         cantidad:2,  motivo:'Entrega a personal',    origenDestino:'Área Seguridad',  observacion:'' },
+  { fecha:'2026-09-10', codigo:'CHA-TAC-NEG-S', tipoMovimiento:'SALIDA',         cantidad:2,  motivo:'Entrega a personal',    origenDestino:'Área Patrullaje', observacion:'Entrega equipo táctico' },
+  { fecha:'2026-09-10', codigo:'CHA-TAC-NEG-M', tipoMovimiento:'SALIDA',         cantidad:2,  motivo:'Entrega a personal',    origenDestino:'Área Patrullaje', observacion:'Entrega equipo táctico' },
+  { fecha:'2026-09-10', codigo:'CHA-TAC-NEG-L', tipoMovimiento:'SALIDA',         cantidad:3,  motivo:'Entrega a personal',    origenDestino:'Área Patrullaje', observacion:'Entrega equipo táctico' },
+  { fecha:'2026-09-15', codigo:'POL-INS-M',     tipoMovimiento:'ENTRADA',        cantidad:8,  motivo:'Compra',                origenDestino:'Proveedor Textil SAC', observacion:'Factura #F001-4521' },
+  { fecha:'2026-09-15', codigo:'POL-INS-L',     tipoMovimiento:'ENTRADA',        cantidad:5,  motivo:'Compra',                origenDestino:'Proveedor Textil SAC', observacion:'Factura #F001-4521' },
+  { fecha:'2026-09-16', codigo:'POL-INS-M',     tipoMovimiento:'SALIDA',         cantidad:8,  motivo:'Entrega a personal',    origenDestino:'Área Administrativa', observacion:'Dotación trimestral' },
+  { fecha:'2026-09-17', codigo:'CHA-TAC-NEG-L', tipoMovimiento:'AJUSTE_NEGATIVO',cantidad:0,  motivo:'Ajuste físico',         origenDestino:'Almacén',         observacion:'Diferencia encontrada en inventario físico' },
+];
+
+// Fix: Compute actual stocks from movements to match DEMO_STOCK
+function buildDemoInventory() {
+  return DEMO_PRODUCTS.map(p => {
+    const stock = DEMO_STOCK[p.codigo] ?? 0;
+    let estado = 'NORMAL';
+    if (stock <= 0) estado = 'AGOTADO';
+    else if (stock <= p.stockMin) estado = 'STOCK BAJO';
+    return { ...p, stock, estado };
+  });
+}
+
+// ============================================================
+// APP STATE
+// ============================================================
+let state = {
+  info: { configured: true, name: 'Almacén de Prendas y Equipamiento', spreadsheetUrl: '#' },
+  products: DEMO_PRODUCTS,
+  inventory: buildDemoInventory(),
+  movements: DEMO_MOVEMENTS.slice().reverse(),
+  metrics: {},
+  lists: {
+    tipos: ['Polaca','Chaleco','Manga'],
+    modelos: ['Institucional','Táctico','Protección'],
+    colores: ['Negro'],
+    tallas: ['S','M','L','XL','XXL','3XL','4XL'],
+    motivos: ['Compra','Entrega a personal','Devolución','Reposición','Ajuste físico','Regularización','Otro'],
+    unidades: ['UNIDAD','PAR','CAJA','PAQUETE']
+  }
+};
+
+// Compute metrics
+function computeMetrics() {
+  const inv = state.inventory;
+  state.metrics = {
+    skus: state.products.length,
+    totalStock: inv.reduce((s, i) => s + i.stock, 0),
+    lowStock: inv.filter(i => i.stock > 0 && i.stock <= i.stockMin).length,
+    outOfStock: inv.filter(i => i.stock <= 0).length,
+    movements30d: state.movements.length
+  };
+}
+
+let toastTimer;
+
+// ============================================================
+// INIT
+// ============================================================
+window.addEventListener('load', () => {
+  setToday();
+  document.querySelectorAll('.nav-item').forEach(btn =>
+    btn.addEventListener('click', () => navigate(btn.dataset.section))
+  );
+  refreshApp();
+});
+
+function refreshApp() {
+  computeMetrics();
+  renderAll();
+  toast('Datos de demo cargados correctamente ✓');
+}
+
+function renderAll() {
+  renderMetrics();
+  renderDashboard();
+  renderInventory();
+  renderMovements();
+  renderProducts();
+  populateSelectors();
+  document.getElementById('sheetLink').href = '#';
+  document.getElementById('systemBadge').textContent = 'Preview local';
+}
+
+function navigate(section) {
+  document.querySelectorAll('.nav-item').forEach(b => b.classList.toggle('active', b.dataset.section === section));
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  const el = document.getElementById('section-' + section);
+  if (el) el.classList.add('active');
+  const titles = { dashboard:'Dashboard', inventario:'Inventario', movimientos:'Movimientos', kardex:'Kardex', productos:'Productos' };
+  document.getElementById('pageTitle').textContent = titles[section] || 'Dashboard';
+}
+
+// ============================================================
+// RENDER FUNCTIONS
+// ============================================================
+function renderMetrics() {
+  const m = state.metrics || {};
+  document.getElementById('mSkus').textContent = fmt(m.skus || 0);
+  document.getElementById('mStock').textContent = fmt(m.totalStock || 0);
+  document.getElementById('mLow').textContent = fmt(m.lowStock || 0);
+  document.getElementById('mOut').textContent = fmt(m.outOfStock || 0);
+  document.getElementById('mMoves30').textContent = (m.movements30d || 0) + ' en 30 días';
+}
+
+function renderDashboard() {
+  const alertBody = document.getElementById('dashboardAlerts');
+  const alerts = state.inventory.filter(i => i.stock <= i.stockMin).sort((a,b) => a.stock - b.stock).slice(0,10);
+  alertBody.innerHTML = alerts.length ? alerts.map(rowInventory).join('') : '<tr><td colspan="5" class="empty">No hay alertas de stock.</td></tr>';
+
+  const moveBody = document.getElementById('dashboardMoves');
+  const rows = state.movements.slice(0,8);
+  moveBody.innerHTML = rows.length
+    ? rows.map(m => `<tr><td>${esc(m.fecha)}</td><td><strong>${esc(m.codigo)}</strong></td><td>${moveLabel(m.tipoMovimiento)}</td><td>${qtyView(m)}</td></tr>`).join('')
+    : '<tr><td colspan="4" class="empty">Sin movimientos.</td></tr>';
+}
+
+function renderInventory() {
+  const q = (document.getElementById('inventorySearch')?.value || '').toLowerCase();
+  const status = document.getElementById('inventoryStatus')?.value || '';
+  const rows = state.inventory.filter(i => {
+    const hay = [i.codigo,i.tipo,i.modelo,i.color,i.talla,i.descripcion].join(' ').toLowerCase();
+    return (!q || hay.includes(q)) && (!status || i.estado === status);
+  });
+  document.getElementById('inventoryTable').innerHTML = rows.length ? rows.map(rowInventoryFull).join('') : '<tr><td colspan="10" class="empty">No se encontraron registros.</td></tr>';
+}
+
+function renderMovements() {
+  const body = document.getElementById('movementsTable');
+  body.innerHTML = state.movements.length
+    ? state.movements.map(m => `<tr><td>${esc(m.fecha)}</td><td><strong>${esc(m.codigo)}</strong></td><td>${moveLabel(m.tipoMovimiento)}</td><td>${qtyView(m)}</td><td>${esc(m.motivo)}</td><td>${esc(m.origenDestino)}</td></tr>`).join('')
+    : '<tr><td colspan="6" class="empty">Sin movimientos.</td></tr>';
+}
+
+function renderProducts() {
+  const q = (document.getElementById('productSearch')?.value || '').toLowerCase();
+  const rows = state.products.filter(p => [p.codigo,p.tipo,p.modelo,p.color,p.talla,p.unidad].join(' ').toLowerCase().includes(q));
+  document.getElementById('productsTable').innerHTML = rows.length
+    ? rows.map(p => `<tr><td><strong>${esc(p.codigo)}</strong></td><td>${esc(p.tipo)}</td><td>${esc(p.modelo)}</td><td>${esc(p.color)}</td><td>${esc(p.talla)}</td><td>${esc(p.unidad)}</td><td>${fmt(p.stockMin)}</td><td><button class="btn btn-secondary" onclick="openKardex('${js(p.codigo)}')">Kardex</button></td></tr>`).join('')
+    : '<tr><td colspan="8" class="empty">Sin productos.</td></tr>';
+}
+
+function populateSelectors() {
+  const skuOptions = state.products.map(p => `<option value="${escAttr(p.codigo)}">${esc(p.codigo)} — ${esc(p.tipo)} ${esc(p.modelo)} ${esc(p.color)} ${esc(p.talla)}</option>`).join('');
+  ['mvCodigo','kxCodigo'].forEach(id => document.getElementById(id).innerHTML = '<option value="">Seleccionar…</option>' + skuOptions);
+
+  const types = state.lists.tipos || [];
+  document.getElementById('prTipo').innerHTML = '<option value="">Seleccionar…</option>' + types.map(v => `<option>${esc(v)}</option>`).join('') + '<option value="OTRO">Otro</option>';
+
+  const units = state.lists.unidades || ['UNIDAD','PAR'];
+  document.getElementById('prUnidad').innerHTML = units.map(v => `<option>${esc(v)}</option>`).join('');
+
+  const motivos = state.lists.motivos || ['Compra','Entrega a personal','Devolución','Otro'];
+  document.getElementById('mvMotivo').innerHTML = '<option value="">Seleccionar…</option>' + motivos.map(v => `<option>${esc(v)}</option>`).join('');
+}
+
+// ============================================================
+// FORM HANDLERS (local demo — data persists only in memory)
+// ============================================================
+function submitMovement(ev) {
+  ev.preventDefault();
+  const form = Object.fromEntries(new FormData(ev.target).entries());
+  const qty = Number(form.cantidad);
+  if (qty <= 0) { toast('La cantidad debe ser mayor que 0.'); return; }
+
+  const inv = state.inventory.find(i => i.codigo === form.codigo);
+  if (['SALIDA','AJUSTE_NEGATIVO'].includes(form.tipoMovimiento) && inv && inv.stock < qty) {
+    toast('Stock insuficiente. Disponible: ' + inv.stock);
+    return;
+  }
+
+  state.movements.unshift({
+    fecha: form.fecha,
+    codigo: form.codigo,
+    tipoMovimiento: form.tipoMovimiento,
+    cantidad: qty,
+    motivo: form.motivo || '',
+    origenDestino: form.origenDestino || '',
+    observacion: form.observacion || ''
+  });
+
+  // Update stock
+  const delta = ['ENTRADA','SALDO_INICIAL','AJUSTE_POSITIVO'].includes(form.tipoMovimiento) ? qty : -qty;
+  if (inv) {
+    inv.stock = Math.round((inv.stock + delta) * 100) / 100;
+    inv.estado = inv.stock <= 0 ? 'AGOTADO' : (inv.stock <= inv.stockMin ? 'STOCK BAJO' : 'NORMAL');
+    DEMO_STOCK[form.codigo] = inv.stock;
+  }
+
+  computeMetrics();
+  renderAll();
+  ev.target.reset();
+  setToday();
+  toast('Movimiento registrado ✓ (solo en memoria)');
+}
+
+function submitProduct(ev) {
+  ev.preventDefault();
+  const form = Object.fromEntries(new FormData(ev.target).entries());
+  const code = String(form.codigo).trim().toUpperCase();
+
+  if (state.products.some(p => p.codigo === code)) {
+    toast('Ya existe un producto con ese código.');
+    return;
+  }
+
+  const newP = {
+    codigo: code, tipo: form.tipo, modelo: form.modelo, color: form.color || '',
+    talla: form.talla, descripcion: form.descripcion || '', unidad: form.unidad || 'UNIDAD',
+    stockMin: Number(form.stockMinimo || 0), activo: 'SI'
+  };
+  state.products.push(newP);
+  DEMO_STOCK[code] = Number(form.stockInicial || 0);
+  state.inventory = buildDemoInventory();
+  // Re-add dynamically created products
+  state.inventory.push({
+    ...newP,
+    stock: Number(form.stockInicial || 0),
+    estado: Number(form.stockInicial || 0) <= 0 ? 'AGOTADO' : (Number(form.stockInicial || 0) <= newP.stockMin ? 'STOCK BAJO' : 'NORMAL')
+  });
+
+  if (Number(form.stockInicial) > 0) {
+    state.movements.unshift({
+      fecha: document.getElementById('mvFecha')?.value || new Date().toISOString().slice(0,10),
+      codigo: code, tipoMovimiento: 'SALDO_INICIAL', cantidad: Number(form.stockInicial),
+      motivo: 'Carga inicial', origenDestino: 'Almacén', observacion: 'Stock inicial al crear el SKU'
+    });
+  }
+
+  computeMetrics();
+  renderAll();
+  ev.target.reset();
+  navigate('productos');
+  toast('Producto creado ✓ (solo en memoria)');
+}
+
+function openQuickMovement() {
+  navigate('movimientos');
+  window.scrollTo({top:0,behavior:'smooth'});
+  document.getElementById('mvCodigo').focus();
+}
+
+function openKardex(code) {
+  navigate('kardex');
+  document.getElementById('kxCodigo').value = code;
+  loadKardex();
+}
+
+function loadKardex() {
+  const code = document.getElementById('kxCodigo').value;
+  const fromDate = document.getElementById('kxDesde').value;
+  const toDate = document.getElementById('kxHasta').value;
+  if (!code) { toast('Selecciona un SKU.'); return; }
+
+  const product = state.products.find(p => p.codigo === code);
+  if (!product) { toast('SKU no encontrado.'); return; }
+
+  // Build kardex from all movements for this code
+  const allMoves = state.movements.slice().reverse(); // chronological
+  let balance = 0;
+  const rows = [];
+  allMoves.forEach(m => {
+    if (m.codigo !== code) return;
+    const delta = ['ENTRADA','SALDO_INICIAL','AJUSTE_POSITIVO'].includes(m.tipoMovimiento) ? m.cantidad : -m.cantidad;
+    balance += delta;
+    const afterFrom = !fromDate || m.fecha >= fromDate;
+    const beforeTo = !toDate || m.fecha <= toDate;
+    if (afterFrom && beforeTo) {
+      rows.push({
+        fecha: m.fecha, tipoMovimiento: m.tipoMovimiento, cantidad: m.cantidad,
+        entrada: delta > 0 ? m.cantidad : 0, salida: delta < 0 ? m.cantidad : 0,
+        saldo: Math.round(balance * 100) / 100,
+        motivo: m.motivo, origenDestino: m.origenDestino, observacion: m.observacion
+      });
+    }
+  });
+
+  const box = document.getElementById('kardexProduct');
+  box.classList.remove('hidden');
+  box.innerHTML = `<strong>${esc(product.codigo)}</strong> · ${esc(product.tipo)} · ${esc(product.modelo)} · ${esc(product.color)} · Talla ${esc(product.talla)} · ${esc(product.unidad)}`;
+  document.getElementById('kxStock').textContent = 'Saldo actual: ' + fmt(balance) + ' ' + esc(product.unidad);
+
+  const body = document.getElementById('kardexTable');
+  body.innerHTML = rows.length
+    ? rows.map(r => `<tr><td>${esc(r.fecha)}</td><td>${moveLabel(r.tipoMovimiento)}</td><td class="move-in">${r.entrada ? fmt(r.entrada) : '—'}</td><td class="move-out">${r.salida ? fmt(r.salida) : '—'}</td><td><strong>${fmt(r.saldo)}</strong></td><td>${esc(r.motivo)}</td><td>${esc(r.origenDestino)}</td><td>${esc(r.observacion)}</td></tr>`).join('')
+    : '<tr><td colspan="8" class="empty">No hay movimientos en el rango seleccionado.</td></tr>';
+}
+
+function downloadInventory() {
+  const headers = ['Código','Tipo','Modelo','Color','Talla','Unidad','Stock','Stock mínimo','Estado'];
+  const lines = [headers.map(csvVal).join(',')];
+  state.inventory.forEach(i => lines.push([
+    i.codigo,i.tipo,i.modelo,i.color,i.talla,i.unidad,i.stock,i.stockMin,i.estado
+  ].map(csvVal).join(',')));
+  downloadText('inventario.csv', '\ufeff' + lines.join('\n'), 'text/csv;charset=utf-8;');
+}
+
+function downloadText(filename, text, type) {
+  const blob = new Blob([text], {type});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob); a.download = filename; a.click();
+  setTimeout(() => URL.revokeObjectURL(a.href), 500);
+}
+
+// ============================================================
+// HELPERS
+// ============================================================
+function rowInventory(i) {
+  return `<tr><td><strong>${esc(i.codigo)}</strong></td><td>${esc(i.tipo)}</td><td>${esc(i.talla)}</td><td>${fmt(i.stock)}</td><td>${statusPill(i.estado)}</td></tr>`;
+}
+function rowInventoryFull(i) {
+  return `<tr><td><strong>${esc(i.codigo)}</strong></td><td>${esc(i.tipo)}</td><td>${esc(i.modelo)}</td><td>${esc(i.color)}</td><td>${esc(i.talla)}</td><td>${esc(i.unidad)}</td><td><strong>${fmt(i.stock)}</strong></td><td>${fmt(i.stockMin)}</td><td>${statusPill(i.estado)}</td><td><button class="btn btn-secondary" onclick="openKardex('${js(i.codigo)}')">Ver</button></td></tr>`;
+}
+function statusPill(s) { const cls = s==='NORMAL'?'normal':(s==='STOCK BAJO'?'low':'out'); return `<span class="status ${cls}">${esc(s)}</span>`; }
+function moveLabel(t) { const map = {ENTRADA:'Entrada',SALIDA:'Salida',AJUSTE_POSITIVO:'Ajuste +',AJUSTE_NEGATIVO:'Ajuste −',SALDO_INICIAL:'Saldo inicial'}; return map[t] || esc(t); }
+function qtyView(m) { const sign = ['ENTRADA','SALDO_INICIAL','AJUSTE_POSITIVO'].includes(m.tipoMovimiento)?'+':'−'; const cls = sign==='+'?'move-in':'move-out'; return `<span class="${cls}">${sign} ${fmt(m.cantidad)}</span>`; }
+function fmt(v) { return Number(v||0).toLocaleString('es-PE',{maximumFractionDigits:2}); }
+function setToday() { const today = new Date().toISOString().slice(0,10); const el = document.getElementById('mvFecha'); if(el) el.value = today; }
+function toast(msg) { const el = document.getElementById('toast'); el.textContent = msg; el.classList.add('show'); clearTimeout(toastTimer); toastTimer = setTimeout(() => el.classList.remove('show'), 3200); }
+function closeModal() { document.getElementById('modal').classList.add('hidden'); }
+function esc(v) { return String(v??'').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+function escAttr(v) { return esc(v); }
+function js(v) { return String(v??'').replace(/\\/g,'\\\\').replace(/'/g,"\\'"); }
+function csvVal(value) { const s = String(value == null ? '' : value).replace(/"/g, '""'); return '"' + s + '"'; }
+</script>
+
+</body>
+</html>
