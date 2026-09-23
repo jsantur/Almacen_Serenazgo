@@ -1,334 +1,383 @@
 <script>
-let state = {info:null, products:[], inventory:[], movements:[], metrics:{}, lists:{}};
-let toastTimer;
+  let state = { info: null, products: [], inventory: [], movements: [], metrics: {}, lists: {} };
+  let toastTimer;
 
-const TYPE_META = {
-  'BORCEGUIES': {cat:'CALZADO', nature:'INVENTARIABLE', unit:'PAR', gender:'VARÓN', placeholder:'Institucional'},
-  'CORREA': {cat:'ACCESORIOS', nature:'INVENTARIABLE', unit:'UNIDAD', gender:'UNISEX', placeholder:'Institucional'},
-  'MANGAS': {cat:'EPP / PROTECCIÓN', nature:'INVENTARIABLE', unit:'PAR', gender:'UNISEX', placeholder:'Protección'},
-  'CHALECO TACTICO': {cat:'EPP / PROTECCIÓN', nature:'INVENTARIABLE', unit:'UNIDAD', gender:'UNISEX', placeholder:'Táctico'},
-  'CHALECO ANTIBALAS': {cat:'EPP / PROTECCIÓN', nature:'INVENTARIABLE', unit:'UNIDAD', gender:'UNISEX', placeholder:'Antibalas'},
-  'CASACA': {cat:'INDUMENTARIA', nature:'INVENTARIABLE', unit:'UNIDAD', gender:'UNISEX', placeholder:'Institucional'},
-  'CHOMPA JORGE CHAVEZ': {cat:'INDUMENTARIA', nature:'INVENTARIABLE', unit:'UNIDAD', gender:'UNISEX', placeholder:'Jorge Chavez'},
-  'CAFARENA': {cat:'INDUMENTARIA', nature:'INVENTARIABLE', unit:'UNIDAD', gender:'UNISEX', placeholder:'Institucional'},
-  'POLO': {cat:'INDUMENTARIA', nature:'INVENTARIABLE', unit:'UNIDAD', gender:'UNISEX', placeholder:'Institucional'},
-  'SOMBRERO': {cat:'ACCESORIOS', nature:'INVENTARIABLE', unit:'UNIDAD', gender:'UNISEX', placeholder:'Institucional'},
-  'POLACA': {cat:'INDUMENTARIA', nature:'INVENTARIABLE', unit:'UNIDAD', gender:'UNISEX', placeholder:'Institucional'},
-  'CHALECO DE FAENA': {cat:'EPP / PROTECCIÓN', nature:'INVENTARIABLE', unit:'UNIDAD', gender:'UNISEX', placeholder:'Faena'},
-  'CAMISA': {cat:'INDUMENTARIA', nature:'INVENTARIABLE', unit:'UNIDAD', gender:'VARÓN', placeholder:'Institucional'},
-  'ZAPATO': {cat:'CALZADO', nature:'INVENTARIABLE', unit:'PAR', gender:'VARÓN', placeholder:'Institucional'},
-  'BOTA': {cat:'CALZADO', nature:'INVENTARIABLE', unit:'PAR', gender:'UNISEX', placeholder:'Institucional'},
-  'GUANTE': {cat:'EPP / PROTECCIÓN', nature:'INVENTARIABLE', unit:'PAR', gender:'UNISEX', placeholder:'Seguridad'},
-  'GORRA': {cat:'ACCESORIOS', nature:'INVENTARIABLE', unit:'UNIDAD', gender:'UNISEX', placeholder:'Institucional'},
-  'GORRO': {cat:'ACCESORIOS', nature:'INVENTARIABLE', unit:'UNIDAD', gender:'UNISEX', placeholder:'Institucional'},
-  'CINTURON': {cat:'ACCESORIOS', nature:'INVENTARIABLE', unit:'UNIDAD', gender:'UNISEX', placeholder:'Institucional'},
-  'ESCOBAS': {cat:'LIMPIEZA Y ASEO', nature:'INVENTARIABLE', unit:'UNIDAD', gender:'NO APLICA', placeholder:'Limpieza'},
-  'RECOGEDORES': {cat:'LIMPIEZA Y ASEO', nature:'INVENTARIABLE', unit:'UNIDAD', gender:'NO APLICA', placeholder:'Limpieza'},
-  'TRAPEADORES': {cat:'LIMPIEZA Y ASEO', nature:'INVENTARIABLE', unit:'UNIDAD', gender:'NO APLICA', placeholder:'Limpieza'},
-  'BALDES': {cat:'LIMPIEZA Y ASEO', nature:'INVENTARIABLE', unit:'UNIDAD', gender:'NO APLICA', placeholder:'Limpieza'},
-  'TRAPOS INDUSTRIALES': {cat:'LIMPIEZA Y ASEO', nature:'CONSUMIBLE', unit:'UNIDAD', gender:'NO APLICA', placeholder:'Industrial'},
-  'DETERGENTE': {cat:'QUÍMICOS Y DESINFECCIÓN', nature:'CONSUMIBLE', unit:'UNIDAD', gender:'NO APLICA', placeholder:'Líquido'},
-  'LEJIA': {cat:'QUÍMICOS Y DESINFECCIÓN', nature:'CONSUMIBLE', unit:'UNIDAD', gender:'NO APLICA', placeholder:'Desinfectante'},
-  'ACIDO MURIATICO': {cat:'QUÍMICOS Y DESINFECCIÓN', nature:'CONSUMIBLE', unit:'LITRO', gender:'NO APLICA', placeholder:'Ácido'},
-  'JABON LIQUIDO': {cat:'QUÍMICOS Y DESINFECCIÓN', nature:'CONSUMIBLE', unit:'UNIDAD', gender:'NO APLICA', placeholder:'Líquido'},
-  'AMBIENTADOR': {cat:'QUÍMICOS Y DESINFECCIÓN', nature:'CONSUMIBLE', unit:'UNIDAD', gender:'NO APLICA', placeholder:'Aerosol / líquido'},
-  'KRESO': {cat:'QUÍMICOS Y DESINFECCIÓN', nature:'CONSUMIBLE', unit:'UNIDAD', gender:'NO APLICA', placeholder:'Desinfectante'},
-  'ISOPO DE BAÑO': {cat:'LIMPIEZA Y ASEO', nature:'INVENTARIABLE', unit:'UNIDAD', gender:'NO APLICA', placeholder:'Baño'},
-  'HOJAS A4': {cat:'PAPELERÍA Y ARCHIVO', nature:'CONSUMIBLE', unit:'RESMA', gender:'NO APLICA', placeholder:'Papel bond A4'},
-  'SOBRE MANILA': {cat:'PAPELERÍA Y ARCHIVO', nature:'CONSUMIBLE', unit:'UNIDAD', gender:'NO APLICA', placeholder:'Manila'},
-  'FOLDER MANILA': {cat:'PAPELERÍA Y ARCHIVO', nature:'CONSUMIBLE', unit:'UNIDAD', gender:'NO APLICA', placeholder:'Manila'},
-  'FASTER': {cat:'PAPELERÍA Y ARCHIVO', nature:'CONSUMIBLE', unit:'UNIDAD', gender:'NO APLICA', placeholder:'Fastener'},
-  'FOLDER PLASTICO': {cat:'PAPELERÍA Y ARCHIVO', nature:'CONSUMIBLE', unit:'UNIDAD', gender:'NO APLICA', placeholder:'Plástico'},
-  'LAPICERO': {cat:'ÚTILES DE ESCRITORIO', nature:'CONSUMIBLE', unit:'UNIDAD', gender:'NO APLICA', placeholder:'Escritura'},
-  'BORRADOR': {cat:'ÚTILES DE ESCRITORIO', nature:'CONSUMIBLE', unit:'UNIDAD', gender:'NO APLICA', placeholder:'Goma'},
-  'CORRECTOR': {cat:'ÚTILES DE ESCRITORIO', nature:'CONSUMIBLE', unit:'UNIDAD', gender:'NO APLICA', placeholder:'Corrección'},
-  'RESALTADOR': {cat:'ÚTILES DE ESCRITORIO', nature:'CONSUMIBLE', unit:'UNIDAD', gender:'NO APLICA', placeholder:'Marcador'},
-  'MICAS': {cat:'PAPELERÍA Y ARCHIVO', nature:'CONSUMIBLE', unit:'UNIDAD', gender:'NO APLICA', placeholder:'Transparente'},
-  'LIBRO DE ACTAS 400 HOJAS': {cat:'PAPELERÍA Y ARCHIVO', nature:'CONSUMIBLE', unit:'UNIDAD', gender:'NO APLICA', placeholder:'Actas'},
-  'LIBRO DE ACTAS 200 HOJAS': {cat:'PAPELERÍA Y ARCHIVO', nature:'CONSUMIBLE', unit:'UNIDAD', gender:'NO APLICA', placeholder:'Actas'},
-  'CUADERNO CARPETA': {cat:'PAPELERÍA Y ARCHIVO', nature:'CONSUMIBLE', unit:'UNIDAD', gender:'NO APLICA', placeholder:'Carpeta'},
-  'TABLILLAS PLASTICAS': {cat:'EQUIPAMIENTO DE OFICINA', nature:'INVENTARIABLE', unit:'UNIDAD', gender:'NO APLICA', placeholder:'Plástica'},
-  'POST ITS': {cat:'ÚTILES DE ESCRITORIO', nature:'CONSUMIBLE', unit:'PAQUETE', gender:'NO APLICA', placeholder:'Notas adhesivas'},
-  'GRAPAS': {cat:'ÚTILES DE ESCRITORIO', nature:'CONSUMIBLE', unit:'CAJA', gender:'NO APLICA', placeholder:'Grapas'},
-  'ENGRAPADOR': {cat:'EQUIPAMIENTO DE OFICINA', nature:'INVENTARIABLE', unit:'UNIDAD', gender:'NO APLICA', placeholder:'Escritorio'},
-  'PERFORADOR': {cat:'EQUIPAMIENTO DE OFICINA', nature:'INVENTARIABLE', unit:'UNIDAD', gender:'NO APLICA', placeholder:'Escritorio'},
-  'CLIP': {cat:'ÚTILES DE ESCRITORIO', nature:'CONSUMIBLE', unit:'CAJA', gender:'NO APLICA', placeholder:'Metálico'},
-  'PORTA CLIP': {cat:'EQUIPAMIENTO DE OFICINA', nature:'INVENTARIABLE', unit:'UNIDAD', gender:'NO APLICA', placeholder:'Organizador'}
-};
+  const TYPE_META = {
+    'BORCEGUIES': { cat: 'CALZADO', nature: 'INVENTARIABLE', unit: 'PAR', gender: 'VARÓN', placeholder: 'Institucional' },
+    'CORREA': { cat: 'ACCESORIOS', nature: 'INVENTARIABLE', unit: 'UNIDAD', gender: 'UNISEX', placeholder: 'Institucional' },
+    'MANGAS': { cat: 'EPP / PROTECCIÓN', nature: 'INVENTARIABLE', unit: 'PAR', gender: 'UNISEX', placeholder: 'Protección' },
+    'CHALECO TACTICO': { cat: 'EPP / PROTECCIÓN', nature: 'INVENTARIABLE', unit: 'UNIDAD', gender: 'UNISEX', placeholder: 'Táctico' },
+    'CHALECO ANTIBALAS': { cat: 'EPP / PROTECCIÓN', nature: 'INVENTARIABLE', unit: 'UNIDAD', gender: 'UNISEX', placeholder: 'Antibalas' },
+    'CASACA': { cat: 'INDUMENTARIA', nature: 'INVENTARIABLE', unit: 'UNIDAD', gender: 'UNISEX', placeholder: 'Institucional' },
+    'CHOMPA JORGE CHAVEZ': { cat: 'INDUMENTARIA', nature: 'INVENTARIABLE', unit: 'UNIDAD', gender: 'UNISEX', placeholder: 'Jorge Chavez' },
+    'CAFARENA': { cat: 'INDUMENTARIA', nature: 'INVENTARIABLE', unit: 'UNIDAD', gender: 'UNISEX', placeholder: 'Institucional' },
+    'POLO': { cat: 'INDUMENTARIA', nature: 'INVENTARIABLE', unit: 'UNIDAD', gender: 'UNISEX', placeholder: 'Institucional' },
+    'SOMBRERO': { cat: 'ACCESORIOS', nature: 'INVENTARIABLE', unit: 'UNIDAD', gender: 'UNISEX', placeholder: 'Institucional' },
+    'POLACA': { cat: 'INDUMENTARIA', nature: 'INVENTARIABLE', unit: 'UNIDAD', gender: 'UNISEX', placeholder: 'Institucional' },
+    'CHALECO DE FAENA': { cat: 'EPP / PROTECCIÓN', nature: 'INVENTARIABLE', unit: 'UNIDAD', gender: 'UNISEX', placeholder: 'Faena' },
+    'CAMISA': { cat: 'INDUMENTARIA', nature: 'INVENTARIABLE', unit: 'UNIDAD', gender: 'VARÓN', placeholder: 'Institucional' },
+    'ZAPATO': { cat: 'CALZADO', nature: 'INVENTARIABLE', unit: 'PAR', gender: 'VARÓN', placeholder: 'Institucional' },
+    'BOTA': { cat: 'CALZADO', nature: 'INVENTARIABLE', unit: 'PAR', gender: 'UNISEX', placeholder: 'Institucional' },
+    'GUANTE': { cat: 'EPP / PROTECCIÓN', nature: 'INVENTARIABLE', unit: 'PAR', gender: 'UNISEX', placeholder: 'Seguridad' },
+    'GORRA': { cat: 'ACCESORIOS', nature: 'INVENTARIABLE', unit: 'UNIDAD', gender: 'UNISEX', placeholder: 'Institucional' },
+    'GORRO': { cat: 'ACCESORIOS', nature: 'INVENTARIABLE', unit: 'UNIDAD', gender: 'UNISEX', placeholder: 'Institucional' },
+    'CINTURON': { cat: 'ACCESORIOS', nature: 'INVENTARIABLE', unit: 'UNIDAD', gender: 'UNISEX', placeholder: 'Institucional' },
+    'ESCOBAS': { cat: 'LIMPIEZA Y ASEO', nature: 'INVENTARIABLE', unit: 'UNIDAD', gender: 'NO APLICA', placeholder: 'Limpieza' },
+    'RECOGEDORES': { cat: 'LIMPIEZA Y ASEO', nature: 'INVENTARIABLE', unit: 'UNIDAD', gender: 'NO APLICA', placeholder: 'Limpieza' },
+    'TRAPEADORES': { cat: 'LIMPIEZA Y ASEO', nature: 'INVENTARIABLE', unit: 'UNIDAD', gender: 'NO APLICA', placeholder: 'Limpieza' },
+    'BALDES': { cat: 'LIMPIEZA Y ASEO', nature: 'INVENTARIABLE', unit: 'UNIDAD', gender: 'NO APLICA', placeholder: 'Limpieza' },
+    'TRAPOS INDUSTRIALES': { cat: 'LIMPIEZA Y ASEO', nature: 'CONSUMIBLE', unit: 'UNIDAD', gender: 'NO APLICA', placeholder: 'Industrial' },
+    'DETERGENTE': { cat: 'QUÍMICOS Y DESINFECCIÓN', nature: 'CONSUMIBLE', unit: 'UNIDAD', gender: 'NO APLICA', placeholder: 'Líquido' },
+    'LEJIA': { cat: 'QUÍMICOS Y DESINFECCIÓN', nature: 'CONSUMIBLE', unit: 'UNIDAD', gender: 'NO APLICA', placeholder: 'Desinfectante' },
+    'ACIDO MURIATICO': { cat: 'QUÍMICOS Y DESINFECCIÓN', nature: 'CONSUMIBLE', unit: 'LITRO', gender: 'NO APLICA', placeholder: 'Ácido' },
+    'JABON LIQUIDO': { cat: 'QUÍMICOS Y DESINFECCIÓN', nature: 'CONSUMIBLE', unit: 'UNIDAD', gender: 'NO APLICA', placeholder: 'Líquido' },
+    'AMBIENTADOR': { cat: 'QUÍMICOS Y DESINFECCIÓN', nature: 'CONSUMIBLE', unit: 'UNIDAD', gender: 'NO APLICA', placeholder: 'Aerosol / líquido' },
+    'KRESO': { cat: 'QUÍMICOS Y DESINFECCIÓN', nature: 'CONSUMIBLE', unit: 'UNIDAD', gender: 'NO APLICA', placeholder: 'Desinfectante' },
+    'ISOPO DE BAÑO': { cat: 'LIMPIEZA Y ASEO', nature: 'INVENTARIABLE', unit: 'UNIDAD', gender: 'NO APLICA', placeholder: 'Baño' },
+    'HOJAS A4': { cat: 'PAPELERÍA Y ARCHIVO', nature: 'CONSUMIBLE', unit: 'RESMA', gender: 'NO APLICA', placeholder: 'Papel bond A4' },
+    'SOBRE MANILA': { cat: 'PAPELERÍA Y ARCHIVO', nature: 'CONSUMIBLE', unit: 'UNIDAD', gender: 'NO APLICA', placeholder: 'Manila' },
+    'FOLDER MANILA': { cat: 'PAPELERÍA Y ARCHIVO', nature: 'CONSUMIBLE', unit: 'UNIDAD', gender: 'NO APLICA', placeholder: 'Manila' },
+    'FASTER': { cat: 'PAPELERÍA Y ARCHIVO', nature: 'CONSUMIBLE', unit: 'UNIDAD', gender: 'NO APLICA', placeholder: 'Fastener' },
+    'FOLDER PLASTICO': { cat: 'PAPELERÍA Y ARCHIVO', nature: 'CONSUMIBLE', unit: 'UNIDAD', gender: 'NO APLICA', placeholder: 'Plástico' },
+    'LAPICERO': { cat: 'ÚTILES DE ESCRITORIO', nature: 'CONSUMIBLE', unit: 'UNIDAD', gender: 'NO APLICA', placeholder: 'Escritura' },
+    'BORRADOR': { cat: 'ÚTILES DE ESCRITORIO', nature: 'CONSUMIBLE', unit: 'UNIDAD', gender: 'NO APLICA', placeholder: 'Goma' },
+    'CORRECTOR': { cat: 'ÚTILES DE ESCRITORIO', nature: 'CONSUMIBLE', unit: 'UNIDAD', gender: 'NO APLICA', placeholder: 'Corrección' },
+    'RESALTADOR': { cat: 'ÚTILES DE ESCRITORIO', nature: 'CONSUMIBLE', unit: 'UNIDAD', gender: 'NO APLICA', placeholder: 'Marcador' },
+    'MICAS': { cat: 'PAPELERÍA Y ARCHIVO', nature: 'CONSUMIBLE', unit: 'UNIDAD', gender: 'NO APLICA', placeholder: 'Transparente' },
+    'LIBRO DE ACTAS 400 HOJAS': { cat: 'PAPELERÍA Y ARCHIVO', nature: 'CONSUMIBLE', unit: 'UNIDAD', gender: 'NO APLICA', placeholder: 'Actas' },
+    'LIBRO DE ACTAS 200 HOJAS': { cat: 'PAPELERÍA Y ARCHIVO', nature: 'CONSUMIBLE', unit: 'UNIDAD', gender: 'NO APLICA', placeholder: 'Actas' },
+    'CUADERNO CARPETA': { cat: 'PAPELERÍA Y ARCHIVO', nature: 'CONSUMIBLE', unit: 'UNIDAD', gender: 'NO APLICA', placeholder: 'Carpeta' },
+    'TABLILLAS PLASTICAS': { cat: 'EQUIPAMIENTO DE OFICINA', nature: 'INVENTARIABLE', unit: 'UNIDAD', gender: 'NO APLICA', placeholder: 'Plástica' },
+    'POST ITS': { cat: 'ÚTILES DE ESCRITORIO', nature: 'CONSUMIBLE', unit: 'PAQUETE', gender: 'NO APLICA', placeholder: 'Notas adhesivas' },
+    'GRAPAS': { cat: 'ÚTILES DE ESCRITORIO', nature: 'CONSUMIBLE', unit: 'CAJA', gender: 'NO APLICA', placeholder: 'Grapas' },
+    'ENGRAPADOR': { cat: 'EQUIPAMIENTO DE OFICINA', nature: 'INVENTARIABLE', unit: 'UNIDAD', gender: 'NO APLICA', placeholder: 'Escritorio' },
+    'PERFORADOR': { cat: 'EQUIPAMIENTO DE OFICINA', nature: 'INVENTARIABLE', unit: 'UNIDAD', gender: 'NO APLICA', placeholder: 'Escritorio' },
+    'CLIP': { cat: 'ÚTILES DE ESCRITORIO', nature: 'CONSUMIBLE', unit: 'CAJA', gender: 'NO APLICA', placeholder: 'Metálico' },
+    'PORTA CLIP': { cat: 'EQUIPAMIENTO DE OFICINA', nature: 'INVENTARIABLE', unit: 'UNIDAD', gender: 'NO APLICA', placeholder: 'Organizador' }
+  };
 
-var DEFAULT_LISTS = {
-  naturalezas:['INVENTARIABLE','CONSUMIBLE'],
-  generos:['VARÓN','DAMA','UNISEX','NO APLICA'],
-  unidades:['UNIDAD','PAR','JUEGO / KIT','CAJA','PAQUETE','RESMA','MILLAR','ROLLO','LITRO','GALÓN','KILOGRAMO'],
-  condiciones:['NUEVO','USADO / REUTILIZABLE','EN MANTENIMIENTO/LAVADO','DADO DE BAJA'],
-  motivos:['Compra','Entrega a personal','Devolución','Reposición','Ajuste físico','Regularización','Pérdida/Merma','Otro'],
-  tallas:['XS','S','M','L','XL','XXL','36','37','38','39','40','41','42','43','44','45','Única','NO APLICA'],
-  presentaciones:['NO APLICA','1 L','A4 · 500 hojas','Caja x 50','Paquete x 100']
-};
-function _mergeLists(defaults, dynamic){
-  var seen = {}, res = [], i, v;
-  for(i=0;i<defaults.length;i++){ v=String(defaults[i]||''); if(v && !seen[v]){ seen[v]=1; res.push(v); } }
-  if(dynamic && dynamic.length){ for(i=0;i<dynamic.length;i++){ v=String(dynamic[i]||''); if(v && !seen[v]){ seen[v]=1; res.push(v); } } }
-  return res;
-}
+  var DEFAULT_LISTS = {
+    naturalezas: ['INVENTARIABLE', 'CONSUMIBLE'],
+    generos: ['VARÓN', 'DAMA', 'UNISEX', 'NO APLICA'],
+    unidades: ['UNIDAD', 'PAR', 'JUEGO / KIT', 'CAJA', 'PAQUETE', 'RESMA', 'MILLAR', 'ROLLO', 'LITRO', 'GALÓN', 'KILOGRAMO'],
+    condiciones: ['NUEVO', 'USADO / REUTILIZABLE', 'EN MANTENIMIENTO/LAVADO', 'DADO DE BAJA'],
+    motivos: ['Compra', 'Entrega a personal', 'Devolución', 'Reposición', 'Ajuste físico', 'Regularización', 'Pérdida/Merma', 'Otro'],
+    tallas: ['XS', 'S', 'M', 'L', 'XL', 'XXL', '36', '37', '38', '39', '40', '41', '42', '43', '44', '45', 'Única', 'NO APLICA'],
+    presentaciones: ['NO APLICA', '1 L', 'A4 · 500 hojas', 'Caja x 50', 'Paquete x 100']
+  };
+  function _mergeLists(defaults, dynamic) {
+    var seen = {}, res = [], i, v;
+    for (i = 0; i < defaults.length; i++) { v = String(defaults[i] || ''); if (v && !seen[v]) { seen[v] = 1; res.push(v); } }
+    if (dynamic && dynamic.length) { for (i = 0; i < dynamic.length; i++) { v = String(dynamic[i] || ''); if (v && !seen[v]) { seen[v] = 1; res.push(v); } } }
+    return res;
+  }
 
-window.addEventListener('load', () => {
-  setToday();
-  document.querySelectorAll('.nav-item').forEach(btn => btn.addEventListener('click', () => navigate(btn.dataset.section)));
-  bindProductSkuPreview();
-  const type = document.getElementById('prTipo');
-  if(type) type.addEventListener('change', applyProductTypeMeta);
-  refreshApp();
-});
-
-function refreshApp(){
-  showLoading(true);
-  google.script.run.withSuccessHandler(data => {
-    state = data;
-    showLoading(false);
-    renderAll();
-  }).withFailureHandler(handleError).getAppData();
-}
-
-function renderAll(){
-  renderMetrics();
-  renderDashboard();
-  renderInventory();
-  renderMovements();
-  populateSelectors();
-  renderProducts();
-  document.getElementById('sheetLink').href = state.info && state.info.spreadsheetUrl ? state.info.spreadsheetUrl : '#';
-  document.getElementById('systemBadge').textContent = state.info && state.info.configured ? 'Conectado a Google Sheets' : 'Sin configurar';
-  updateProductStats();
-  applyProductTypeMeta();
-  updateSkuPreview();
-}
-
-function navigate(section){
-  document.querySelectorAll('.nav-item').forEach(b => b.classList.toggle('active', b.dataset.section === section));
-  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-  const el = document.getElementById('section-' + section);
-  if (el) el.classList.add('active');
-  const titles = {dashboard:'Dashboard',inventario:'Inventario',movimientos:'Movimientos',kardex:'Kardex',productos:'Productos'};
-  document.getElementById('pageTitle').textContent = titles[section] || 'Dashboard';
-}
-
-function renderMetrics(){
-  const m = state.metrics || {};
-  document.getElementById('mSkus').textContent = fmt(m.skus || 0);
-  document.getElementById('mStock').textContent = fmt(m.totalStock || 0);
-  document.getElementById('mLow').textContent = fmt(m.lowStock || 0);
-  document.getElementById('mOut').textContent = fmt(m.outOfStock || 0);
-  document.getElementById('mMoves30').textContent = (m.movements30d || 0) + ' en 30 días';
-}
-
-function renderDashboard(){
-  const alertBody = document.getElementById('dashboardAlerts');
-  const alerts = state.inventory.filter(i => i.stock <= i.stockMin).sort((a,b) => a.stock - b.stock).slice(0,10);
-  alertBody.innerHTML = alerts.length ? alerts.map(rowInventory).join('') : '<tr><td colspan="5" class="empty">No hay alertas de stock.</td></tr>';
-  const moveBody = document.getElementById('dashboardMoves');
-  const rows = state.movements.slice(0,8);
-  moveBody.innerHTML = rows.length ? rows.map(m => `<tr><td>${esc(m.fecha)}</td><td><strong>${esc(m.codigo)}</strong></td><td>${moveLabel(m.tipoMovimiento)}</td><td>${qtyView(m)}</td></tr>`).join('') : '<tr><td colspan="4" class="empty">Sin movimientos.</td></tr>';
-}
-
-function renderInventory(){
-  const q = (document.getElementById('inventorySearch')?.value || '').toLowerCase();
-  const status = document.getElementById('inventoryStatus')?.value || '';
-  const rows = state.inventory.filter(i => {
-    const hay = [i.codigo,i.tipo,i.modelo,i.color,i.talla,i.descripcion].join(' ').toLowerCase();
-    return (!q || hay.includes(q)) && (!status || i.estado === status);
+  window.addEventListener('load', () => {
+    setToday();
+    document.querySelectorAll('.nav-item').forEach(btn => btn.addEventListener('click', () => navigate(btn.dataset.section)));
+    bindProductSkuPreview();
+    const type = document.getElementById('prTipo');
+    if (type) type.addEventListener('change', applyProductTypeMeta);
+    refreshApp();
   });
-  document.getElementById('inventoryTable').innerHTML = rows.length ? rows.map(rowInventoryFull).join('') : '<tr><td colspan="10" class="empty">No se encontraron registros.</td></tr>';
-}
 
-function renderMovements(){
-  const body = document.getElementById('movementsTable');
-  body.innerHTML = state.movements.length ? state.movements.map(m => `<tr><td>${esc(m.fecha)}</td><td><strong>${esc(m.codigo)}</strong></td><td>${moveLabel(m.tipoMovimiento)}</td><td>${qtyView(m)}</td><td>${esc(m.motivo)}</td><td>${esc(m.origenDestino)}</td></tr>`).join('') : '<tr><td colspan="6" class="empty">Sin movimientos.</td></tr>';
-}
+  function refreshApp() {
+    showLoading(true);
+    google.script.run.withSuccessHandler(data => {
+      state = data;
+      showLoading(false);
+      renderAll();
+    }).withFailureHandler(handleError).getAppData();
+  }
 
-function renderProducts(){
-  const q = (document.getElementById('productSearch')?.value || '').toLowerCase();
-  const fam = document.getElementById('productFamilyFilter')?.value || '';
-  const nature = document.getElementById('productNatureFilter')?.value || '';
-  const rows = state.products.filter(p => {
-    const hay = [p.codigo,p.categoria,p.naturaleza,p.tipo,p.modelo,p.marca,p.color,p.talla,p.presentacion,p.genero,p.unidad,p.ubicacion,p.condicion,p.descripcion].join(' ').toLowerCase();
-    return (!q || hay.includes(q)) && (!fam || p.categoria === fam) && (!nature || p.naturaleza === nature);
-  });
-  document.getElementById('productsTable').innerHTML = rows.length ? rows.map(p => { const inv = state.inventory.find(i => i.codigo === p.codigo); return `<tr><td><strong>${esc(p.codigo)}</strong></td><td>${esc(p.categoria)}</td><td>${naturePill(p.naturaleza)}</td><td>${esc(p.tipo)}</td><td>${esc([p.marca,p.modelo].filter(Boolean).join(' · ') || '—')}</td><td>${esc(p.color || '—')}</td><td>${esc(p.talla || 'NO APLICA')}</td><td>${esc(p.presentacion || '—')}</td><td>${esc(p.unidad)}</td><td>${esc(p.ubicacion || '—')}</td><td>${esc(p.condicion)}</td><td><strong>${inv ? fmt(inv.stock) : '0'}</strong></td><td>${inv ? statusPill(inv.estado) : statusPill('AGOTADO')}</td><td class="actions-cell"><button class="btn btn-secondary" onclick="openProductCode('${js(p.codigo)}')">Código</button><button class="btn btn-secondary" onclick="openKardex('${js(p.codigo)}')">Kardex</button></td></tr>`; }).join('') : '<tr><td colspan="14" class="empty">Sin productos para los filtros seleccionados.</td></tr>';
-}
+  function renderAll() {
+    renderMetrics();
+    renderDashboard();
+    renderInventory();
+    renderMovements();
+    populateSelectors();
+    renderProducts();
+    document.getElementById('sheetLink').href = state.info && state.info.spreadsheetUrl ? state.info.spreadsheetUrl : '#';
+    document.getElementById('systemBadge').textContent = state.info && state.info.configured ? 'Conectado a Google Sheets' : 'Sin configurar';
+    updateProductStats();
+    applyProductTypeMeta();
+    updateSkuPreview();
+  }
 
-function populateSelectors(){
-  var skuOptions = state.products.map(function(p){ return '<option value="'+escAttr(p.codigo)+'">'+esc(p.codigo)+' — '+esc(p.tipo)+' · '+esc(p.modelo || p.marca || '')+' · '+esc(p.color || '')+' · '+esc(p.talla || p.presentacion || '')+'</option>'; }).join('');
-  ['mvCodigo','kxCodigo'].forEach(function(id){ var el = document.getElementById(id); if(el) el.innerHTML = '<option value="">Seleccionar…</option>' + skuOptions; });
-  var l = state.lists || {};
-  fillSelect('prCategoria', _mergeLists(Object.keys(TYPE_META).map(function(k){ return TYPE_META[k].cat; }), l.categorias));
-  fillSelect('prNaturaleza', _mergeLists(DEFAULT_LISTS.naturalezas, l.naturalezas));
-  fillSelect('prTipo', _mergeLists(Object.keys(TYPE_META), l.tipos), true);
-  fillSelect('prGenero', _mergeLists(DEFAULT_LISTS.generos, l.generos));
-  fillSelect('prUnidad', _mergeLists(DEFAULT_LISTS.unidades, l.unidades));
-  fillSelect('prCondicion', _mergeLists(DEFAULT_LISTS.condiciones, l.condiciones));
-  fillSelect('mvCondicion', _mergeLists(DEFAULT_LISTS.condiciones, l.condiciones));
-  fillSelect('mvMotivo', _mergeLists(DEFAULT_LISTS.motivos, l.motivos), true);
-  fillFilter('productFamilyFilter', _mergeLists(Object.keys(TYPE_META).map(function(k){ return TYPE_META[k].cat; }), l.categorias));
-  fillFilter('productNatureFilter', _mergeLists(DEFAULT_LISTS.naturalezas, l.naturalezas));
-  var dl = document.getElementById('prTallaList');
-  if (dl) dl.innerHTML = _mergeLists(DEFAULT_LISTS.tallas, l.tallas).map(function(v){ return '<option value="'+escAttr(v)+'"></option>'; }).join('');
-  var pl = document.getElementById('prPresentacionList');
-  if (pl) pl.innerHTML = _mergeLists(DEFAULT_LISTS.presentaciones, l.presentaciones).map(function(v){ return '<option value="'+escAttr(v)+'"></option>'; }).join('');
-}
+  function navigate(section) {
+    document.querySelectorAll('.nav-item').forEach(b => b.classList.toggle('active', b.dataset.section === section));
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    const el = document.getElementById('section-' + section);
+    if (el) el.classList.add('active');
+    const titles = { dashboard: 'Dashboard', inventario: 'Inventario', movimientos: 'Movimientos', kardex: 'Kardex', productos: 'Productos' };
+    document.getElementById('pageTitle').textContent = titles[section] || 'Dashboard';
+  }
 
-function fillSelect(id, values, extraOther){
-  const el = document.getElementById(id); if(!el) return;
-  const current = el.value;
-  el.innerHTML = '<option value="">Seleccionar…</option>' + values.map(v => `<option value="${escAttr(v)}">${esc(v)}</option>`).join('') + (extraOther ? '<option value="OTRO">Otro</option>' : '');
-  if (values.includes(current)) el.value = current;
-}
-function fillFilter(id, values){
-  const el=document.getElementById(id); if(!el)return; const current=el.value;
-  const first=id==='productFamilyFilter'?'Todas las familias':'Todas';
-  el.innerHTML='<option value="">'+first+'</option>'+values.map(v=>`<option value="${escAttr(v)}">${esc(v)}</option>`).join('');
-  if(values.includes(current))el.value=current;
-}
+  function renderMetrics() {
+    const m = state.metrics || {};
+    document.getElementById('mSkus').textContent = fmt(m.skus || 0);
+    document.getElementById('mStock').textContent = fmt(m.totalStock || 0);
+    document.getElementById('mLow').textContent = fmt(m.lowStock || 0);
+    document.getElementById('mOut').textContent = fmt(m.outOfStock || 0);
+    document.getElementById('mMoves30').textContent = (m.movements30d || 0) + ' en 30 días';
+  }
 
-function submitMovement(ev){
-  ev.preventDefault();
-  const form = Object.fromEntries(new FormData(ev.target).entries());
-  showLoading(true);
-  google.script.run.withSuccessHandler(res => {
-    showLoading(false); toast(res.message); ev.target.reset(); setToday(); refreshApp();
-  }).withFailureHandler(handleError).recordMovement(form);
-}
+  function renderDashboard() {
+    const alertBody = document.getElementById('dashboardAlerts');
+    const alerts = state.inventory.filter(i => i.stock <= i.stockMin).sort((a, b) => a.stock - b.stock).slice(0, 10);
+    alertBody.innerHTML = alerts.length ? alerts.map(rowInventory).join('') : '<tr><td colspan="5" class="empty">No hay alertas de stock.</td></tr>';
+    const moveBody = document.getElementById('dashboardMoves');
+    const rows = state.movements.slice(0, 8);
+    moveBody.innerHTML = rows.length ? rows.map(m => `<tr><td>${esc(m.fecha)}</td><td><strong>${esc(m.codigo)}</strong></td><td>${moveLabel(m.tipoMovimiento)}</td><td>${qtyView(m)}</td></tr>`).join('') : '<tr><td colspan="4" class="empty">Sin movimientos.</td></tr>';
+  }
 
-function submitProduct(ev){
-  ev.preventDefault();
-  const form = Object.fromEntries(new FormData(ev.target).entries());
-  if (!form.tipo){toast('Selecciona un tipo de producto.');return;}
-  const sku = buildSkuPreview(form.tipo, form.modelo||form.marca||'', form.color||'', form.talla||'', form.presentacion||'');
-  form.codigo = sku; // Add generated SKU to form data
-  showLoading(true);
-  google.script.run.withSuccessHandler(res => {
-    showLoading(false); toast(res.message); ev.target.reset(); resetProductForm(); refreshApp(); navigate('productos');
-  }).withFailureHandler(handleError).createProduct(form);
-}
+  function renderInventory() {
+    const q = (document.getElementById('inventorySearch')?.value || '').toLowerCase();
+    const status = document.getElementById('inventoryStatus')?.value || '';
+    const rows = state.inventory.filter(i => {
+      const hay = [i.codigo, i.tipo, i.modelo, i.color, i.talla, i.descripcion].join(' ').toLowerCase();
+      return (!q || hay.includes(q)) && (!status || i.estado === status);
+    });
+    document.getElementById('inventoryTable').innerHTML = rows.length ? rows.map(rowInventoryFull).join('') : '<tr><td colspan="10" class="empty">No se encontraron registros.</td></tr>';
+  }
 
-function openQuickMovement(){
-  navigate('movimientos');
-  window.scrollTo({top:0,behavior:'smooth'});
-  document.getElementById('mvCodigo').focus();
-}
+  function renderMovements() {
+    const body = document.getElementById('movementsTable');
+    body.innerHTML = state.movements.length ? state.movements.map(m => `<tr><td>${esc(m.fecha)}</td><td><strong>${esc(m.codigo)}</strong></td><td>${moveLabel(m.tipoMovimiento)}</td><td>${qtyView(m)}</td><td>${esc(m.motivo)}</td><td>${esc(m.origenDestino)}</td></tr>`).join('') : '<tr><td colspan="6" class="empty">Sin movimientos.</td></tr>';
+  }
 
-function openKardex(code){
-  navigate('kardex');
-  document.getElementById('kxCodigo').value = code;
-  loadKardex();
-}
+  function renderProducts() {
+    const q = (document.getElementById('productSearch')?.value || '').toLowerCase();
+    const fam = document.getElementById('productFamilyFilter')?.value || '';
+    const nature = document.getElementById('productNatureFilter')?.value || '';
+    const rows = state.products.filter(p => {
+      const hay = [p.codigo, p.categoria, p.naturaleza, p.tipo, p.modelo, p.marca, p.color, p.talla, p.presentacion, p.genero, p.unidad, p.ubicacion, p.condicion, p.descripcion].join(' ').toLowerCase();
+      return (!q || hay.includes(q)) && (!fam || p.categoria === fam) && (!nature || p.naturaleza === nature);
+    });
+    document.getElementById('productsTable').innerHTML = rows.length ? rows.map(p => { const inv = state.inventory.find(i => i.codigo === p.codigo); return `<tr><td><strong>${esc(p.codigo)}</strong></td><td>${esc(p.categoria)}</td><td>${naturePill(p.naturaleza)}</td><td>${esc(p.tipo)}</td><td>${esc([p.marca, p.modelo].filter(Boolean).join(' · ') || '—')}</td><td>${esc(p.color || '—')}</td><td>${esc(p.talla || 'NO APLICA')}</td><td>${esc(p.presentacion || '—')}</td><td>${esc(p.unidad)}</td><td>${esc(p.ubicacion || '—')}</td><td>${esc(p.condicion)}</td><td><strong>${inv ? fmt(inv.stock) : '0'}</strong></td><td>${inv ? statusPill(inv.estado) : statusPill('AGOTADO')}</td><td class="actions-cell" style="white-space:nowrap;"><button class="btn btn-secondary" style="margin-right:4px;" onclick="editProduct('${js(p.codigo)}')">✏️ Editar</button><button class="btn btn-secondary" onclick="toggleProductStatus('${js(p.codigo)}')">${p.activo === 'NO' ? '▶️ Activar' : '⏸️ Desactivar'}</button></td><td class="actions-cell"><button class="btn btn-secondary" onclick="openProductCode('${js(p.codigo)}')">Código</button><button class="btn btn-secondary" onclick="openKardex('${js(p.codigo)}')">Kardex</button></td></tr>`; }).join('') : '<tr><td colspan="15" class="empty">Sin productos para los filtros seleccionados.</td></tr>';
+  }
 
-function loadKardex(){
-  const code = document.getElementById('kxCodigo').value;
-  const from = document.getElementById('kxDesde').value;
-  const to = document.getElementById('kxHasta').value;
-  if(!code){toast('Selecciona un SKU.');return;}
-  showLoading(true);
-  google.script.run.withSuccessHandler(data => {
-    showLoading(false);
-    const p = data.product;
-    const box = document.getElementById('kardexProduct');
-    box.classList.remove('hidden');
-    box.innerHTML = `<strong>${esc(p.codigo)}</strong> · ${esc(p.categoria||'')} · ${esc(p.naturaleza||'')} · ${esc(p.tipo||'')} · ${esc([p.marca,p.modelo].filter(Boolean).join(' · '))} · ${esc(p.color || '—')} · Talla ${esc(p.talla || 'NO APLICA')} · Presentación ${esc(p.presentacion || '—')} · ${esc(p.ubicacion || '—')} · Condición: ${esc(p.condicion||'NUEVO')}`;
-    document.getElementById('kxStock').textContent = 'Saldo actual: ' + fmt(data.currentStock) + ' ' + esc(p.unidad||'UNIDAD');
-    const body = document.getElementById('kardexTable');
-    body.innerHTML = data.rows.length ? data.rows.map(r => `<tr><td>${esc(r.fecha)}</td><td>${moveLabel(r.tipoMovimiento)}</td><td class="move-in">${r.entrada ? fmt(r.entrada) : '—'}</td><td class="move-out">${r.salida ? fmt(r.salida) : '—'}</td><td><strong>${fmt(r.saldo)}</strong></td><td>${esc(r.motivo)}</td><td>${esc(r.origenDestino)}</td><td>${esc(r.observacion)}</td></tr>`).join('') : '<tr><td colspan="8" class="empty">No hay movimientos en el rango seleccionado.</td></tr>';
-  }).withFailureHandler(handleError).getKardex(code, from, to);
-}
+  function populateSelectors() {
+    var skuOptions = state.products.map(function (p) { return '<option value="' + escAttr(p.codigo) + '">' + esc(p.codigo) + ' — ' + esc(p.tipo) + ' · ' + esc(p.modelo || p.marca || '') + ' · ' + esc(p.color || '') + ' · ' + esc(p.talla || p.presentacion || '') + '</option>'; }).join('');
+    ['mvCodigo', 'kxCodigo'].forEach(function (id) { var el = document.getElementById(id); if (el) el.innerHTML = '<option value="">Seleccionar…</option>' + skuOptions; });
+    var l = state.lists || {};
+    var catList = document.getElementById('prCategoriaList');
+    if (catList) catList.innerHTML = _mergeLists(Object.keys(TYPE_META).map(function (k) { return TYPE_META[k].cat; }), l.categorias).map(function (v) { return '<option value="' + escAttr(v) + '"></option>'; }).join('');
+    fillSelect('prNaturaleza', _mergeLists(DEFAULT_LISTS.naturalezas, l.naturalezas));
+    var tl = document.getElementById('prTipoList');
+    if (tl) tl.innerHTML = _mergeLists(Object.keys(TYPE_META), l.tipos).map(function (v) { return '<option value="' + escAttr(v) + '"></option>'; }).join('');
+    fillSelect('prGenero', _mergeLists(DEFAULT_LISTS.generos, l.generos));
+    var unList = document.getElementById('prUnidadList');
+    if (unList) unList.innerHTML = _mergeLists(DEFAULT_LISTS.unidades, l.unidades).map(function (v) { return '<option value="' + escAttr(v) + '"></option>'; }).join('');
+    var condList = document.getElementById('prCondicionList');
+    if (condList) condList.innerHTML = _mergeLists(DEFAULT_LISTS.condiciones, l.condiciones).map(function (v) { return '<option value="' + escAttr(v) + '"></option>'; }).join('');
+    fillSelect('mvCondicion', _mergeLists(DEFAULT_LISTS.condiciones, l.condiciones));
+    fillSelect('mvMotivo', _mergeLists(DEFAULT_LISTS.motivos, l.motivos), true);
+    fillFilter('productFamilyFilter', _mergeLists(Object.keys(TYPE_META).map(function (k) { return TYPE_META[k].cat; }), l.categorias));
+    fillFilter('productNatureFilter', _mergeLists(DEFAULT_LISTS.naturalezas, l.naturalezas));
+    var dl = document.getElementById('prTallaList');
+    if (dl) dl.innerHTML = _mergeLists(DEFAULT_LISTS.tallas, l.tallas).map(function (v) { return '<option value="' + escAttr(v) + '"></option>'; }).join('');
+    var pl = document.getElementById('prPresentacionList');
+    if (pl) pl.innerHTML = _mergeLists(DEFAULT_LISTS.presentaciones, l.presentaciones).map(function (v) { return '<option value="' + escAttr(v) + '"></option>'; }).join('');
+  }
 
-function downloadInventory(){
-  google.script.run.withSuccessHandler(csv => downloadText('inventario.csv', '\ufeff' + csv, 'text/csv;charset=utf-8;')).withFailureHandler(handleError).exportInventoryCsv();
-}
+  function fillSelect(id, values, extraOther) {
+    const el = document.getElementById(id); if (!el) return;
+    const current = el.value;
+    el.innerHTML = '<option value="">Seleccionar…</option>' + values.map(v => `<option value="${escAttr(v)}">${esc(v)}</option>`).join('') + (extraOther ? '<option value="OTRO">Otro</option>' : '');
+    if (values.includes(current)) el.value = current;
+  }
+  function fillFilter(id, values) {
+    const el = document.getElementById(id); if (!el) return; const current = el.value;
+    const first = id === 'productFamilyFilter' ? 'Todas las familias' : 'Todas';
+    el.innerHTML = '<option value="">' + first + '</option>' + values.map(v => `<option value="${escAttr(v)}">${esc(v)}</option>`).join('');
+    if (values.includes(current)) el.value = current;
+  }
 
-function downloadText(filename, text, type){
-  const blob = new Blob([text], {type:type});
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob); a.download = filename; a.click();
-  setTimeout(() => URL.revokeObjectURL(a.href), 500);
-}
+  function submitMovement(ev) {
+    ev.preventDefault();
+    const form = Object.fromEntries(new FormData(ev.target).entries());
+    showLoading(true);
+    google.script.run.withSuccessHandler(res => {
+      showLoading(false); toast(res.message); ev.target.reset(); setToday(); refreshApp();
+    }).withFailureHandler(handleError).recordMovement(form);
+  }
 
-function bindProductSkuPreview(){ ['prTipo','prModelo','prMarca','prColor','prTalla','prPresentacion'].forEach(id => { const el = document.getElementById(id); if(el) ['input','change'].forEach(evt => el.addEventListener(evt, updateSkuPreview)); }); }
-function applyProductTypeMeta(){
-  var raw=(document.getElementById('prTipo')||{}).value||''; var key=stripAccents(raw).toUpperCase(); var meta=TYPE_META[key];
-  var model=document.getElementById('prModelo'), cat=document.getElementById('prCategoria'), nat=document.getElementById('prNaturaleza'), gen=document.getElementById('prGenero'), unit=document.getElementById('prUnidad');
-  if(model && meta){ model.placeholder='Ej.: '+meta.placeholder+' / variante'; }
-  if(meta){ if(cat) cat.value=meta.cat; if(nat) nat.value=meta.nature; if(gen) gen.value=meta.gender; if(unit) unit.value=meta.unit; }
-  var hint=document.getElementById('productSmartHint');
-  if(hint) hint.textContent = meta ? ('Sugerencia: '+meta.cat+' · '+meta.nature+' · '+meta.unit+'. Puedes modificarla cuando una variante concreta lo necesite.') : 'Selecciona un tipo para recibir una sugerencia de familia, naturaleza y unidad.';
-  updateSkuPreview();
-}
-function updateSkuPreview(){
-  const type = document.getElementById('prTipo')?.value || '', model = document.getElementById('prModelo')?.value || '', brand = document.getElementById('prMarca')?.value || '', color = document.getElementById('prColor')?.value || '', talla = document.getElementById('prTalla')?.value || '', pres = document.getElementById('prPresentacion')?.value || '';
-  const preview=document.getElementById('skuPreview'); if(!preview)return;
-  if(!type){preview.textContent='Completa Tipo / Producto';return;}
-  preview.textContent=buildSkuPreview(type, model || brand, color, talla, pres);
-}
-function buildSkuPreview(type, model, color, talla, pres){
-  const mapType={'BORCEGUIES':'BOR','CORREA':'COR','MANGAS':'MGA','MANGA':'MGA','CHALECO TACTICO':'CHA','CHALECO TÁCTICO':'CHA','CHALECO ANTIBALAS':'ABA','CASACA':'CAS','CHOMPA JORGE CHAVEZ':'CHO','CHOMPA JORGE CHÁVEZ':'CHO','CAFARENA':'CAF','POLO':'POL','POLOS':'POL','SOMBRERO':'SOM','POLACA':'POL','CHALECO DE FAENA':'CHA','CAMISA':'CAM','PANTALÓN':'PAN','PANTALON':'PAN','ZAPATO':'ZAP','BOTA':'BOT','GUANTE':'GUA','GORRA':'GOR','GORRO':'GOR','CINTURÓN':'CIN','CINTURON':'CIN','ESCOBAS':'ESCO','ESCOBA':'ESCO','RECOGEDORES':'REC','RECOGEDOR':'REC','TRAPEADORES':'TRA','TRAPEADOR':'TRA','BALDES':'BAL','BALDE':'BAL','TRAPOS INDUSTRIALES':'TRI','DETERGENTE':'DET','LEJÍA':'LEJ','LEJIA':'LEJ','ÁCIDO MURIÁTICO':'ACI','ACIDO MURIATICO':'ACI','JABÓN LÍQUIDO':'JAB','JABON LIQUIDO':'JAB','AMBIENTADOR':'AMB','KRESO':'KRE','ISOPO DE BAÑO':'ISO'};
-  const mapModel={'INSTITUCIONAL':'INS','TACTICO':'TAC','TÁCTICO':'TAC','FAENA':'FAE','PROTECCION':'PRO','PROTECCIÓN':'PRO','ANTIBALAS':'ANT','JORGE CHAVEZ':'JCH','JORGE CHÁVEZ':'JCH','LIMPIEZA':'LIM','LIQUIDO':'LIQ','LÍQUIDO':'LIQ','BAÑO':'BAN','ÁCIDO':'ACI','ACIDO':'ACI','DESINFECTANTE':'DES','INODORO':'INO'};
-  const mapColor={'NEGRO':'NEG','AZUL':'AZU','BLANCO':'BLA','ROJO':'ROJ','VERDE':'VER','GRIS':'GRI','MARRON':'MAR','MARRÓN':'MAR','BEIGE':'BEI','AMARILLO':'AMA','NARANJA':'NAR','CELESTE':'CEL'};
-  const token=(value,map,fallback)=>{const s=stripAccents(value).trim().toUpperCase();if(!s)return fallback;if(map[s])return map[s];return s.replace(/[^A-Z0-9]/g,'').slice(0,3)||fallback;};
-  let variant=(talla||'').trim().toUpperCase(); if(!variant || ['NO APLICA','N/A','NA'].includes(stripAccents(variant).trim())) variant=(pres||'').trim().toUpperCase();
-  variant=variant.replace(/\s+/g,''); if(['NOAPLICA','N/A','NA'].includes(stripAccents(variant))) variant='';
-  variant=variant==='UNICA'||variant==='ÚNICA'?'UNI':(variant==='SINTALLA'?'ST':variant); variant=stripAccents(variant).replace(/[^A-Z0-9.-]/g,'')||'STD';
-  return [token(type,mapType,'TIP'),token(model,mapModel,'GEN'),token(color,mapColor,'GEN'),variant].join('-');
-}
-function stripAccents(v){return String(v||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'');}
-function resetProductForm(){ const f=document.getElementById('productForm'); if(f){const n=document.getElementById('prNaturaleza'); if(n)n.value='INVENTARIABLE'; const g=document.getElementById('prGenero'); if(g)g.value='NO APLICA'; const p=document.getElementById('prPresentacion'); if(p)p.value='NO APLICA'; const t=document.getElementById('prTalla'); if(t)t.value='NO APLICA';} setTimeout(() => {applyProductTypeMeta(); updateSkuPreview();}, 20); }
+  function submitProduct(ev) {
+    ev.preventDefault();
+    const form = Object.fromEntries(new FormData(ev.target).entries());
+    if (!form.tipo) { toast('Selecciona un tipo de producto.'); return; }
+    
+    const sku = buildSkuPreview(form.tipo, form.modelo || form.marca || '', form.color || '', form.talla || '', form.presentacion || '');
+    form.codigo = sku; // Add generated SKU to form data
 
-function updateProductStats(){
-  const m=state.metrics||{}; const fam=new Set(state.products.map(p=>p.categoria).filter(Boolean)).size;
-  const a=document.getElementById('prStatInv'); if(a)a.textContent=fmt(m.inventariables||0);
-  const b=document.getElementById('prStatCons'); if(b)b.textContent=fmt(m.consumibles||0);
-  const c=document.getElementById('prStatFamilies'); if(c)c.textContent=fmt(fam);
-}
+    if (form.originalCodigo) {
+      showLoading(true);
+      google.script.run.withSuccessHandler(res => {
+        showLoading(false); toast(res.message); ev.target.reset(); document.getElementById('originalCodigo').value = ''; resetProductForm(); refreshApp(); navigate('productos');
+      }).withFailureHandler(handleError).editProduct(form);
+      return;
+    }
 
-function rowInventory(i){
-  return `<tr><td><strong>${esc(i.codigo)}</strong></td><td>${esc(i.tipo)}</td><td>${esc(i.talla)}</td><td>${fmt(i.stock)}</td><td>${statusPill(i.estado)}</td></tr>`;
-}
-function rowInventoryFull(i){
-  return `<tr><td><strong>${esc(i.codigo)}</strong></td><td>${esc(i.tipo)}</td><td>${esc(i.modelo)}</td><td>${esc(i.color)}</td><td>${esc(i.talla)}</td><td>${esc(i.unidad)}</td><td><strong>${fmt(i.stock)}</strong></td><td>${fmt(i.stockMin)}</td><td>${statusPill(i.estado)}</td><td><button class="btn btn-secondary" onclick="openKardex('${js(i.codigo)}')">Ver</button></td></tr>`;
-}
-function naturePill(s){const cls=s==='CONSUMIBLE'?'nature-consumible':'nature-inventariable';return `<span class="nature-pill ${cls}">${esc(s||'INVENTARIABLE')}</span>`;}
-function statusPill(s){const cls=s==='NORMAL'?'normal':(s==='SOBRESTOCK'?'over':(['REORDENAR','STOCK BAJO'].includes(s)?'low':'out'));return `<span class="status ${cls}">${esc(s)}</span>`;}
-function moveLabel(t){const map={ENTRADA:'Entrada',SALIDA:'Salida',DEVOLUCION:'Devolución',AJUSTE_POSITIVO:'Ajuste +',AJUSTE_NEGATIVO:'Ajuste −',SALDO_INICIAL:'Saldo inicial'};return map[t] || esc(t);}
-function qtyView(m){const sign=['ENTRADA','SALDO_INICIAL','AJUSTE_POSITIVO'].includes(m.tipoMovimiento)?'+':'−';const cls=sign==='+'?'move-in':'move-out';return `<span class="${cls}">${sign} ${fmt(m.cantidad)}</span>`;}
-function fmt(v){return Number(v||0).toLocaleString('es-PE',{maximumFractionDigits:2});}
-function setToday(){const today=new Intl.DateTimeFormat('en-CA',{timeZone:'America/Lima'}).format(new Date());const el=document.getElementById('mvFecha');if(el)el.value=today;}
-function toast(msg){const el=document.getElementById('toast');el.textContent=msg;el.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>el.classList.remove('show'),3200);}
-function handleError(err){showLoading(false);toast((err && err.message) ? err.message : String(err));}
-function showLoading(show){document.getElementById('loading').style.display=show?'flex':'none';}
-function closeModal(){document.getElementById('modal').classList.add('hidden');}
-function esc(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
-function escAttr(v){return esc(v);}
-function js(v){return String(v??'').replace(/\\/g,'\\\\').replace(/'/g,"\\'");}
-function openProductCode(code){
-  var p = state.products.find(function(x){return x.codigo === code;});
-  if(!p){toast('Producto no encontrado.');return;}
-  var bc = p.barcodeUrl || ('https://barcode.tec-it.com/barcode.ashx?data='+encodeURIComponent(p.codigo)+'&code=Code128&translate-esc=true');
-  var qr = p.qrUrl || ('https://api.qrserver.com/v1/create-qr-code/?size=220x220&data='+encodeURIComponent(p.codigo));
-  var mt = document.getElementById('modalTitle'); if(mt) mt.textContent = 'Identificacion · ' + p.codigo;
-  var mb = document.getElementById('modalBody'); if(!mb) return;
-  var mm = [p.tipo, p.categoria, p.naturaleza, [p.marca,p.modelo].filter(Boolean).join(' · '), p.color||'—', p.talla||p.presentacion||'—'].map(esc).join(' · ');
-  var pres = esc(p.presentacion||'NO APLICA');
-  var und = esc(p.unidad);
-  var cod = esc(p.codigo);
-  var bcA = escAttr(bc), qrA = escAttr(qr);
-  var h = '';
-  h += '<div class="code-card">';
-  h +=   '<div class="code-meta"><strong>'+cod+'</strong><span>'+mm+'</span></div>';
-  h +=   '<div class="code-grid">';
-  h +=     '<div><div class="code-label">Codigo de barras</div><img class="barcode-img" src="'+bcA+'" alt="Codigo de barras"><a class="btn btn-secondary" href="'+bcA+'" target="_blank">Abrir</a></div>';
-  h +=     '<div><div class="code-label">Codigo QR</div><img class="qr-img" src="'+qrA+'" alt="QR"><a class="btn btn-secondary" href="'+qrA+'" target="_blank">Abrir</a></div>';
-  h +=   '</div>';
-  h +=   '<div class="scan-note">Un lector de codigos puede enviar el SKU como teclado. Presentacion: <strong>'+pres+'</strong> · Unidad: <strong>'+und+'</strong>.</div>';
-  h += '</div>';
-  mb.innerHTML = h;
-  var m = document.getElementById('modal'); if(m) m.classList.remove('hidden');
-}
+    showLoading(true);
+    google.script.run.withSuccessHandler(res => {
+      showLoading(false); toast(res.message); ev.target.reset(); resetProductForm(); refreshApp(); navigate('productos');
+    }).withFailureHandler(handleError).createProduct(form);
+  }
+
+  function editProduct(codigo) {
+    const product = state.products.find(p => p.codigo === codigo);
+    if (!product) return;
+    
+    // Fill the form fields with product data
+    document.getElementById('originalCodigo').value = product.codigo;
+    document.getElementById('prCategoria').value = product.categoria || '';
+    document.getElementById('prNaturaleza').value = product.naturaleza || 'INVENTARIABLE';
+    document.getElementById('prTipo').value = product.tipo || '';
+    document.getElementById('prModelo').value = product.modelo || '';
+    document.getElementById('prMarca').value = product.marca || '';
+    document.getElementById('prColor').value = product.color || '';
+    document.getElementById('prTalla').value = product.talla === 'NO APLICA' ? '' : (product.talla || '');
+    document.getElementById('prPresentacion').value = product.presentacion === 'NO APLICA' ? '' : (product.presentacion || '');
+    document.getElementById('prGenero').value = product.genero || 'NO APLICA';
+    document.getElementById('prUnidad').value = product.unidad || 'UNIDAD';
+    document.getElementById('prCondicion').value = product.condicion || 'NUEVO';
+    
+    const ub = document.querySelector('input[name="ubicacion"]');
+    if (ub) ub.value = product.ubicacion || '';
+    
+    // Navigate to the form
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    toast('Modo edición: Editando ' + product.codigo);
+  }
+
+  function toggleProductStatus(codigo) {
+    showLoading(true);
+    google.script.run.withSuccessHandler(res => {
+      showLoading(false);
+      toast(res.message);
+      refreshApp();
+    }).withFailureHandler(handleError).toggleProductStatus(codigo);
+  }
+
+  function openQuickMovement() {
+    navigate('movimientos');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    document.getElementById('mvCodigo').focus();
+  }
+
+  function openKardex(code) {
+    navigate('kardex');
+    document.getElementById('kxCodigo').value = code;
+    loadKardex();
+  }
+
+  function loadKardex() {
+    const code = document.getElementById('kxCodigo').value;
+    const from = document.getElementById('kxDesde').value;
+    const to = document.getElementById('kxHasta').value;
+    if (!code) { toast('Selecciona un SKU.'); return; }
+    showLoading(true);
+    google.script.run.withSuccessHandler(data => {
+      showLoading(false);
+      const p = data.product;
+      const box = document.getElementById('kardexProduct');
+      box.classList.remove('hidden');
+      box.innerHTML = `<strong>${esc(p.codigo)}</strong> · ${esc(p.categoria || '')} · ${esc(p.naturaleza || '')} · ${esc(p.tipo || '')} · ${esc([p.marca, p.modelo].filter(Boolean).join(' · '))} · ${esc(p.color || '—')} · Talla ${esc(p.talla || 'NO APLICA')} · Presentación ${esc(p.presentacion || '—')} · ${esc(p.ubicacion || '—')} · Condición: ${esc(p.condicion || 'NUEVO')}`;
+      document.getElementById('kxStock').textContent = 'Saldo actual: ' + fmt(data.currentStock) + ' ' + esc(p.unidad || 'UNIDAD');
+      const body = document.getElementById('kardexTable');
+      body.innerHTML = data.rows.length ? data.rows.map(r => `<tr><td>${esc(r.fecha)}</td><td>${moveLabel(r.tipoMovimiento)}</td><td class="move-in">${r.entrada ? fmt(r.entrada) : '—'}</td><td class="move-out">${r.salida ? fmt(r.salida) : '—'}</td><td><strong>${fmt(r.saldo)}</strong></td><td>${esc(r.motivo)}</td><td>${esc(r.origenDestino)}</td><td>${esc(r.observacion)}</td></tr>`).join('') : '<tr><td colspan="8" class="empty">No hay movimientos en el rango seleccionado.</td></tr>';
+    }).withFailureHandler(handleError).getKardex(code, from, to);
+  }
+
+  function downloadInventory() {
+    google.script.run.withSuccessHandler(csv => downloadText('inventario.csv', '\ufeff' + csv, 'text/csv;charset=utf-8;')).withFailureHandler(handleError).exportInventoryCsv();
+  }
+
+  function downloadText(filename, text, type) {
+    const blob = new Blob([text], { type: type });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob); a.download = filename; a.click();
+    setTimeout(() => URL.revokeObjectURL(a.href), 500);
+  }
+
+  function bindProductSkuPreview() { ['prTipo', 'prModelo', 'prMarca', 'prColor', 'prTalla', 'prPresentacion'].forEach(id => { const el = document.getElementById(id); if (el) ['input', 'change'].forEach(evt => el.addEventListener(evt, updateSkuPreview)); }); }
+  function applyProductTypeMeta() {
+    var raw = (document.getElementById('prTipo') || {}).value || ''; var key = stripAccents(raw).toUpperCase(); var meta = TYPE_META[key];
+    var model = document.getElementById('prModelo'), cat = document.getElementById('prCategoria'), nat = document.getElementById('prNaturaleza'), gen = document.getElementById('prGenero'), unit = document.getElementById('prUnidad');
+    if (model && meta) { model.placeholder = 'Ej.: ' + meta.placeholder + ' / variante'; }
+    if (meta) { if (cat) cat.value = meta.cat; if (nat) nat.value = meta.nature; if (gen) gen.value = meta.gender; if (unit) unit.value = meta.unit; }
+    var hint = document.getElementById('productSmartHint');
+    if (hint) hint.textContent = meta ? ('Sugerencia: ' + meta.cat + ' · ' + meta.nature + ' · ' + meta.unit + '. Puedes modificarla cuando una variante concreta lo necesite.') : 'Selecciona un tipo para recibir una sugerencia de familia, naturaleza y unidad.';
+    updateSkuPreview();
+  }
+  function updateSkuPreview() {
+    const type = document.getElementById('prTipo')?.value || '', model = document.getElementById('prModelo')?.value || '', brand = document.getElementById('prMarca')?.value || '', color = document.getElementById('prColor')?.value || '', talla = document.getElementById('prTalla')?.value || '', pres = document.getElementById('prPresentacion')?.value || '';
+    const preview = document.getElementById('skuPreview'); if (!preview) return;
+    if (!type) { preview.textContent = 'Completa Tipo / Producto'; return; }
+    preview.textContent = buildSkuPreview(type, model || brand, color, talla, pres);
+  }
+  function buildSkuPreview(type, model, color, talla, pres) {
+    const mapType = { 'BORCEGUIES': 'BOR', 'CORREA': 'COR', 'MANGAS': 'MGA', 'MANGA': 'MGA', 'CHALECO TACTICO': 'CHA', 'CHALECO TÁCTICO': 'CHA', 'CHALECO ANTIBALAS': 'ABA', 'CASACA': 'CAS', 'CHOMPA JORGE CHAVEZ': 'CHO', 'CHOMPA JORGE CHÁVEZ': 'CHO', 'CAFARENA': 'CAF', 'POLO': 'POL', 'POLOS': 'POL', 'SOMBRERO': 'SOM', 'POLACA': 'POL', 'CHALECO DE FAENA': 'CHA', 'CAMISA': 'CAM', 'PANTALÓN': 'PAN', 'PANTALON': 'PAN', 'ZAPATO': 'ZAP', 'BOTA': 'BOT', 'GUANTE': 'GUA', 'GORRA': 'GOR', 'GORRO': 'GOR', 'CINTURÓN': 'CIN', 'CINTURON': 'CIN', 'ESCOBAS': 'ESCO', 'ESCOBA': 'ESCO', 'RECOGEDORES': 'REC', 'RECOGEDOR': 'REC', 'TRAPEADORES': 'TRA', 'TRAPEADOR': 'TRA', 'BALDES': 'BAL', 'BALDE': 'BAL', 'TRAPOS INDUSTRIALES': 'TRI', 'DETERGENTE': 'DET', 'LEJÍA': 'LEJ', 'LEJIA': 'LEJ', 'ÁCIDO MURIÁTICO': 'ACI', 'ACIDO MURIATICO': 'ACI', 'JABÓN LÍQUIDO': 'JAB', 'JABON LIQUIDO': 'JAB', 'AMBIENTADOR': 'AMB', 'KRESO': 'KRE', 'ISOPO DE BAÑO': 'ISO' };
+    const mapModel = { 'INSTITUCIONAL': 'INS', 'TACTICO': 'TAC', 'TÁCTICO': 'TAC', 'FAENA': 'FAE', 'PROTECCION': 'PRO', 'PROTECCIÓN': 'PRO', 'ANTIBALAS': 'ANT', 'JORGE CHAVEZ': 'JCH', 'JORGE CHÁVEZ': 'JCH', 'LIMPIEZA': 'LIM', 'LIQUIDO': 'LIQ', 'LÍQUIDO': 'LIQ', 'BAÑO': 'BAN', 'ÁCIDO': 'ACI', 'ACIDO': 'ACI', 'DESINFECTANTE': 'DES', 'INODORO': 'INO' };
+    const mapColor = { 'NEGRO': 'NEG', 'AZUL': 'AZU', 'BLANCO': 'BLA', 'ROJO': 'ROJ', 'VERDE': 'VER', 'GRIS': 'GRI', 'MARRON': 'MAR', 'MARRÓN': 'MAR', 'BEIGE': 'BEI', 'AMARILLO': 'AMA', 'NARANJA': 'NAR', 'CELESTE': 'CEL' };
+    const token = (value, map, fallback) => { const s = stripAccents(value).trim().toUpperCase(); if (!s) return fallback; if (map[s]) return map[s]; return s.replace(/[^A-Z0-9]/g, '').slice(0, 3) || fallback; };
+    let variant = (talla || '').trim().toUpperCase(); if (!variant || ['NO APLICA', 'N/A', 'NA'].includes(stripAccents(variant).trim())) variant = (pres || '').trim().toUpperCase();
+    variant = variant.replace(/\s+/g, ''); if (['NOAPLICA', 'N/A', 'NA'].includes(stripAccents(variant))) variant = '';
+    variant = variant === 'UNICA' || variant === 'ÚNICA' ? 'UNI' : (variant === 'SINTALLA' ? 'ST' : variant); variant = stripAccents(variant).replace(/[^A-Z0-9.-]/g, '') || 'STD';
+    return [token(type, mapType, 'TIP'), token(model, mapModel, 'GEN'), token(color, mapColor, 'GEN'), variant].join('-');
+  }
+  function stripAccents(v) { return String(v || '').normalize('NFD').replace(/[\u0300-\u036f]/g, ''); }
+  function resetProductForm() { const f = document.getElementById('productForm'); if (f) { const n = document.getElementById('prNaturaleza'); if (n) n.value = 'INVENTARIABLE'; const g = document.getElementById('prGenero'); if (g) g.value = 'NO APLICA'; const p = document.getElementById('prPresentacion'); if (p) p.value = 'NO APLICA'; const t = document.getElementById('prTalla'); if (t) t.value = 'NO APLICA'; } setTimeout(() => { applyProductTypeMeta(); updateSkuPreview(); }, 20); }
+
+  function updateProductStats() {
+    const m = state.metrics || {}; const fam = new Set(state.products.map(p => p.categoria).filter(Boolean)).size;
+    const a = document.getElementById('prStatInv'); if (a) a.textContent = fmt(m.inventariables || 0);
+    const b = document.getElementById('prStatCons'); if (b) b.textContent = fmt(m.consumibles || 0);
+    const c = document.getElementById('prStatFamilies'); if (c) c.textContent = fmt(fam);
+  }
+
+  function rowInventory(i) {
+    return `<tr><td><strong>${esc(i.codigo)}</strong></td><td>${esc(i.tipo)}</td><td>${esc(i.talla)}</td><td>${fmt(i.stock)}</td><td>${statusPill(i.estado)}</td></tr>`;
+  }
+  function rowInventoryFull(i) {
+    return `<tr><td><strong>${esc(i.codigo)}</strong></td><td>${esc(i.tipo)}</td><td>${esc(i.modelo)}</td><td>${esc(i.color)}</td><td>${esc(i.talla)}</td><td>${esc(i.unidad)}</td><td><strong>${fmt(i.stock)}</strong></td><td>${fmt(i.stockMin)}</td><td>${statusPill(i.estado)}</td><td><button class="btn btn-secondary" onclick="openKardex('${js(i.codigo)}')">Ver</button></td></tr>`;
+  }
+  function naturePill(s) { const cls = s === 'CONSUMIBLE' ? 'nature-consumible' : 'nature-inventariable'; return `<span class="nature-pill ${cls}">${esc(s || 'INVENTARIABLE')}</span>`; }
+  function statusPill(s) { const cls = s === 'NORMAL' ? 'normal' : (s === 'SOBRESTOCK' ? 'over' : (['REORDENAR', 'STOCK BAJO'].includes(s) ? 'low' : 'out')); return `<span class="status ${cls}">${esc(s)}</span>`; }
+  function moveLabel(t) { const map = { ENTRADA: 'Entrada', SALIDA: 'Salida', DEVOLUCION: 'Devolución', AJUSTE_POSITIVO: 'Ajuste +', AJUSTE_NEGATIVO: 'Ajuste −', SALDO_INICIAL: 'Saldo inicial' }; return map[t] || esc(t); }
+  function qtyView(m) { const sign = ['ENTRADA', 'SALDO_INICIAL', 'AJUSTE_POSITIVO'].includes(m.tipoMovimiento) ? '+' : '−'; const cls = sign === '+' ? 'move-in' : 'move-out'; return `<span class="${cls}">${sign} ${fmt(m.cantidad)}</span>`; }
+  function fmt(v) { return Number(v || 0).toLocaleString('es-PE', { maximumFractionDigits: 2 }); }
+  function setToday() { const today = new Intl.DateTimeFormat('en-CA', { timeZone: 'America/Lima' }).format(new Date()); const el = document.getElementById('mvFecha'); if (el) el.value = today; }
+  function toast(msg) { const el = document.getElementById('toast'); el.textContent = msg; el.classList.add('show'); clearTimeout(toastTimer); toastTimer = setTimeout(() => el.classList.remove('show'), 3200); }
+  function handleError(err) { showLoading(false); toast((err && err.message) ? err.message : String(err)); }
+  function showLoading(show) { document.getElementById('loading').style.display = show ? 'flex' : 'none'; }
+  function closeModal() { document.getElementById('modal').classList.add('hidden'); }
+  function esc(v) { return String(v ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c])); }
+  function escAttr(v) { return esc(v); }
+  function js(v) { return String(v ?? '').replace(/\\/g, '\\\\').replace(/'/g, "\\'"); }
+  function openProductCode(code) {
+    var p = state.products.find(function (x) { return x.codigo === code; });
+    if (!p) { toast('Producto no encontrado.'); return; }
+    var bc = p.barcodeUrl || ('https://barcode.tec-it.com/barcode.ashx?data=' + encodeURIComponent(p.codigo) + '&code=Code128&translate-esc=true');
+    var qr = p.qrUrl || ('https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=' + encodeURIComponent(p.codigo));
+    var mt = document.getElementById('modalTitle'); if (mt) mt.textContent = 'Identificacion · ' + p.codigo;
+    var mb = document.getElementById('modalBody'); if (!mb) return;
+    var mm = [p.tipo, p.categoria, p.naturaleza, [p.marca, p.modelo].filter(Boolean).join(' · '), p.color || '—', p.talla || p.presentacion || '—'].map(esc).join(' · ');
+    var pres = esc(p.presentacion || 'NO APLICA');
+    var und = esc(p.unidad);
+    var cod = esc(p.codigo);
+    var bcA = escAttr(bc), qrA = escAttr(qr);
+    var h = '';
+    h += '<div class="code-card">';
+    h += '<div class="code-meta"><strong>' + cod + '</strong><span>' + mm + '</span></div>';
+    h += '<div class="code-grid">';
+    h += '<div><div class="code-label">Codigo de barras</div><img class="barcode-img" src="' + bcA + '" alt="Codigo de barras"><a class="btn btn-secondary" href="' + bcA + '" target="_blank">Abrir</a></div>';
+    h += '<div><div class="code-label">Codigo QR</div><img class="qr-img" src="' + qrA + '" alt="QR"><a class="btn btn-secondary" href="' + qrA + '" target="_blank">Abrir</a></div>';
+    h += '</div>';
+    h += '<div class="scan-note">Un lector de codigos puede enviar el SKU como teclado. Presentacion: <strong>' + pres + '</strong> · Unidad: <strong>' + und + '</strong>.</div>';
+    h += '</div>';
+    mb.innerHTML = h;
+    var m = document.getElementById('modal'); if (m) m.classList.remove('hidden');
+  }
 </script>

@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <base target="_top">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <?!= include('Stylesheet'); ?>
 </head>
+
 <body>
   <div id="appShell" class="app-shell">
     <aside class="sidebar">
@@ -41,7 +43,10 @@
         </div>
       </header>
 
-      <div id="loading" class="loading-overlay"><div class="spinner"></div><div>Cargando sistema…</div></div>
+      <div id="loading" class="loading-overlay">
+        <div class="spinner"></div>
+        <div>Cargando sistema…</div>
+      </div>
 
       <section id="section-dashboard" class="section active">
         <div class="section-head">
@@ -52,113 +57,338 @@
           <button class="btn btn-secondary" onclick="refreshApp()">⟳ Actualizar</button>
         </div>
         <div class="cards">
-          <div class="metric-card"><div class="metric-icon">◫</div><div><div class="metric-label">SKUs activos</div><div id="mSkus" class="metric-value">0</div></div></div>
-          <div class="metric-card"><div class="metric-icon">▣</div><div><div class="metric-label">Stock total</div><div id="mStock" class="metric-value">0</div></div></div>
-          <div class="metric-card warning"><div class="metric-icon">⚠</div><div><div class="metric-label">Stock bajo</div><div id="mLow" class="metric-value">0</div></div></div>
-          <div class="metric-card danger"><div class="metric-icon">×</div><div><div class="metric-label">Agotados</div><div id="mOut" class="metric-value">0</div></div></div>
+          <div class="metric-card">
+            <div class="metric-icon">◫</div>
+            <div>
+              <div class="metric-label">SKUs activos</div>
+              <div id="mSkus" class="metric-value">0</div>
+            </div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-icon">▣</div>
+            <div>
+              <div class="metric-label">Stock total</div>
+              <div id="mStock" class="metric-value">0</div>
+            </div>
+          </div>
+          <div class="metric-card warning">
+            <div class="metric-icon">⚠</div>
+            <div>
+              <div class="metric-label">Stock bajo</div>
+              <div id="mLow" class="metric-value">0</div>
+            </div>
+          </div>
+          <div class="metric-card danger">
+            <div class="metric-icon">×</div>
+            <div>
+              <div class="metric-label">Agotados</div>
+              <div id="mOut" class="metric-value">0</div>
+            </div>
+          </div>
         </div>
         <div class="grid-2">
           <div class="panel">
-            <div class="panel-head"><h3>Alertas de inventario</h3><span class="muted">Stock mínimo</span></div>
-            <div class="table-wrap"><table><thead><tr><th>SKU</th><th>Prenda</th><th>Talla</th><th>Stock</th><th>Estado</th></tr></thead><tbody id="dashboardAlerts"></tbody></table></div>
+            <div class="panel-head">
+              <h3>Alertas de inventario</h3><span class="muted">Stock mínimo</span>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>SKU</th>
+                    <th>Prenda</th>
+                    <th>Talla</th>
+                    <th>Stock</th>
+                    <th>Estado</th>
+                  </tr>
+                </thead>
+                <tbody id="dashboardAlerts"></tbody>
+              </table>
+            </div>
           </div>
           <div class="panel">
-            <div class="panel-head"><h3>Movimientos recientes</h3><span id="mMoves30" class="muted"></span></div>
-            <div class="table-wrap"><table><thead><tr><th>Fecha</th><th>SKU</th><th>Movimiento</th><th>Cantidad</th></tr></thead><tbody id="dashboardMoves"></tbody></table></div>
+            <div class="panel-head">
+              <h3>Movimientos recientes</h3><span id="mMoves30" class="muted"></span>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Fecha</th>
+                    <th>SKU</th>
+                    <th>Movimiento</th>
+                    <th>Cantidad</th>
+                  </tr>
+                </thead>
+                <tbody id="dashboardMoves"></tbody>
+              </table>
+            </div>
           </div>
         </div>
       </section>
 
       <section id="section-inventario" class="section">
-        <div class="section-head"><div><h2>Inventario</h2><p>Stock calculado automáticamente a partir del Kardex.</p></div><div class="actions"><button class="btn btn-secondary" onclick="downloadInventory()">⇩ CSV</button><button class="btn btn-primary" onclick="openQuickMovement()">＋ Movimiento</button></div></div>
-        <div class="toolbar"><input id="inventorySearch" class="input" placeholder="Buscar código, prenda, modelo, color o talla…" oninput="renderInventory()"><select id="inventoryStatus" class="input select" onchange="renderInventory()"><option value="">Todos los estados</option><option value="NORMAL">Normal</option><option value="STOCK BAJO">Stock bajo</option><option value="AGOTADO">Agotado</option></select></div>
-        <div class="panel"><div class="table-wrap"><table><thead><tr><th>Código</th><th>Prenda</th><th>Modelo</th><th>Color</th><th>Talla</th><th>Unidad</th><th>Stock</th><th>Mín.</th><th>Estado</th><th></th></tr></thead><tbody id="inventoryTable"></tbody></table></div></div>
+        <div class="section-head">
+          <div>
+            <h2>Inventario</h2>
+            <p>Stock calculado automáticamente a partir del Kardex.</p>
+          </div>
+          <div class="actions"><button class="btn btn-secondary" onclick="downloadInventory()">⇩ CSV</button><button
+              class="btn btn-primary" onclick="openQuickMovement()">＋ Movimiento</button></div>
+        </div>
+        <div class="toolbar"><input id="inventorySearch" class="input"
+            placeholder="Buscar código, prenda, modelo, color o talla…" oninput="renderInventory()"><select
+            id="inventoryStatus" class="input select" onchange="renderInventory()">
+            <option value="">Todos los estados</option>
+            <option value="NORMAL">Normal</option>
+            <option value="STOCK BAJO">Stock bajo</option>
+            <option value="AGOTADO">Agotado</option>
+          </select></div>
+        <div class="panel">
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Código</th>
+                  <th>Prenda</th>
+                  <th>Modelo</th>
+                  <th>Color</th>
+                  <th>Talla</th>
+                  <th>Unidad</th>
+                  <th>Stock</th>
+                  <th>Mín.</th>
+                  <th>Estado</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody id="inventoryTable"></tbody>
+            </table>
+          </div>
+        </div>
       </section>
 
       <section id="section-movimientos" class="section">
-        <div class="section-head"><div><h2>Registrar movimiento</h2><p>Entradas, salidas y ajustes con validación de stock.</p></div></div>
+        <div class="section-head">
+          <div>
+            <h2>Registrar movimiento</h2>
+            <p>Entradas, salidas y ajustes con validación de stock.</p>
+          </div>
+        </div>
         <div class="panel form-panel">
           <form id="movementForm" onsubmit="submitMovement(event)">
             <div class="form-grid">
               <label>Fecha<input id="mvFecha" name="fecha" class="input" type="date" required></label>
               <label>Producto / SKU<select id="mvCodigo" name="codigo" class="input select" required></select></label>
-              <label>Tipo<select id="mvTipo" name="tipoMovimiento" class="input select" required><option value="ENTRADA">Entrada</option><option value="SALIDA">Salida</option><option value="AJUSTE_POSITIVO">Ajuste +</option><option value="AJUSTE_NEGATIVO">Ajuste −</option></select></label>
+              <label>Tipo<select id="mvTipo" name="tipoMovimiento" class="input select" required>
+                  <option value="ENTRADA">Entrada</option>
+                  <option value="SALIDA">Salida</option>
+                  <option value="AJUSTE_POSITIVO">Ajuste +</option>
+                  <option value="AJUSTE_NEGATIVO">Ajuste −</option>
+                </select></label>
               <label>Cantidad<input name="cantidad" class="input" type="number" min="0.01" step="0.01" required></label>
               <label>Motivo<select id="mvMotivo" name="motivo" class="input select" required></select></label>
-              <label>Origen / Destino<input name="origenDestino" class="input" placeholder="Proveedor, área, persona…"></label>
-              <label class="full">Observación<textarea name="observacion" class="input" rows="3" placeholder="Detalle del movimiento"></textarea></label>
+              <label>Origen / Destino<input name="origenDestino" class="input"
+                  placeholder="Proveedor, área, persona…"></label>
+              <label class="full">Observación<textarea name="observacion" class="input" rows="3"
+                  placeholder="Detalle del movimiento"></textarea></label>
             </div>
-            <div class="form-actions"><button type="reset" class="btn btn-secondary">Limpiar</button><button type="submit" class="btn btn-primary">Guardar movimiento</button></div>
+            <div class="form-actions"><button type="reset" class="btn btn-secondary">Limpiar</button><button
+                type="submit" class="btn btn-primary">Guardar movimiento</button></div>
           </form>
         </div>
-        <div class="panel"><div class="panel-head"><h3>Últimos movimientos</h3><span class="muted">Máximo 150 en vista</span></div><div class="table-wrap"><table><thead><tr><th>Fecha</th><th>SKU</th><th>Movimiento</th><th>Cantidad</th><th>Motivo</th><th>Origen/Destino</th></tr></thead><tbody id="movementsTable"></tbody></table></div></div>
+        <div class="panel">
+          <div class="panel-head">
+            <h3>Últimos movimientos</h3><span class="muted">Máximo 150 en vista</span>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Fecha</th>
+                  <th>SKU</th>
+                  <th>Movimiento</th>
+                  <th>Cantidad</th>
+                  <th>Motivo</th>
+                  <th>Origen/Destino</th>
+                </tr>
+              </thead>
+              <tbody id="movementsTable"></tbody>
+            </table>
+          </div>
+        </div>
       </section>
 
       <section id="section-kardex" class="section">
-        <div class="section-head"><div><h2>Kardex por SKU</h2><p>Consulta el historial y saldo corrido de una variante.</p></div></div>
+        <div class="section-head">
+          <div>
+            <h2>Kardex por SKU</h2>
+            <p>Consulta el historial y saldo corrido de una variante.</p>
+          </div>
+        </div>
         <div class="panel">
           <div class="form-grid compact">
             <label>Producto / SKU<select id="kxCodigo" class="input select"></select></label>
             <label>Desde<input id="kxDesde" class="input" type="date"></label>
             <label>Hasta<input id="kxHasta" class="input" type="date"></label>
-            <div class="align-end"><button class="btn btn-primary" onclick="loadKardex()">Consultar Kardex</button></div>
+            <div class="align-end"><button class="btn btn-primary" onclick="loadKardex()">Consultar Kardex</button>
+            </div>
           </div>
         </div>
         <div id="kardexProduct" class="product-summary hidden"></div>
-        <div class="panel"><div class="panel-head"><h3>Movimientos</h3><span id="kxStock" class="muted"></span></div><div class="table-wrap"><table><thead><tr><th>Fecha</th><th>Movimiento</th><th>Entrada</th><th>Salida</th><th>Saldo</th><th>Motivo</th><th>Origen/Destino</th><th>Observación</th></tr></thead><tbody id="kardexTable"><tr><td colspan="8" class="empty">Selecciona un SKU para consultar.</td></tr></tbody></table></div></div>
+        <div class="panel">
+          <div class="panel-head">
+            <h3>Movimientos</h3><span id="kxStock" class="muted"></span>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Fecha</th>
+                  <th>Movimiento</th>
+                  <th>Entrada</th>
+                  <th>Salida</th>
+                  <th>Saldo</th>
+                  <th>Motivo</th>
+                  <th>Origen/Destino</th>
+                  <th>Observación</th>
+                </tr>
+              </thead>
+              <tbody id="kardexTable">
+                <tr>
+                  <td colspan="8" class="empty">Selecciona un SKU para consultar.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
       </section>
 
       <section id="section-productos" class="section">
-        <div class="section-head"><div><h2>Productos / SKUs</h2><p>Catálogo preparado para <strong>vestuario, calzado, EPP, equipamiento y productos de limpieza y suministros de oficina</strong>. Talla/color son opcionales; para papelería y consumibles, la variante principal puede ser la presentación o contenido.</p></div></div>
+        <div class="section-head">
+          <div>
+            <h2>Productos / SKUs</h2>
+            <p>Catálogo preparado para <strong>vestuario, calzado, EPP, equipamiento y productos de limpieza y
+                suministros de oficina</strong>. Talla/color son opcionales; para papelería y consumibles, la variante
+              principal puede ser la presentación o contenido.</p>
+          </div>
+        </div>
         <div class="catalog-stats">
-          <div class="catalog-stat"><span>Inventariables</span><strong id="prStatInv">0</strong><small>Prendas, calzado, equipos y útiles</small></div>
-          <div class="catalog-stat"><span>Consumibles</span><strong id="prStatCons">0</strong><small>Detergente, lejía, químicos y similares</small></div>
-          <div class="catalog-stat"><span>Familias</span><strong id="prStatFamilies">0</strong><small>Clasificación del catálogo</small></div>
+          <div class="catalog-stat"><span>Inventariables</span><strong id="prStatInv">0</strong><small>Prendas, calzado,
+              equipos y útiles</small></div>
+          <div class="catalog-stat"><span>Consumibles</span><strong id="prStatCons">0</strong><small>Detergente, lejía,
+              químicos y similares</small></div>
+          <div class="catalog-stat"><span>Familias</span><strong id="prStatFamilies">0</strong><small>Clasificación del
+              catálogo</small></div>
         </div>
         <div class="panel form-panel">
           <div class="form-kicker">1. Identificación del producto</div>
           <form id="productForm" onsubmit="submitProduct(event)">
+            <input type="hidden" id="originalCodigo" name="originalCodigo">
             <div class="form-grid">
-              <label>Familia / Categoría<select id="prCategoria" name="categoria" class="input select" required></select></label>
-              <label>Naturaleza<select id="prNaturaleza" name="naturaleza" class="input select" required></select></label>
-              <label>Tipo / Producto<select id="prTipo" name="tipo" class="input select" required></select></label>
-              <label>Modelo / Variante<input id="prModelo" name="modelo" class="input" placeholder="Ej.: Institucional, Táctico, A4, Manila, Transparente…"></label>
+              <label>Familia / Categoría<input id="prCategoria" list="prCategoriaList" name="categoria" class="input" placeholder="Escribe o selecciona…" required><datalist id="prCategoriaList"></datalist></label>
+              <label>Naturaleza<select id="prNaturaleza" name="naturaleza" class="input select"
+                  required></select></label>
+              <label>Tipo / Producto<input id="prTipo" list="prTipoList" name="tipo" class="input" placeholder="Escribe o selecciona…" required><datalist id="prTipoList"></datalist></label>
+              <label>Modelo / Variante<input id="prModelo" name="modelo" class="input"
+                  placeholder="Ej.: Institucional, Táctico, A4, Manila, Transparente…"></label>
               <label>Marca<input id="prMarca" name="marca" class="input" placeholder="Opcional"></label>
               <label>Color<input id="prColor" name="color" class="input" placeholder="Ej.: Negro"></label>
             </div>
             <div class="form-kicker">2. Presentación y variante</div>
             <div class="form-grid">
-              <label>Talla / Medida<input id="prTalla" list="prTallaList" name="talla" class="input" placeholder="S, M, L, 42, Única…"><datalist id="prTallaList"></datalist><span class="field-help">Para papelería/químicos puede ser "NO APLICA".</span></label>
-              <label>Presentación / Contenido<input id="prPresentacion" list="prPresentacionList" name="presentacion" class="input" placeholder="A4, 200 hojas, 400 hojas, 1 L, Caja x 50…"><datalist id="prPresentacionList"></datalist><span class="field-help">Úsalo para formato, número de hojas, volumen, peso o empaque.</span></label>
+              <label>Talla / Medida<input id="prTalla" list="prTallaList" name="talla" class="input"
+                  placeholder="S, M, L, 42, Única…"><datalist id="prTallaList"></datalist><span class="field-help">Para
+                  papelería/químicos puede ser "NO APLICA".</span></label>
+              <label>Presentación / Contenido<input id="prPresentacion" list="prPresentacionList" name="presentacion"
+                  class="input" placeholder="A4, 200 hojas, 400 hojas, 1 L, Caja x 50…"><datalist
+                  id="prPresentacionList"></datalist><span class="field-help">Úsalo para formato, número de hojas,
+                  volumen, peso o empaque.</span></label>
               <label>Género / Corte<select id="prGenero" name="genero" class="input select" required></select></label>
-              <label>Unidad de medida<select id="prUnidad" name="unidad" class="input select" required></select></label>
-              <label>Condición de inventario<select id="prCondicion" name="condicion" class="input select" required></select></label>
-              <label>Ubicación física<input name="ubicacion" class="input" placeholder="Ej.: Estante B3 - Caja 12"></label>
+              <label>Unidad de medida<input id="prUnidad" list="prUnidadList" name="unidad" class="input" placeholder="Escribe o selecciona…" required><datalist id="prUnidadList"></datalist></label>
+              <label>Condición de inventario<input id="prCondicion" list="prCondicionList" name="condicion" class="input" placeholder="Escribe o selecciona…" required><datalist id="prCondicionList"></datalist></label>
+              <label>Ubicación física<input name="ubicacion" class="input"
+                  placeholder="Ej.: Estante B3 - Caja 12"></label>
             </div>
             <div class="form-kicker">3. Parámetros de stock</div>
             <div class="form-grid">
-              <label>Stock inicial<input name="stockInicial" class="input" type="number" min="0" step="0.01" value="0"></label>
-              <label>Stock mínimo<input name="stockMinimo" class="input" type="number" min="0" step="0.01" value="0"></label>
-              <label>Punto de reorden<input name="puntoReorden" class="input" type="number" min="0" step="0.01" value="0"></label>
-              <label>Stock máximo<input name="stockMaximo" class="input" type="number" min="0" step="0.01" value="0"></label>
-              <label class="full">Descripción / especificación<input name="descripcion" class="input" placeholder="Material, características, tamaño, observaciones, etc."></label>
+              <label>Stock inicial<input name="stockInicial" class="input" type="number" min="0" step="0.01"
+                  value="0"></label>
+              <label>Stock mínimo<input name="stockMinimo" class="input" type="number" min="0" step="0.01"
+                  value="0"></label>
+              <label>Punto de reorden<input name="puntoReorden" class="input" type="number" min="0" step="0.01"
+                  value="0"></label>
+              <label>Stock máximo<input name="stockMaximo" class="input" type="number" min="0" step="0.01"
+                  value="0"></label>
+              <label class="full">Descripción / especificación<input name="descripcion" class="input"
+                  placeholder="Material, características, tamaño, observaciones, etc."></label>
             </div>
-            <div class="sku-preview"><div><span class="muted">SKU automático</span><strong id="skuPreview">Completa Tipo / Producto</strong></div><div class="sku-help">El código usa la variante disponible: talla; si no aplica, usa presentación/contenido. También genera código de barras y QR.</div></div>
-            <div id="productSmartHint" class="smart-hint">Selecciona un tipo para recibir una sugerencia de familia, naturaleza y unidad.</div>
-            <div class="form-actions"><button type="reset" class="btn btn-secondary" onclick="resetProductForm()">Limpiar</button><button type="submit" class="btn btn-primary">Crear SKU y producto</button></div>
+            <div class="sku-preview">
+              <div><span class="muted">SKU automático</span><strong id="skuPreview">Completa Tipo / Producto</strong>
+              </div>
+              <div class="sku-help">El código usa la variante disponible: talla; si no aplica, usa
+                presentación/contenido. También genera código de barras y QR.</div>
+            </div>
+            <div id="productSmartHint" class="smart-hint">Selecciona un tipo para recibir una sugerencia de familia,
+              naturaleza y unidad.</div>
+            <div class="form-actions"><button type="reset" class="btn btn-secondary"
+                onclick="resetProductForm()">Limpiar</button><button type="submit" class="btn btn-primary">Crear SKU y
+                producto</button></div>
           </form>
         </div>
         <div class="panel">
-          <div class="panel-head product-list-head"><div><h3>Catálogo activo</h3><span class="muted">Filtra por familia o naturaleza y busca por cualquier atributo. El stock se calcula desde el Kardex.</span></div><div class="product-filters"><select id="productFamilyFilter" class="input select small" onchange="renderProducts()"><option value="">Todas las familias</option></select><select id="productNatureFilter" class="input select small" onchange="renderProducts()"><option value="">Todas</option></select><input id="productSearch" class="input small" placeholder="Buscar SKU, producto, marca, talla…" oninput="renderProducts()"></div></div>
-          <div class="table-wrap"><table><thead><tr><th>Código</th><th>Familia</th><th>Naturaleza</th><th>Producto</th><th>Marca / Modelo</th><th>Color</th><th>Talla</th><th>Presentación</th><th>Unidad</th><th>Ubicación</th><th>Condición</th><th>Stock</th><th>Estado</th><th></th></tr></thead><tbody id="productsTable"></tbody></table></div>
+          <div class="panel-head product-list-head">
+            <div>
+              <h3>Catálogo activo</h3><span class="muted">Filtra por familia o naturaleza y busca por cualquier
+                atributo. El stock se calcula desde el Kardex.</span>
+            </div>
+            <div class="product-filters"><select id="productFamilyFilter" class="input select small"
+                onchange="renderProducts()">
+                <option value="">Todas las familias</option>
+              </select><select id="productNatureFilter" class="input select small" onchange="renderProducts()">
+                <option value="">Todas</option>
+              </select><input id="productSearch" class="input small" placeholder="Buscar SKU, producto, marca, talla…"
+                oninput="renderProducts()"></div>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Código</th>
+                  <th>Familia</th>
+                  <th>Naturaleza</th>
+                  <th>Producto</th>
+                  <th>Marca / Modelo</th>
+                  <th>Color</th>
+                  <th>Talla</th>
+                  <th>Presentación</th>
+                  <th>Unidad</th>
+                  <th>Ubicación</th>
+                  <th>Condición</th>
+                  <th>Stock</th>
+                  <th>Estado</th>
+                  <th>ACCIONES</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody id="productsTable"></tbody>
+            </table>
+          </div>
         </div>
       </section>
     </main>
   </div>
 
   <div id="toast" class="toast"></div>
-  <div id="modal" class="modal hidden"><div class="modal-card"><div class="modal-head"><h3 id="modalTitle">Registrar movimiento</h3><button class="icon-btn" onclick="closeModal()">×</button></div><div id="modalBody"></div></div></div>
+  <div id="modal" class="modal hidden">
+    <div class="modal-card">
+      <div class="modal-head">
+        <h3 id="modalTitle">Registrar movimiento</h3><button class="icon-btn" onclick="closeModal()">×</button>
+      </div>
+      <div id="modalBody"></div>
+    </div>
+  </div>
 
   <?!= include('JavaScript'); ?>
 </body>
+
 </html>

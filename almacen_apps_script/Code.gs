@@ -74,7 +74,7 @@ function getAppData() {
 
   return {
     info: getSystemInfo(),
-    products: activeProducts.map(_publicProduct_),
+    products: products.map(_publicProduct_),
     inventory: inventory.sort((a,b) => a.tipo.localeCompare(b.tipo, 'es') || a.codigo.localeCompare(b.codigo, 'es')),
     movements: movements.sort(_movementSort_).slice(0, 150).map(_publicMovement_),
     metrics: {
@@ -157,6 +157,10 @@ function createProduct(form) {
 }
 
 function deactivateProduct(codigo) {
+  return toggleProductStatus(codigo);
+}
+
+function toggleProductStatus(codigo) {
   const lock = LockService.getScriptLock();
   lock.waitLock(15000);
   try {
@@ -166,11 +170,69 @@ function deactivateProduct(codigo) {
     const code = String(codigo || '').trim().toUpperCase();
     for (let r = 1; r < values.length; r++) {
       if (String(values[r][1]).toUpperCase() === code) {
-        sh.getRange(r + 1, 18).setValue('NO'); // ACTIVO is index 17 -> column 18
-        return { ok: true, message: 'Producto desactivado.' };
+        const currentStatus = String(values[r][17]).toUpperCase();
+        const newStatus = currentStatus === 'NO' ? 'SI' : 'NO';
+        sh.getRange(r + 1, 18).setValue(newStatus); // ACTIVO is index 17 -> column 18
+        SpreadsheetApp.flush();
+        return { ok: true, message: newStatus === 'SI' ? 'Producto activado correctamente.' : 'Producto desactivado correctamente.' };
       }
     }
     throw new Error('Producto no encontrado.');
+  } finally {
+    lock.releaseLock();
+  }
+}
+
+function editProduct(form) {
+  const lock = LockService.getScriptLock();
+  lock.waitLock(15000);
+  try {
+    const ss = _getDb_();
+    const sh = ss.getSheetByName(APP.SHEETS.PRODUCTS);
+    const values = sh.getDataRange().getValues();
+    const originalCode = String(form.originalCodigo || '').trim().toUpperCase();
+    if (!originalCode) throw new Error('Código original no proporcionado.');
+
+    const newSku = String(form.codigo || '').trim().toUpperCase();
+
+    for (let r = 1; r < values.length; r++) {
+      if (String(values[r][1]).toUpperCase() === originalCode) {
+        // Update product fields in the row
+        // ['ID','CODIGO','CATEGORIA','NATURALEZA','TIPO','MODELO','MARCA','COLOR','TALLA','PRESENTACION','GENERO','UBICACION','UNIDAD','CONDICION','PUNTO_REORDEN','STOCK_MAXIMO','DESCRIPCION','ACTIVO','CREADO_EN']
+        sh.getRange(r + 1, 2).setValue(newSku);                                              // CODIGO
+        sh.getRange(r + 1, 3).setValue(String(form.categoria || '').trim());                  // CATEGORIA
+        sh.getRange(r + 1, 4).setValue(String(form.naturaleza || 'INVENTARIABLE').trim());    // NATURALEZA
+        sh.getRange(r + 1, 5).setValue(String(form.tipo || '').trim());                       // TIPO
+        sh.getRange(r + 1, 6).setValue(String(form.modelo || '').trim());                     // MODELO
+        sh.getRange(r + 1, 7).setValue(String(form.marca || '').trim());                      // MARCA
+        sh.getRange(r + 1, 8).setValue(String(form.color || '').trim());                      // COLOR
+        sh.getRange(r + 1, 9).setValue(String(form.talla || 'NO APLICA').trim());             // TALLA
+        sh.getRange(r + 1, 10).setValue(String(form.presentacion || 'NO APLICA').trim());     // PRESENTACION
+        sh.getRange(r + 1, 11).setValue(String(form.genero || 'NO APLICA').trim());           // GENERO
+        sh.getRange(r + 1, 12).setValue(String(form.ubicacion || '').trim());                 // UBICACION
+        sh.getRange(r + 1, 13).setValue(String(form.unidad || 'UNIDAD').trim());              // UNIDAD
+        sh.getRange(r + 1, 14).setValue(String(form.condicion || 'NUEVO').trim());            // CONDICION
+        sh.getRange(r + 1, 15).setValue(Number(form.puntoReorden || 0));                      // PUNTO_REORDEN
+        sh.getRange(r + 1, 16).setValue(Number(form.stockMaximo || 0));                       // STOCK_MAXIMO
+        sh.getRange(r + 1, 17).setValue(String(form.descripcion || '').trim());               // DESCRIPCION
+
+        // If the SKU changed, cascade update the MOVIMIENTOS sheet
+        if (newSku !== originalCode) {
+          const mvSh = ss.getSheetByName(APP.SHEETS.MOVEMENTS);
+          const mvValues = mvSh.getDataRange().getValues();
+          // MOVIMIENTO column CODIGO is index 2 (column 3)
+          for (let m = 1; m < mvValues.length; m++) {
+            if (String(mvValues[m][2]).toUpperCase() === originalCode) {
+              mvSh.getRange(m + 1, 3).setValue(newSku);
+            }
+          }
+        }
+
+        SpreadsheetApp.flush();
+        return { ok: true, message: 'Producto actualizado correctamente.' + (newSku !== originalCode ? ' SKU actualizado a ' + newSku + '.' : '') };
+      }
+    }
+    throw new Error('Producto no encontrado: ' + originalCode);
   } finally {
     lock.releaseLock();
   }
