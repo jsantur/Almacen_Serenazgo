@@ -171,45 +171,92 @@
         <div class="section-head">
           <div>
             <h2>Registrar movimiento</h2>
-            <p>Entradas, salidas y ajustes con validación de stock.</p>
+            <p>Entradas, salidas y ajustes con validación de stock. Un movimiento puede incluir múltiples productos.</p>
           </div>
         </div>
         <div class="panel form-panel">
           <form id="movementForm" onsubmit="submitMovement(event)">
+
+            <!-- ── CAMPOS GENERALES ─────────────────────────── -->
+            <div class="form-kicker">Datos generales del movimiento</div>
             <div class="form-grid">
               <label>Fecha<input id="mvFecha" name="fecha" class="input" type="date" required></label>
-              <label>Producto / SKU<select id="mvCodigo" name="codigo" class="input select" required></select></label>
-              <label>Tipo<select id="mvTipo" name="tipoMovimiento" class="input select" required>
+              <label>Tipo de movimiento *<select id="mvTipo" name="tipoMovimiento" class="input select" required onchange="onMovementTypeChange()">
                   <option value="ENTRADA">Entrada</option>
                   <option value="SALIDA">Salida</option>
                   <option value="AJUSTE_POSITIVO">Ajuste +</option>
                   <option value="AJUSTE_NEGATIVO">Ajuste −</option>
+                  <option value="DEVOLUCION">Devolución</option>
                 </select></label>
-              <label>Cantidad<input name="cantidad" class="input" type="number" min="0.01" step="0.01" required></label>
-              <label>Motivo<select id="mvMotivo" name="motivo" class="input select" required></select></label>
-              <label>Origen / Destino<input name="origenDestino" class="input"
-                  placeholder="Proveedor, área, persona…"></label>
-              <label class="full">Observación<textarea name="observacion" class="input" rows="3"
-                  placeholder="Detalle del movimiento"></textarea></label>
+              <label>Motivo *<select id="mvMotivo" name="motivo" class="input select" required></select></label>
+              <label>Beneficiario<input id="mvBeneficiario" name="beneficiario" class="input" placeholder="Nombre completo"></label>
+              <label>DNI<input id="mvDni" name="dniBeneficiario" class="input" placeholder="Número de documento" maxlength="12"></label>
+              <label>Área / Dependencia<input id="mvArea" name="areaDestino" list="mvAreaList" class="input" placeholder="Área o dependencia">
+                <datalist id="mvAreaList"><option value="SERENAZGO"><option value="LIMPIEZA"><option value="LOGISTICA"><option value="SEGURIDAD PATRIMONIAL"><option value="SECRETARIA GENERAL"><option value="RECURSOS HUMANOS"><option value="ADMINISTRACION"><option value="VIGILANCIA"></datalist>
+              </label>
+              <label>Cargo<input id="mvCargo" name="cargoBeneficiario" class="input" placeholder="Cargo del beneficiario"></label>
+              <label>Documento / Vale / PECOSA<input id="mvDocumento" name="documentoEntrega" class="input" placeholder="VALE-001, PECOSA-001…"></label>
+              <label>Tipo de destino<select id="mvTipoDestino" name="origenDestino" class="input select">
+                  <option value="">Seleccionar…</option>
+                  <option value="PERSONA">Persona</option>
+                  <option value="ÁREA">Área / Dependencia</option>
+                  <option value="PROVEEDOR">Proveedor</option>
+                  <option value="ALMACÉN">Almacén</option>
+                  <option value="OTRO">Otro</option>
+                </select></label>
             </div>
-            <div class="form-actions"><button type="reset" class="btn btn-secondary">Limpiar</button><button
-                type="submit" class="btn btn-primary">Guardar movimiento</button></div>
+
+            <!-- ── SECCIÓN PRODUCTOS ───────────────────────── -->
+            <hr class="section-divider">
+            <div class="products-section-label">📦 Productos del movimiento</div>
+
+            <div class="products-table-wrap">
+              <table class="products-table">
+                <thead>
+                  <tr>
+                    <th style="min-width:220px">Producto / SKU</th>
+                    <th style="min-width:90px">Cantidad</th>
+                    <th style="min-width:80px">Stock disp.</th>
+                    <th style="min-width:160px">Condición</th>
+                    <th style="width:40px"></th>
+                  </tr>
+                </thead>
+                <tbody id="productRowsBody"></tbody>
+              </table>
+            </div>
+
+            <button type="button" class="add-product-btn" onclick="addProductRow()">+ Agregar producto</button>
+
+            <!-- ── OBSERVACIÓN ─────────────────────────────── -->
+            <hr class="section-divider">
+            <div class="form-grid">
+              <label class="full">Observación<textarea id="mvObservacion" name="observacion" class="input" rows="2" placeholder="Detalle adicional del movimiento"></textarea></label>
+            </div>
+
+            <div class="form-actions">
+              <button type="button" class="btn btn-secondary" onclick="clearMovementForm()">Limpiar</button>
+              <button type="submit" class="btn btn-primary">Guardar movimiento</button>
+            </div>
           </form>
         </div>
+
+        <!-- ── HISTORIAL AGRUPADO ──────────────────────────── -->
         <div class="panel">
           <div class="panel-head">
-            <h3>Últimos movimientos</h3><span class="muted">Máximo 150 en vista</span>
+            <h3>Últimos movimientos</h3><span class="muted">Agrupados por operación · Máx. 150 en vista</span>
           </div>
           <div class="table-wrap">
             <table>
               <thead>
                 <tr>
+                  <th></th>
                   <th>Fecha</th>
-                  <th>SKU</th>
-                  <th>Movimiento</th>
-                  <th>Cantidad</th>
+                  <th>ID Movimiento</th>
+                  <th>Tipo</th>
+                  <th>Beneficiario</th>
+                  <th>Productos</th>
+                  <th>Unidades</th>
                   <th>Motivo</th>
-                  <th>Origen/Destino</th>
                 </tr>
               </thead>
               <tbody id="movementsTable"></tbody>
@@ -385,6 +432,26 @@
         <h3 id="modalTitle">Registrar movimiento</h3><button class="icon-btn" onclick="closeModal()">×</button>
       </div>
       <div id="modalBody"></div>
+    </div>
+  </div>
+
+  <!-- ── MODAL RESUMEN MOVIMIENTO ───────────────────────── -->
+  <div id="movementSummaryModal" class="modal hidden">
+    <div class="summary-modal-card">
+      <div class="summary-head">
+        <h3>📋 Resumen del movimiento</h3>
+        <button class="icon-btn" style="color:#fff" onclick="cancelMovementSummary()">×</button>
+      </div>
+      <div class="summary-body">
+        <dl class="summary-meta" id="summaryMeta"></dl>
+        <div class="products-section-label" style="margin-bottom:8px">Productos</div>
+        <div class="summary-products" id="summaryProducts"></div>
+        <div class="summary-totals" id="summaryTotals"></div>
+        <div class="summary-actions">
+          <button class="btn btn-secondary" onclick="cancelMovementSummary()">Cancelar</button>
+          <button class="btn btn-primary" id="confirmSaveBtn" onclick="confirmSaveMovement()">Guardar movimiento</button>
+        </div>
+      </div>
     </div>
   </div>
 

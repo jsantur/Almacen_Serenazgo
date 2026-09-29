@@ -7,7 +7,7 @@ const APP = {
     CONFIG: 'CONFIG'
   },
   PRODUCT_HEADERS: ['ID','CODIGO','CATEGORIA','NATURALEZA','TIPO','MODELO','MARCA','COLOR','TALLA','PRESENTACION','GENERO','UBICACION','UNIDAD','CONDICION','PUNTO_REORDEN','STOCK_MAXIMO','DESCRIPCION','ACTIVO','CREADO_EN'],
-  MOVEMENT_HEADERS: ['ID','FECHA','CODIGO','TIPO_MOVIMIENTO','CANTIDAD','CONDICION','MOTIVO','ORIGEN_DESTINO','BENEFICIARIO','DNI_BENEFICIARIO','AREA_DESTINO','CARGO_BENEFICIARIO','DOCUMENTO_ENTREGA','USUARIO','OBSERVACION','CREADO_EN'],
+  MOVEMENT_HEADERS: ['ID','MOVEMENT_ID','FECHA','CODIGO','TIPO_MOVIMIENTO','CANTIDAD','CONDICION','MOTIVO','ORIGEN_DESTINO','BENEFICIARIO','DNI_BENEFICIARIO','AREA_DESTINO','CARGO_BENEFICIARIO','DOCUMENTO_ENTREGA','USUARIO','OBSERVACION','CREADO_EN'],
   CONFIG_HEADERS: ['CLAVE','VALOR']
 };
 
@@ -283,6 +283,93 @@ function recordMovement(form) {
   }
 }
 
+/**
+ * Registra un movimiento con múltiples productos de forma atómica.
+ * batchData = { fecha, tipoMovimiento, motivo, beneficiario, dniBeneficiario,
+ *               areaDestino, cargoBeneficiario, documentoEntrega,
+ *               origenDestino, observacion,
+ *               productos: [{ codigo, cantidad, condicion }, ...] }
+ * Escribe UNA FILA POR PRODUCTO en la hoja MOVIMIENTOS, todas con el mismo MOVEMENT_ID.
+ * Si falta stock para cualquier producto la operación se aborta completa (rollback).
+ */
+function recordMovementBatch(batchData) {
+  if (!batchData || !Array.isArray(batchData.productos) || !batchData.productos.length) {
+    throw new Error('Debe incluir al menos un producto en el movimiento.');
+  }
+  const tipo = String(batchData.tipoMovimiento || '').toUpperCase();
+  const validTypes = ['ENTRADA','SALIDA','AJUSTE_POSITIVO','AJUSTE_NEGATIVO','DEVOLUCION'];
+  if (!validTypes.includes(tipo)) throw new Error('Tipo de movimiento no válido: ' + tipo);
+
+  const lock = LockService.getScriptLock();
+  lock.waitLock(20000);
+  try {
+    const ss = _getDb_();
+    const products = _readSheet_(ss, APP.SHEETS.PRODUCTS);
+    const movements = _readSheet_(ss, APP.SHEETS.MOVEMENTS);
+    const inventory = _buildInventory_(products, movements);
+    const isSalida = ['SALIDA','AJUSTE_NEGATIVO'].includes(tipo);
+    const fecha = batchData.fecha || _today_();
+    const movementId = _id_('MOV'); // ID compartido para toda la operación
+
+    // ── 1. VALIDAR TODOS LOS PRODUCTOS ANTES DE ESCRIBIR NADA ──
+    const validatedItems = [];
+    batchData.productos.forEach(function(item, idx) {
+      const code = String(item.codigo || '').trim().toUpperCase();
+      if (!code) throw new Error('Fila ' + (idx + 1) + ': El código de producto es obligatorio.');
+      const qty = Number(item.cantidad);
+      if (!(qty > 0)) throw new Error('Fila ' + (idx + 1) + ': La cantidad debe ser mayor que 0.');
+      if (!Number.isInteger(qty)) throw new Error('Fila ' + (idx + 1) + ': La cantidad debe ser un número entero.');
+
+      const product = products.find(function(p) { return String(p.CODIGO).toUpperCase() === code; });
+      if (!product || String(product.ACTIVO).toUpperCase() === 'NO') {
+        throw new Error('El SKU "' + code + '" no existe o está inactivo.');
+      }
+      if (isSalida) {
+        const inv = inventory.find(function(i) { return i.codigo === code; });
+        const available = inv ? inv.stock : 0;
+        if (available < qty) {
+          throw new Error('Stock insuficiente para "' + (product.TIPO || code) + '" (' + code + '). Disponible: ' + available + '. Solicitado: ' + qty + '.');
+        }
+      }
+      validatedItems.push({
+        codigo: code,
+        cantidad: qty,
+        condicion: String(item.condicion || 'NUEVO').trim()
+      });
+    });
+
+    // ── 2. ESCRIBIR TODAS LAS FILAS (atómico dentro del lock) ──
+    validatedItems.forEach(function(item) {
+      _appendMovement_(ss, {
+        movementId: movementId,
+        fecha: fecha,
+        codigo: item.codigo,
+        tipoMovimiento: tipo,
+        cantidad: item.cantidad,
+        condicion: item.condicion,
+        motivo: String(batchData.motivo || '').trim(),
+        origenDestino: String(batchData.origenDestino || '').trim(),
+        beneficiario: String(batchData.beneficiario || '').trim(),
+        dniBeneficiario: String(batchData.dniBeneficiario || '').trim(),
+        areaDestino: String(batchData.areaDestino || '').trim(),
+        cargoBeneficiario: String(batchData.cargoBeneficiario || '').trim(),
+        documentoEntrega: String(batchData.documentoEntrega || '').trim(),
+        observacion: String(batchData.observacion || '').trim()
+      });
+    });
+
+    SpreadsheetApp.flush();
+    return {
+      ok: true,
+      movementId: movementId,
+      count: validatedItems.length,
+      message: 'Movimiento registrado correctamente. ID: ' + movementId + ' · ' + validatedItems.length + ' producto(s).'
+    };
+  } finally {
+    lock.releaseLock();
+  }
+}
+
 function getKardex(codigo, fromDate, toDate) {
   const ss = _getDb_();
   const products = _readSheet_(ss, APP.SHEETS.PRODUCTS);
@@ -495,12 +582,25 @@ function _seedDemoData_(ss, force) {
 function _appendMovement_(ss, item) {
   const sh = ss.getSheetByName(APP.SHEETS.MOVEMENTS);
   const email = Session.getActiveUser().getEmail() || 'APP';
-  // ['ID','FECHA','CODIGO','TIPO_MOVIMIENTO','CANTIDAD','CONDICION','MOTIVO','ORIGEN_DESTINO','BENEFICIARIO','DNI_BENEFICIARIO','AREA_DESTINO','CARGO_BENEFICIARIO','DOCUMENTO_ENTREGA','USUARIO','OBSERVACION','CREADO_EN']
+  // ['ID','MOVEMENT_ID','FECHA','CODIGO','TIPO_MOVIMIENTO','CANTIDAD','CONDICION','MOTIVO','ORIGEN_DESTINO','BENEFICIARIO','DNI_BENEFICIARIO','AREA_DESTINO','CARGO_BENEFICIARIO','DOCUMENTO_ENTREGA','USUARIO','OBSERVACION','CREADO_EN']
   sh.appendRow([
-    _id_('MOV'), item.fecha, item.codigo, item.tipoMovimiento, Number(item.cantidad),
-    item.condicion || '', item.motivo || '', item.origenDestino || '',
-    item.beneficiario || '', item.dniBeneficiario || '', item.areaDestino || '', item.cargoBeneficiario || '', item.documentoEntrega || '',
-    email, item.observacion || '', new Date()
+    _id_('ROW'),
+    item.movementId || '',
+    item.fecha,
+    item.codigo,
+    item.tipoMovimiento,
+    Number(item.cantidad),
+    item.condicion || '',
+    item.motivo || '',
+    item.origenDestino || '',
+    item.beneficiario || '',
+    item.dniBeneficiario || '',
+    item.areaDestino || '',
+    item.cargoBeneficiario || '',
+    item.documentoEntrega || '',
+    email,
+    item.observacion || '',
+    new Date()
   ]);
 }
 
@@ -561,6 +661,7 @@ function _publicProduct_(p) {
 
 function _publicMovement_(m) {
   return {
+    movementId: String(m.MOVEMENT_ID || ''),
     fecha: _formatDateValue_(m.FECHA), codigo: String(m.CODIGO || ''), tipoMovimiento: String(m.TIPO_MOVIMIENTO || ''),
     cantidad: Number(m.CANTIDAD || 0), condicion: String(m.CONDICION || ''), motivo: String(m.MOTIVO || ''), origenDestino: String(m.ORIGEN_DESTINO || ''),
     beneficiario: String(m.BENEFICIARIO || ''), dniBeneficiario: String(m.DNI_BENEFICIARIO || ''), areaDestino: String(m.AREA_DESTINO || ''), cargoBeneficiario: String(m.CARGO_BENEFICIARIO || ''), documentoEntrega: String(m.DOCUMENTO_ENTREGA || ''),

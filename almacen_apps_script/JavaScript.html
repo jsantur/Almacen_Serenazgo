@@ -78,6 +78,7 @@
     bindProductSkuPreview();
     const type = document.getElementById('prTipo');
     if (type) type.addEventListener('change', applyProductTypeMeta);
+    initMovementForm();
     refreshApp();
   });
 
@@ -143,7 +144,61 @@
 
   function renderMovements() {
     const body = document.getElementById('movementsTable');
-    body.innerHTML = state.movements.length ? state.movements.map(m => `<tr><td>${esc(m.fecha)}</td><td><strong>${esc(m.codigo)}</strong></td><td>${moveLabel(m.tipoMovimiento)}</td><td>${qtyView(m)}</td><td>${esc(m.motivo)}</td><td>${esc(m.origenDestino)}</td></tr>`).join('') : '<tr><td colspan="6" class="empty">Sin movimientos.</td></tr>';
+    if (!state.movements.length) {
+      body.innerHTML = '<tr><td colspan="8" class="empty">Sin movimientos.</td></tr>';
+      return;
+    }
+    // Group by movementId field (shared across products of same operation)
+    // Fallback: treat each row as its own group for legacy single-product movements
+    const groups = {};
+    const groupOrder = [];
+    state.movements.forEach(m => {
+      const gid = m.movementId || (m.fecha + '|' + m.codigo + '|' + m.tipoMovimiento);
+      if (!groups[gid]) { groups[gid] = []; groupOrder.push(gid); }
+      groups[gid].push(m);
+    });
+    let html = '';
+    groupOrder.forEach(gid => {
+      const items = groups[gid];
+      const first = items[0];
+      const totalUnits = items.reduce((s, m) => s + Number(m.cantidad || 0), 0);
+      const movId = first.movementId || '';
+      const rowId = 'grp_' + gid.replace(/[^a-z0-9]/gi, '_');
+      html += `<tr class="movement-group-row" onclick="toggleMovementGroup('${rowId}')">
+        <td><button class="expand-btn" id="expBtn_${rowId}">▶</button></td>
+        <td>${esc(first.fecha)}</td>
+        <td>${movId ? `<span class="mov-id-badge">${esc(movId)}</span>` : '<span class="muted">—</span>'}</td>
+        <td>${moveLabel(first.tipoMovimiento)}</td>
+        <td>${esc(first.beneficiario || '—')}</td>
+        <td><strong>${items.length}</strong> ${items.length === 1 ? 'producto' : 'productos'}</td>
+        <td>${qtyViewSign(first, totalUnits)}</td>
+        <td>${esc(first.motivo || '—')}</td>
+      </tr>`;
+      items.forEach(m => {
+        html += `<tr class="movement-detail-row" id="det_${rowId}" style="display:none">
+          <td></td><td></td>
+          <td colspan="2"><strong>${esc(m.codigo)}</strong></td>
+          <td colspan="2">${esc(m.condicion || '')}</td>
+          <td>${qtyView(m)}</td>
+          <td>${esc(m.documentoEntrega || '')}</td>
+        </tr>`;
+      });
+    });
+    body.innerHTML = html;
+  }
+
+  function toggleMovementGroup(rowId) {
+    const btn = document.getElementById('expBtn_' + rowId);
+    const detRows = document.querySelectorAll('#det_' + rowId);
+    const isOpen = btn && btn.textContent === '▼';
+    if (btn) btn.textContent = isOpen ? '▶' : '▼';
+    detRows.forEach(r => r.style.display = isOpen ? 'none' : '');
+  }
+
+  function qtyViewSign(m, total) {
+    const sign = ['ENTRADA', 'SALDO_INICIAL', 'AJUSTE_POSITIVO'].includes(m.tipoMovimiento) ? '+' : '−';
+    const cls = sign === '+' ? 'move-in' : 'move-out';
+    return `<span class="${cls}">${sign} ${fmt(total)}</span>`;
   }
 
   function renderProducts() {
@@ -159,7 +214,14 @@
 
   function populateSelectors() {
     var skuOptions = state.products.map(function (p) { return '<option value="' + escAttr(p.codigo) + '">' + esc(p.codigo) + ' — ' + esc(p.tipo) + ' · ' + esc(p.modelo || p.marca || '') + ' · ' + esc(p.color || '') + ' · ' + esc(p.talla || p.presentacion || '') + '</option>'; }).join('');
-    ['mvCodigo', 'kxCodigo'].forEach(function (id) { var el = document.getElementById(id); if (el) el.innerHTML = '<option value="">Seleccionar…</option>' + skuOptions; });
+    // kxCodigo only — mvCodigo removed (multi-product rows now handle product selection)
+    ['kxCodigo'].forEach(function (id) { var el = document.getElementById(id); if (el) el.innerHTML = '<option value="">Seleccionar…</option>' + skuOptions; });
+    // Refresh existing product row selects with latest product list
+    document.querySelectorAll('#productRowsBody .mv-product-select').forEach(function(sel) {
+      var currentVal = sel.value;
+      sel.innerHTML = '<option value="">Seleccionar producto…</option>' + skuOptions;
+      if (currentVal) sel.value = currentVal;
+    });
     var l = state.lists || {};
     var catList = document.getElementById('prCategoriaList');
     if (catList) catList.innerHTML = _mergeLists(Object.keys(TYPE_META).map(function (k) { return TYPE_META[k].cat; }), l.categorias).map(function (v) { return '<option value="' + escAttr(v) + '"></option>'; }).join('');
@@ -194,13 +256,199 @@
     if (values.includes(current)) el.value = current;
   }
 
+  /* ═══════════════════════════════════════════════════════════
+   *  MULTI-PRODUCT MOVEMENT SYSTEM
+   * ═══════════════════════════════════════════════════════════ */
+
+  let _productRowCount = 0;
+  let _pendingBatchData = null;
+
+  function initMovementForm() {
+    addProductRow();
+  }
+
+  function onMovementTypeChange() {
+    document.querySelectorAll('#productRowsBody tr').forEach(tr => {
+      const sel = tr.querySelector('.mv-product-select');
+      if (sel && sel.value) updateProductStock(tr.dataset.rowId);
+    });
+  }
+
+  function addProductRow() {
+    _productRowCount++;
+    const rowId = 'pr' + _productRowCount;
+    const condOptions = _mergeLists(DEFAULT_LISTS.condiciones, (state.lists || {}).condiciones || []);
+    const condHtml = condOptions.map(v => `<option value="${escAttr(v)}">${esc(v)}</option>`).join('');
+    const skuOptions = state.products.map(p =>
+      `<option value="${escAttr(p.codigo)}">${esc(p.codigo)} — ${esc(p.tipo)}${p.modelo ? ' · ' + esc(p.modelo) : ''} ${p.color ? ' · ' + esc(p.color) : ''} ${p.talla && p.talla !== 'NO APLICA' ? ' · ' + esc(p.talla) : ''}</option>`
+    ).join('');
+    const tbody = document.getElementById('productRowsBody');
+    const tr = document.createElement('tr');
+    tr.dataset.rowId = rowId;
+    tr.innerHTML = `
+      <td>
+        <select class="input select mv-product-select" data-row="${rowId}" onchange="updateProductStock('${rowId}')" style="min-width:200px">
+          <option value="">Seleccionar producto…</option>
+          ${skuOptions}
+        </select>
+      </td>
+      <td><input class="input mv-qty" data-row="${rowId}" type="number" min="1" step="1" value="1" style="width:80px" oninput="updateProductStock('${rowId}')"></td>
+      <td><span class="stock-badge" id="stockBadge_${rowId}">—</span></td>
+      <td>
+        <select class="input select mv-condicion" data-row="${rowId}" style="min-width:140px">
+          ${condHtml}
+        </select>
+      </td>
+      <td><button type="button" class="remove-row-btn" onclick="removeProductRow('${rowId}')" title="Eliminar">🗑</button></td>`;
+    tbody.appendChild(tr);
+  }
+
+  function removeProductRow(rowId) {
+    const tbody = document.getElementById('productRowsBody');
+    if (tbody.querySelectorAll('tr').length <= 1) { toast('Debe haber al menos un producto en el movimiento.'); return; }
+    const tr = tbody.querySelector(`tr[data-row-id="${rowId}"]`);
+    if (tr) tr.remove();
+  }
+
+  function updateProductStock(rowId) {
+    const tbody = document.getElementById('productRowsBody');
+    const tr = tbody.querySelector(`tr[data-row-id="${rowId}"]`);
+    if (!tr) return;
+    const sel = tr.querySelector('.mv-product-select');
+    const qtyInput = tr.querySelector('.mv-qty');
+    const badge = document.getElementById('stockBadge_' + rowId);
+    if (!sel || !badge) return;
+    const codigo = sel.value;
+    if (!codigo) { badge.textContent = '—'; badge.className = 'stock-badge'; return; }
+    const inv = state.inventory.find(i => i.codigo === codigo);
+    const stock = inv ? inv.stock : 0;
+    const qty = Number(qtyInput ? qtyInput.value : 1);
+    const tipo = (document.getElementById('mvTipo') || {}).value || '';
+    const isSalida = ['SALIDA', 'AJUSTE_NEGATIVO'].includes(tipo);
+    badge.textContent = stock;
+    badge.className = 'stock-badge' + (stock <= 0 ? ' out' : (isSalida && qty > stock ? ' warn' : (stock <= 3 ? ' low' : '')));
+  }
+
+  function _collectProductRows() {
+    const rows = [];
+    document.querySelectorAll('#productRowsBody tr').forEach(tr => {
+      const sel = tr.querySelector('.mv-product-select');
+      const qty = tr.querySelector('.mv-qty');
+      const cond = tr.querySelector('.mv-condicion');
+      if (sel && qty) rows.push({ rowId: tr.dataset.rowId, codigo: sel.value, cantidad: Number(qty.value), condicion: cond ? cond.value : 'NUEVO' });
+    });
+    return rows;
+  }
+
+  function validateMovementForm(rows) {
+    const errors = [];
+    const tipo = document.getElementById('mvTipo').value;
+    const isSalida = ['SALIDA', 'AJUSTE_NEGATIVO'].includes(tipo);
+    if (!document.getElementById('mvFecha').value) errors.push('La fecha es obligatoria.');
+    if (!tipo) errors.push('El tipo de movimiento es obligatorio.');
+    if (!rows.length) { errors.push('Agrega al menos un producto.'); return errors; }
+    const seen = {};
+    rows.forEach((r, idx) => {
+      if (!r.codigo) { errors.push(`Fila ${idx + 1}: Selecciona un producto.`); return; }
+      if (!(r.cantidad > 0)) { errors.push(`Fila ${idx + 1}: La cantidad debe ser mayor que 0.`); return; }
+      if (!Number.isInteger(r.cantidad)) { errors.push(`Fila ${idx + 1}: La cantidad debe ser un número entero.`); return; }
+      const key = r.codigo + '|' + r.condicion;
+      if (seen[key] !== undefined) {
+        errors.push(`El producto ${r.codigo} (${r.condicion}) ya fue agregado. Consolida las cantidades o usa condiciones distintas.`);
+      } else { seen[key] = idx; }
+      if (isSalida) {
+        const inv = state.inventory.find(i => i.codigo === r.codigo);
+        const available = inv ? inv.stock : 0;
+        const p = state.products.find(x => x.codigo === r.codigo);
+        const name = p ? (p.tipo + (p.modelo ? ' · ' + p.modelo : '')) : r.codigo;
+        if (available < r.cantidad) errors.push(`Stock insuficiente para "${name}". Disponible: ${available}. Solicitado: ${r.cantidad}.`);
+      }
+    });
+    return errors;
+  }
+
   function submitMovement(ev) {
     ev.preventDefault();
-    const form = Object.fromEntries(new FormData(ev.target).entries());
+    const rows = _collectProductRows();
+    const errors = validateMovementForm(rows);
+    if (errors.length) { toast(errors[0]); return; }
+    showMovementSummary(rows);
+  }
+
+  function showMovementSummary(rows) {
+    const tipo = document.getElementById('mvTipo').value;
+    const motivo = document.getElementById('mvMotivo').value;
+    const beneficiario = document.getElementById('mvBeneficiario').value;
+    const dni = document.getElementById('mvDni').value;
+    const area = document.getElementById('mvArea').value;
+    const cargo = document.getElementById('mvCargo').value;
+    const doc = document.getElementById('mvDocumento').value;
+    const fecha = document.getElementById('mvFecha').value;
+    const tipoDestino = document.getElementById('mvTipoDestino').value;
+    const obs = document.getElementById('mvObservacion').value;
+    const typeLabels = { ENTRADA: 'ENTRADA', SALIDA: 'SALIDA', AJUSTE_POSITIVO: 'AJUSTE +', AJUSTE_NEGATIVO: 'AJUSTE −', DEVOLUCION: 'DEVOLUCIÓN' };
+    const metaItems = [['Tipo', typeLabels[tipo] || tipo], ['Fecha', fecha], ['Motivo', motivo || '—'], ['Beneficiario', beneficiario || '—'], ['DNI', dni || '—'], ['Área', area || '—'], ['Cargo', cargo || '—'], ['Documento', doc || '—'], ['Destino', tipoDestino || '—']];
+    document.getElementById('summaryMeta').innerHTML = metaItems.map(([k, v]) => `<div><dt>${esc(k)}</dt><dd>${esc(v)}</dd></div>`).join('');
+    let totalUnits = 0;
+    document.getElementById('summaryProducts').innerHTML = rows.map(r => {
+      const p = state.products.find(x => x.codigo === r.codigo);
+      const name = p ? (p.tipo + (p.modelo ? ' · ' + p.modelo : '') + (p.color ? ' · ' + p.color : '') + (p.talla && p.talla !== 'NO APLICA' ? ' · ' + p.talla : '')) : r.codigo;
+      totalUnits += r.cantidad;
+      return `<div class="summary-product-row"><span class="icon">✅</span><span style="flex:1"><strong>${esc(name)}</strong> <span class="muted">(${esc(r.codigo)})</span></span><span style="font-weight:700">${r.cantidad} uds.</span><span class="muted" style="margin-left:10px;font-size:11px">${esc(r.condicion)}</span></div>`;
+    }).join('');
+    document.getElementById('summaryTotals').innerHTML = `<span>Total productos: <strong>${rows.length}</strong></span><span>Total unidades: <strong>${totalUnits}</strong></span>`;
+    _pendingBatchData = { fecha, tipoMovimiento: tipo, motivo, beneficiario, dniBeneficiario: dni, areaDestino: area, cargoBeneficiario: cargo, documentoEntrega: doc, origenDestino: tipoDestino, observacion: obs, productos: rows.map(r => ({ codigo: r.codigo, cantidad: r.cantidad, condicion: r.condicion })) };
+    document.getElementById('movementSummaryModal').classList.remove('hidden');
+  }
+
+  function cancelMovementSummary() {
+    document.getElementById('movementSummaryModal').classList.add('hidden');
+    _pendingBatchData = null;
+  }
+
+  function confirmSaveMovement() {
+    if (!_pendingBatchData) return;
+    const btn = document.getElementById('confirmSaveBtn');
+    btn.disabled = true;
+    btn.textContent = 'Guardando…';
+    document.getElementById('movementSummaryModal').classList.add('hidden');
     showLoading(true);
-    google.script.run.withSuccessHandler(res => {
-      showLoading(false); toast(res.message); ev.target.reset(); setToday(); refreshApp();
-    }).withFailureHandler(handleError).recordMovement(form);
+    google.script.run
+      .withSuccessHandler(res => {
+        showLoading(false);
+        btn.disabled = false;
+        btn.textContent = 'Guardar movimiento';
+        _pendingBatchData = null;
+        toast(res.message || 'Movimiento guardado correctamente.');
+        clearMovementForm();
+        refreshApp();
+      })
+      .withFailureHandler(err => {
+        showLoading(false);
+        btn.disabled = false;
+        btn.textContent = 'Guardar movimiento';
+        _pendingBatchData = null;
+        handleError(err);
+      })
+      .recordMovementBatch(_pendingBatchData);
+  }
+
+  function clearMovementForm() {
+    document.getElementById('mvBeneficiario').value = '';
+    document.getElementById('mvDni').value = '';
+    document.getElementById('mvArea').value = '';
+    document.getElementById('mvCargo').value = '';
+    document.getElementById('mvDocumento').value = '';
+    document.getElementById('mvObservacion').value = '';
+    document.getElementById('mvTipo').value = 'ENTRADA';
+    document.getElementById('mvTipoDestino').value = '';
+    const motivo = document.getElementById('mvMotivo');
+    if (motivo) motivo.selectedIndex = 0;
+    setToday();
+    const tbody = document.getElementById('productRowsBody');
+    tbody.innerHTML = '';
+    _productRowCount = 0;
+    addProductRow();
   }
 
   function submitProduct(ev) {
@@ -263,7 +511,8 @@
   function openQuickMovement() {
     navigate('movimientos');
     window.scrollTo({ top: 0, behavior: 'smooth' });
-    document.getElementById('mvCodigo').focus();
+    const firstSelect = document.querySelector('#productRowsBody .mv-product-select');
+    if (firstSelect) firstSelect.focus();
   }
 
   function openKardex(code) {

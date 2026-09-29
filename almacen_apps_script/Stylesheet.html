@@ -602,6 +602,267 @@
     gap: 6px
   }
 
+  /* ── Multi-product movement styles ───────────────────────── */
+  .section-divider {
+    border: 0;
+    border-top: 2px solid var(--line);
+    margin: 22px 0 18px
+  }
+
+  .products-section-label {
+    font-size: 11px;
+    font-weight: 900;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--primary);
+    margin: 0 0 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px
+  }
+
+  .products-section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--line)
+  }
+
+  .products-table-wrap {
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 10px
+  }
+
+  .products-table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 0
+  }
+
+  .products-table th {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    color: var(--muted);
+    background: #f7f9fb;
+    padding: 9px 10px;
+    border-bottom: 1px solid var(--line);
+    text-align: left
+  }
+
+  .products-table td {
+    padding: 8px 10px;
+    border-bottom: 1px solid var(--line);
+    vertical-align: middle;
+    white-space: normal
+  }
+
+  .products-table tr:last-child td {
+    border-bottom: 0
+  }
+
+  .products-table .input {
+    padding: 7px 9px;
+    font-size: 13px
+  }
+
+  .stock-badge {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 700;
+    background: #eaf7ef;
+    color: #157347;
+    min-width: 38px;
+    text-align: center
+  }
+
+  .stock-badge.low {
+    background: #fff6da;
+    color: #8a5c00
+  }
+
+  .stock-badge.out {
+    background: #fff0ef;
+    color: #a61b10
+  }
+
+  .stock-badge.warn {
+    background: #fff0ef;
+    color: #a61b10
+  }
+
+  .add-product-btn {
+    background: #f0faf8;
+    border: 2px dashed #a8d5ce;
+    color: var(--primary);
+    border-radius: 9px;
+    padding: 9px 16px;
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 13px;
+    width: 100%;
+    text-align: center;
+    transition: background .15s
+  }
+
+  .add-product-btn:hover {
+    background: #ddf3ee
+  }
+
+  .remove-row-btn {
+    border: 0;
+    background: transparent;
+    color: #b42318;
+    cursor: pointer;
+    font-size: 18px;
+    padding: 2px 6px;
+    border-radius: 6px;
+    line-height: 1
+  }
+
+  .remove-row-btn:hover {
+    background: #fff0ef
+  }
+
+  /* ── Movement summary modal ───────────────────────────────── */
+  .summary-modal-card {
+    background: #fff;
+    width: min(600px, 100%);
+    border-radius: 16px;
+    box-shadow: 0 25px 70px rgba(0, 0, 0, .28);
+    overflow: hidden
+  }
+
+  .summary-head {
+    background: var(--primary);
+    color: #fff;
+    padding: 16px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center
+  }
+
+  .summary-head h3 {
+    margin: 0;
+    font-size: 15px;
+    letter-spacing: .04em
+  }
+
+  .summary-body {
+    padding: 20px
+  }
+
+  .summary-meta {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px 18px;
+    margin-bottom: 16px;
+    font-size: 13px
+  }
+
+  .summary-meta dt {
+    font-weight: 700;
+    color: var(--muted);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: .05em
+  }
+
+  .summary-meta dd {
+    margin: 0;
+    color: var(--text);
+    font-weight: 500
+  }
+
+  .summary-products {
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 14px
+  }
+
+  .summary-product-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 13px;
+    border-bottom: 1px solid var(--line);
+    font-size: 13px
+  }
+
+  .summary-product-row:last-child {
+    border-bottom: 0
+  }
+
+  .summary-product-row .icon {
+    font-size: 16px
+  }
+
+  .summary-totals {
+    display: flex;
+    gap: 20px;
+    justify-content: flex-end;
+    font-size: 13px;
+    color: var(--muted);
+    margin-bottom: 18px
+  }
+
+  .summary-totals strong {
+    color: var(--text)
+  }
+
+  .summary-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end
+  }
+
+  /* ── Grouped movement list ────────────────────────────────── */
+  .movement-group-row {
+    cursor: pointer
+  }
+
+  .movement-group-row:hover td {
+    background: #f7fbfa
+  }
+
+  .movement-detail-row td {
+    background: #f9fbfd;
+    padding: 6px 14px 6px 32px;
+    font-size: 12px;
+    color: var(--muted)
+  }
+
+  .mov-id-badge {
+    display: inline-block;
+    background: #e8f5f2;
+    color: #0a5c55;
+    border-radius: 5px;
+    font-size: 10px;
+    font-weight: 800;
+    padding: 2px 5px;
+    letter-spacing: .03em;
+    margin-right: 4px
+  }
+
+  .expand-btn {
+    border: 0;
+    background: transparent;
+    font-size: 14px;
+    cursor: pointer;
+    padding: 1px 4px;
+    border-radius: 4px;
+    color: var(--muted)
+  }
+
+  .expand-btn:hover {
+    background: var(--line)
+  }
+
   .code-card {
     padding: 20px
   }
