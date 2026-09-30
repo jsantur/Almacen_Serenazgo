@@ -112,29 +112,37 @@ function createProduct(form) {
     if (rows.some(r => String(r.CODIGO).toUpperCase() === code)) {
       throw new Error('Ya existe un producto con el código ' + code + '.');
     }
-    const id = _id_('PRD');
-    const now = new Date();
-    sh.appendRow([
-      id,
-      code,
-      String(form.categoria || '').trim(),
-      String(form.naturaleza || 'INVENTARIABLE').trim(),
-      String(form.tipo || '').trim(),
-      String(form.modelo || '').trim(),
-      String(form.marca || '').trim(),
-      String(form.color || '').trim(),
-      String(form.talla || 'NO APLICA').trim(),
-      String(form.presentacion || 'NO APLICA').trim(),
-      String(form.genero || 'NO APLICA').trim(),
-      String(form.ubicacion || '').trim(),
-      String(form.unidad || 'UNIDAD').trim(),
-      String(form.condicion || 'NUEVO').trim(),
-      Number(form.puntoReorden || 0),
-      Number(form.stockMaximo || 0),
-      String(form.descripcion || '').trim(),
-      'SI',
-      now
-    ]);
+    const data = {
+      'ID': _id_('PRD'),
+      'CODIGO': code,
+      'CATEGORIA': String(form.categoria || '').trim(),
+      'NATURALEZA': String(form.naturaleza || 'INVENTARIABLE').trim(),
+      'TIPO': String(form.tipo || '').trim(),
+      'MODELO': String(form.modelo || '').trim(),
+      'MARCA': String(form.marca || '').trim(),
+      'COLOR': String(form.color || '').trim(),
+      'TALLA': String(form.talla || 'NO APLICA').trim(),
+      'PRESENTACION': String(form.presentacion || 'NO APLICA').trim(),
+      'GENERO': String(form.genero || 'NO APLICA').trim(),
+      'UBICACION': String(form.ubicacion || '').trim(),
+      'UNIDAD': String(form.unidad || 'UNIDAD').trim(),
+      'CONDICION': String(form.condicion || 'NUEVO').trim(),
+      'PUNTO_REORDEN': Number(form.puntoReorden || 0),
+      'STOCK_MAXIMO': Number(form.stockMaximo || 0),
+      'DESCRIPCION': String(form.descripcion || '').trim(),
+      'ACTIVO': 'SI',
+      'CREADO_EN': new Date()
+    };
+    
+    const headers = sh.getRange(1, 1, 1, sh.getLastColumn()).getValues()[0];
+    const row = new Array(headers.length).fill('');
+    headers.forEach((h, i) => {
+      const key = String(h).trim().toUpperCase();
+      if (data[key] !== undefined) {
+        row[i] = data[key];
+      }
+    });
+    sh.appendRow(row);
 
     const initial = Number(form.stockInicial || 0);
     if (initial > 0) {
@@ -166,13 +174,20 @@ function toggleProductStatus(codigo) {
   try {
     const ss = _getDb_();
     const sh = ss.getSheetByName(APP.SHEETS.PRODUCTS);
+    const colMap = _resolveColumns_(sh);
     const values = sh.getDataRange().getValues();
     const code = String(codigo || '').trim().toUpperCase();
+    
+    const codeIndex = colMap['CODIGO'] - 1;
+    const activoIndex = colMap['ACTIVO'] - 1;
+    
+    if (codeIndex < 0 || activoIndex < 0) throw new Error('Schema de PRODUCTOS inválido.');
+
     for (let r = 1; r < values.length; r++) {
-      if (String(values[r][1]).toUpperCase() === code) {
-        const currentStatus = String(values[r][17]).toUpperCase();
+      if (String(values[r][codeIndex]).toUpperCase() === code) {
+        const currentStatus = String(values[r][activoIndex]).toUpperCase();
         const newStatus = currentStatus === 'NO' ? 'SI' : 'NO';
-        sh.getRange(r + 1, 18).setValue(newStatus); // ACTIVO is index 17 -> column 18
+        _updateRowBySchema_(sh, r + 1, { 'ACTIVO': newStatus }, colMap);
         SpreadsheetApp.flush();
         return { ok: true, message: newStatus === 'SI' ? 'Producto activado correctamente.' : 'Producto desactivado correctamente.' };
       }
@@ -189,47 +204,85 @@ function editProduct(form) {
   try {
     const ss = _getDb_();
     const sh = ss.getSheetByName(APP.SHEETS.PRODUCTS);
+    const colMap = _resolveColumns_(sh);
     const values = sh.getDataRange().getValues();
     const originalCode = String(form.originalCodigo || '').trim().toUpperCase();
     if (!originalCode) throw new Error('Código original no proporcionado.');
 
     const newSku = String(form.codigo || '').trim().toUpperCase();
+    const codeIndex = colMap['CODIGO'] - 1;
 
     for (let r = 1; r < values.length; r++) {
-      if (String(values[r][1]).toUpperCase() === originalCode) {
-        // Update product fields in the row
-        // ['ID','CODIGO','CATEGORIA','NATURALEZA','TIPO','MODELO','MARCA','COLOR','TALLA','PRESENTACION','GENERO','UBICACION','UNIDAD','CONDICION','PUNTO_REORDEN','STOCK_MAXIMO','DESCRIPCION','ACTIVO','CREADO_EN']
-        sh.getRange(r + 1, 2).setValue(newSku);                                              // CODIGO
-        sh.getRange(r + 1, 3).setValue(String(form.categoria || '').trim());                  // CATEGORIA
-        sh.getRange(r + 1, 4).setValue(String(form.naturaleza || 'INVENTARIABLE').trim());    // NATURALEZA
-        sh.getRange(r + 1, 5).setValue(String(form.tipo || '').trim());                       // TIPO
-        sh.getRange(r + 1, 6).setValue(String(form.modelo || '').trim());                     // MODELO
-        sh.getRange(r + 1, 7).setValue(String(form.marca || '').trim());                      // MARCA
-        sh.getRange(r + 1, 8).setValue(String(form.color || '').trim());                      // COLOR
-        sh.getRange(r + 1, 9).setValue(String(form.talla || 'NO APLICA').trim());             // TALLA
-        sh.getRange(r + 1, 10).setValue(String(form.presentacion || 'NO APLICA').trim());     // PRESENTACION
-        sh.getRange(r + 1, 11).setValue(String(form.genero || 'NO APLICA').trim());           // GENERO
-        sh.getRange(r + 1, 12).setValue(String(form.ubicacion || '').trim());                 // UBICACION
-        sh.getRange(r + 1, 13).setValue(String(form.unidad || 'UNIDAD').trim());              // UNIDAD
-        sh.getRange(r + 1, 14).setValue(String(form.condicion || 'NUEVO').trim());            // CONDICION
-        sh.getRange(r + 1, 15).setValue(Number(form.puntoReorden || 0));                      // PUNTO_REORDEN
-        sh.getRange(r + 1, 16).setValue(Number(form.stockMaximo || 0));                       // STOCK_MAXIMO
-        sh.getRange(r + 1, 17).setValue(String(form.descripcion || '').trim());               // DESCRIPCION
+      if (String(values[r][codeIndex]).toUpperCase() === originalCode) {
+        
+        _updateRowBySchema_(sh, r + 1, {
+          'CODIGO': newSku,
+          'CATEGORIA': String(form.categoria || '').trim(),
+          'NATURALEZA': String(form.naturaleza || 'INVENTARIABLE').trim(),
+          'TIPO': String(form.tipo || '').trim(),
+          'MODELO': String(form.modelo || '').trim(),
+          'MARCA': String(form.marca || '').trim(),
+          'COLOR': String(form.color || '').trim(),
+          'TALLA': String(form.talla || 'NO APLICA').trim(),
+          'PRESENTACION': String(form.presentacion || 'NO APLICA').trim(),
+          'GENERO': String(form.genero || 'NO APLICA').trim(),
+          'UBICACION': String(form.ubicacion || '').trim(),
+          'UNIDAD': String(form.unidad || 'UNIDAD').trim(),
+          'CONDICION': String(form.condicion || 'NUEVO').trim(),
+          'PUNTO_REORDEN': Number(form.puntoReorden || 0),
+          'STOCK_MAXIMO': Number(form.stockMaximo || 0),
+          'DESCRIPCION': String(form.descripcion || '').trim()
+        }, colMap);
+
+        // -- MANEJAR EL STOCK NUEVO AQUÍ --
+        const newStockStr = form.stockNuevo;
+        let adjustmentMessage = '';
+        
+        if (newStockStr !== undefined && newStockStr !== '') {
+           const newStock = Number(newStockStr);
+           if (Number.isFinite(newStock) && newStock >= 0) {
+              const products = _readSheet_(ss, APP.SHEETS.PRODUCTS);
+              const movements = _readSheet_(ss, APP.SHEETS.MOVEMENTS);
+              const inventory = _buildInventory_(products, movements);
+              const currentInv = inventory.find(i => i.codigo === originalCode);
+              const oldStock = currentInv ? currentInv.stock : 0;
+              
+              const delta = newStock - oldStock;
+              if (delta !== 0) {
+                 const tipo = delta > 0 ? 'AJUSTE_POSITIVO' : 'AJUSTE_NEGATIVO';
+                 _appendMovement_(ss, {
+                    movementId: _id_('AJUSTE'),
+                    fecha: _today_(),
+                    codigo: newSku,
+                    tipoMovimiento: tipo,
+                    cantidad: Math.abs(delta),
+                    condicion: String(form.condicion || 'NUEVO').trim(),
+                    motivo: 'Corrección de stock desde edición del producto',
+                    origenDestino: 'Almacén',
+                    observacion: 'Stock anterior: ' + oldStock + ' | Stock corregido: ' + newStock
+                 });
+                 adjustmentMessage = ' y stock corregido mediante ajuste de Kardex';
+              }
+           } else {
+              throw new Error('El nuevo stock debe ser un número mayor o igual a 0.');
+           }
+        }
 
         // If the SKU changed, cascade update the MOVIMIENTOS sheet
         if (newSku !== originalCode) {
           const mvSh = ss.getSheetByName(APP.SHEETS.MOVEMENTS);
+          const mvColMap = _resolveColumns_(mvSh);
           const mvValues = mvSh.getDataRange().getValues();
-          // MOVIMIENTO column CODIGO is index 2 (column 3)
+          const mvCodeIdx = mvColMap['CODIGO'] - 1;
           for (let m = 1; m < mvValues.length; m++) {
-            if (String(mvValues[m][2]).toUpperCase() === originalCode) {
-              mvSh.getRange(m + 1, 3).setValue(newSku);
+            if (String(mvValues[m][mvCodeIdx]).toUpperCase() === originalCode) {
+              _updateRowBySchema_(mvSh, m + 1, { 'CODIGO': newSku }, mvColMap);
             }
           }
         }
 
         SpreadsheetApp.flush();
-        return { ok: true, message: 'Producto actualizado correctamente.' + (newSku !== originalCode ? ' SKU actualizado a ' + newSku + '.' : '') };
+        return { ok: true, message: 'Producto actualizado correctamente' + adjustmentMessage + '.' + (newSku !== originalCode ? ' SKU actualizado a ' + newSku + '.' : '') };
       }
     }
     throw new Error('Producto no encontrado: ' + originalCode);
@@ -582,26 +635,36 @@ function _seedDemoData_(ss, force) {
 function _appendMovement_(ss, item) {
   const sh = ss.getSheetByName(APP.SHEETS.MOVEMENTS);
   const email = Session.getActiveUser().getEmail() || 'APP';
-  // ['ID','MOVEMENT_ID','FECHA','CODIGO','TIPO_MOVIMIENTO','CANTIDAD','CONDICION','MOTIVO','ORIGEN_DESTINO','BENEFICIARIO','DNI_BENEFICIARIO','AREA_DESTINO','CARGO_BENEFICIARIO','DOCUMENTO_ENTREGA','USUARIO','OBSERVACION','CREADO_EN']
-  sh.appendRow([
-    _id_('ROW'),
-    item.movementId || '',
-    item.fecha,
-    item.codigo,
-    item.tipoMovimiento,
-    Number(item.cantidad),
-    item.condicion || '',
-    item.motivo || '',
-    item.origenDestino || '',
-    item.beneficiario || '',
-    item.dniBeneficiario || '',
-    item.areaDestino || '',
-    item.cargoBeneficiario || '',
-    item.documentoEntrega || '',
-    email,
-    item.observacion || '',
-    new Date()
-  ]);
+  
+  const data = {
+    'ID': _id_('ROW'),
+    'MOVEMENT_ID': item.movementId || '',
+    'FECHA': item.fecha,
+    'CODIGO': item.codigo,
+    'TIPO_MOVIMIENTO': item.tipoMovimiento,
+    'CANTIDAD': Number(item.cantidad),
+    'CONDICION': item.condicion || '',
+    'MOTIVO': item.motivo || '',
+    'ORIGEN_DESTINO': item.origenDestino || '',
+    'BENEFICIARIO': item.beneficiario || '',
+    'DNI_BENEFICIARIO': item.dniBeneficiario || '',
+    'AREA_DESTINO': item.areaDestino || '',
+    'CARGO_BENEFICIARIO': item.cargoBeneficiario || '',
+    'DOCUMENTO_ENTREGA': item.documentoEntrega || '',
+    'USUARIO': email,
+    'OBSERVACION': item.observacion || '',
+    'CREADO_EN': new Date()
+  };
+
+  const headers = sh.getRange(1, 1, 1, sh.getLastColumn()).getValues()[0];
+  const row = new Array(headers.length).fill('');
+  headers.forEach((h, i) => {
+    const key = String(h).trim().toUpperCase();
+    if (data[key] !== undefined) {
+      row[i] = data[key];
+    }
+  });
+  sh.appendRow(row);
 }
 
 function _readSheet_(ss, sheetName) {
@@ -710,4 +773,22 @@ function _formatDateValue_(v) {
 function _csv_(value) {
   const s = String(value == null ? '' : value).replace(/"/g, '""');
   return '"' + s + '"';
+}
+
+function _resolveColumns_(sheet) {
+  const headers = sheet.getRange(1, 1, 1, sheet.getLastColumn()).getValues()[0];
+  const map = {};
+  headers.forEach((h, i) => {
+    map[String(h).trim().toUpperCase()] = i + 1; // 1-based index for getRange
+  });
+  return map;
+}
+
+function _updateRowBySchema_(sheet, rowNumber, dataMap, columnMap) {
+  Object.keys(dataMap).forEach(key => {
+    const colIndex = columnMap[key.toUpperCase()];
+    if (colIndex) {
+      sheet.getRange(rowNumber, colIndex).setValue(dataMap[key]);
+    }
+  });
 }

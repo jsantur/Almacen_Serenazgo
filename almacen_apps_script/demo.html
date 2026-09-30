@@ -191,6 +191,28 @@
     font-weight: 700
   }
 
+
+  /* Dashboard operativo */
+  .dashboard-head{display:flex;justify-content:space-between;align-items:flex-end;gap:18px;margin-bottom:18px}
+  .dashboard-head h2{margin:3px 0 3px;font-size:25px}
+  .dashboard-head p{margin:0;color:var(--muted)}
+  .dashboard-actions{display:flex;align-items:center;gap:9px}
+  .dashboard-period{font-size:11px;font-weight:800;color:var(--muted);background:#f1f4f6;border:1px solid var(--line);border-radius:999px;padding:9px 11px}
+  .dashboard-kpis{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px;margin-bottom:16px}
+  .dash-kpi{background:#fff;border:1px solid var(--line);border-radius:14px;padding:15px;display:flex;gap:12px;align-items:center;min-width:0;box-shadow:var(--shadow)}
+  .dash-kpi.warning{border-top:3px solid #d89b12}.dash-kpi.danger{border-top:3px solid #d94b45}
+  .dash-kpi-icon{width:40px;height:40px;border-radius:11px;display:grid;place-items:center;font-size:18px;flex:0 0 auto}
+  .dash-kpi-icon.teal{background:#e8f7f4;color:#0f766e}.dash-kpi-icon.blue{background:#eaf2ff;color:#2563eb}.dash-kpi-icon.amber{background:#fff5d9;color:#a96e00}.dash-kpi-icon.red{background:#fff0ef;color:#b42318}.dash-kpi-icon.purple{background:#f2eafd;color:#7c3aed}
+  .dash-kpi-label{font-size:9px;font-weight:900;color:var(--muted);letter-spacing:.06em;white-space:nowrap}.dash-kpi-value{font-size:23px;font-weight:900;line-height:1.15;margin-top:3px}.dash-kpi-sub{font-size:10px;color:var(--muted);margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .dashboard-grid{display:grid;gap:16px;margin-bottom:16px}.dashboard-grid.top{grid-template-columns:1.45fr .85fr}.dashboard-grid.middle{grid-template-columns:1.15fr .85fr}.dashboard-grid.bottom{grid-template-columns:1fr 1fr}
+  .dashboard-panel{margin-bottom:0}.metric-tag{font-size:10px;font-weight:900;color:var(--primary);background:#eaf6f4;border-radius:999px;padding:6px 9px;white-space:nowrap}
+  .category-bars{padding:17px 18px 16px}.cat-row{display:grid;grid-template-columns:130px 1fr 58px;gap:10px;align-items:center;margin-bottom:13px}.cat-row:last-child{margin-bottom:0}.cat-name{font-size:11px;font-weight:800;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.cat-track{height:10px;background:#edf1f3;border-radius:999px;overflow:hidden}.cat-fill{height:100%;border-radius:999px;background:linear-gradient(90deg,#16b7b0,#1597d0)}.cat-value{text-align:right;font-size:11px;font-weight:900}
+  .inventory-health{padding:19px;display:flex;align-items:center;justify-content:center;gap:30px;min-height:185px}.health-donut{width:142px;height:142px;border-radius:50%;display:grid;place-items:center;background:conic-gradient(#19b978 0deg 240deg,#e8b53e 240deg 305deg,#df5b65 305deg 360deg);position:relative;flex:0 0 auto}.health-donut:after{content:"";position:absolute;inset:18px;background:#fff;border-radius:50%}.health-donut>div{position:relative;z-index:1;text-align:center}.health-donut strong{display:block;font-size:23px}.health-donut span{font-size:8px;font-weight:900;color:var(--muted);letter-spacing:.06em}.health-legend{min-width:150px}.health-legend>div{display:grid;grid-template-columns:12px 1fr auto;gap:7px;align-items:center;margin:10px 0;font-size:11px}.health-legend strong{font-size:12px}.legend-dot{width:9px;height:9px;border-radius:50%}.legend-dot.normal{background:#19b978}.legend-dot.low{background:#e8b53e}.legend-dot.out{background:#df5b65}
+  .movement-chart{padding:16px 18px 17px}.movement-chart-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:10px;align-items:end;height:180px;border-bottom:1px solid var(--line);padding:10px 4px 0}.movement-day{height:100%;display:flex;align-items:flex-end;justify-content:center;gap:4px;position:relative}.movement-bars{height:145px;display:flex;align-items:flex-end;gap:4px}.movement-bar{width:13px;border-radius:4px 4px 0 0;min-height:3px}.movement-bar.in{background:#22b8b1}.movement-bar.out{background:#e66b72}.movement-label{position:absolute;bottom:-23px;font-size:9px;color:var(--muted)}.movement-legend{display:flex;gap:14px;margin-top:25px;font-size:10px;color:var(--muted)}.movement-legend span{display:inline-flex;align-items:center;gap:5px}.movement-legend i{width:8px;height:8px;border-radius:2px;display:inline-block}.movement-legend .in{background:#22b8b1}.movement-legend .out{background:#e66b72}
+  .top-products{padding:14px 18px}.top-product{display:grid;grid-template-columns:25px 1fr 80px;gap:9px;align-items:center;padding:9px 0;border-bottom:1px solid #eef1f3}.top-product:last-child{border-bottom:0}.rank{font-weight:900;color:var(--muted);font-size:11px}.top-product-name{font-size:11px;font-weight:800;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.top-product-meta{font-size:9px;color:var(--muted);margin-top:2px}.top-stock{text-align:right;font-size:12px;font-weight:900}.top-stock small{display:block;font-size:9px;color:var(--muted);font-weight:700}
+  .dashboard-panel table{min-width:620px}.dashboard-panel th,.dashboard-panel td{padding:10px 12px;font-size:11px}.dashboard-panel th{font-size:9px}.dashboard-panel .status-pill{font-size:9px;padding:4px 7px}
+  @media(max-width:1200px){.dashboard-kpis{grid-template-columns:repeat(3,1fr)}.dashboard-grid.top,.dashboard-grid.middle,.dashboard-grid.bottom{grid-template-columns:1fr 1fr}}
+  @media(max-width:850px){.dashboard-head{flex-direction:column;align-items:flex-start}.dashboard-kpis{grid-template-columns:repeat(2,1fr)}.dashboard-grid.top,.dashboard-grid.middle,.dashboard-grid.bottom{grid-template-columns:1fr}.inventory-health{justify-content:flex-start}}
   .section {
     display: none;
     padding: 28px 32px 40px
@@ -457,6 +479,79 @@
   .align-end {
     display: flex;
     align-items: end
+  }
+
+  .kardex-search-panel {
+    position: relative;
+    z-index: 20;
+    overflow: visible; /* permite que los resultados del buscador salgan fuera del panel */
+  }
+  .kardex-search-box {
+    position: relative;
+    z-index: 30;
+  }
+  .kardex-search-head {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+  .kardex-search-head strong { display:block; font-size:13px; }
+  .kardex-search-head .muted { display:block; margin-top:3px; font-size:11px; }
+  .kardex-search-row {
+    display:grid;
+    grid-template-columns:minmax(320px, 2fr) 150px 150px auto;
+    gap:10px;
+    align-items:end;
+  }
+  .kardex-search-box > .input { padding-left:38px; padding-right:34px; }
+  .kardex-search-icon {
+    position:absolute; left:13px; bottom:12px; z-index:2; font-size:15px; pointer-events:none;
+  }
+  .kardex-clear {
+    position:absolute; right:8px; bottom:7px; border:0; background:transparent; color:var(--muted);
+    width:28px; height:28px; border-radius:50%; cursor:pointer; font-size:20px; line-height:1;
+  }
+  .kardex-clear:hover { background:#eef2f4; color:var(--text); }
+  .kardex-search-results {
+    position:absolute; left:0; right:0; top:calc(100% + 5px); background:#fff; border:1px solid var(--line);
+    border-radius:12px; box-shadow:0 12px 30px rgba(15,23,42,.14); overflow:hidden; max-height:360px; overflow-y:auto;
+    z-index:50;
+  }
+  .kardex-result-item {
+    width:100%; border:0; border-bottom:1px solid #edf1f3; background:#fff; text-align:left; padding:11px 13px;
+    cursor:pointer; display:flex; justify-content:space-between; gap:12px; align-items:center;
+  }
+  .kardex-result-item:last-child { border-bottom:0; }
+  .kardex-result-item:hover, .kardex-result-item.active { background:#f0f8f6; }
+  .kardex-result-main strong { display:block; color:var(--text); font-size:12px; }
+  .kardex-result-main span { display:block; color:var(--muted); font-size:11px; margin-top:3px; }
+  .kardex-result-stock { text-align:right; white-space:nowrap; }
+  .kardex-result-stock strong { display:block; font-size:12px; }
+  .kardex-result-stock span { display:block; font-size:10px; margin-top:3px; }
+  .kardex-search-empty { padding:18px; text-align:center; color:var(--muted); font-size:12px; }
+  .kardex-recent { display:flex; gap:7px; flex-wrap:wrap; margin-top:10px; align-items:center; }
+  .kardex-recent-label { font-size:10px; color:var(--muted); font-weight:800; text-transform:uppercase; margin-right:2px; }
+  .kardex-recent-chip {
+    border:1px solid var(--line); background:#fff; color:var(--text); border-radius:999px; padding:6px 10px;
+    cursor:pointer; font-size:10px; font-weight:800;
+  }
+  .kardex-recent-chip:hover { border-color:#0f766e; color:#0f766e; }
+  .kardex-selected {
+    margin-top:10px; padding:9px 11px; border-radius:10px; border:1px solid #cbe8e3; background:#eef7f5;
+    font-size:11px; color:#245b55;
+  }
+  .kardex-selected strong { color:#0f766e; }
+  .kardex-date-field { font-size:12px; color:#52606d; font-weight:700; }
+  .kardex-date-field .input { margin-top:6px; }
+  @media (max-width: 900px) {
+    .kardex-search-row { grid-template-columns:1fr 1fr; }
+    .kardex-search-box { grid-column:1/-1; }
+    .kardex-search-row .align-end { justify-content:flex-end; }
+  }
+  @media (max-width: 560px) {
+    .kardex-search-row { grid-template-columns:1fr; }
+    .kardex-search-box { grid-column:auto; }
   }
 
   .product-summary {
@@ -1092,7 +1187,8 @@
     padding-top: 6px
   }
 
-  .field-help {
+  .required-star { color: #dc2626; font-weight: 800; margin-left: 3px; }
+.field-help {
     display: block;
     font-size: 10px;
     font-weight: 500;
@@ -1125,6 +1221,26 @@
     box-shadow: var(--shadow)
   }
 
+  .catalog-stat-action {
+    width: 100%;
+    text-align: left;
+    font: inherit;
+    color: inherit;
+    cursor: pointer;
+    transition: transform .15s ease, border-color .15s ease, box-shadow .15s ease;
+  }
+
+  .catalog-stat-action:hover {
+    transform: translateY(-1px);
+    border-color: var(--primary);
+    box-shadow: 0 8px 20px rgba(15, 118, 110, .10);
+  }
+
+  .catalog-stat-action:focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
+  }
+
   .catalog-stat span {
     display: block;
     font-size: 11px;
@@ -1143,6 +1259,124 @@
   .catalog-stat small {
     font-size: 11px;
     color: var(--muted)
+  }
+
+  /* ═══════════════════════════════════════════════════════════
+   * PAGINACIÓN — PRODUCTOS / INVENTARIO / MOVIMIENTOS
+   * Máximo 10 registros visibles por página.
+   * La paginación se aplica DESPUÉS de búsqueda y filtros.
+   * ═══════════════════════════════════════════════════════════ */
+  .pagination {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+    padding: 12px 16px;
+    border-top: 1px solid var(--line);
+    background: #fff;
+    min-height: 58px;
+  }
+
+  .pagination-info {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--muted);
+    font-size: 12px;
+    white-space: nowrap;
+  }
+
+  .pagination-size {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 38px;
+    height: 30px;
+    padding: 0 9px;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    background: #f8fafb;
+    color: var(--text);
+    font-weight: 800;
+    font-size: 12px;
+  }
+
+  .pagination-range {
+    color: var(--text);
+    font-weight: 700;
+  }
+
+  .pagination-buttons {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .pagination-btn {
+    min-width: 32px;
+    height: 32px;
+    padding: 0 8px;
+    border: 1px solid transparent;
+    border-radius: 7px;
+    background: transparent;
+    color: var(--text);
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 700;
+    transition: background .15s ease, border-color .15s ease, color .15s ease;
+  }
+
+  .pagination-btn:hover:not(:disabled) {
+    background: #f1f5f6;
+    border-color: var(--line);
+  }
+
+  .pagination-btn.active {
+    background: var(--primary);
+    color: #fff;
+    border-color: var(--primary);
+  }
+
+  .pagination-btn:disabled {
+    color: #b8c0c7;
+    cursor: not-allowed;
+    opacity: .7;
+  }
+
+  .pagination-btn.pagination-nav {
+    font-size: 16px;
+    line-height: 1;
+  }
+
+  .pagination-ellipsis {
+    min-width: 26px;
+    text-align: center;
+    color: var(--muted);
+    font-size: 13px;
+  }
+
+  .pagination-empty {
+    width: 100%;
+    color: var(--muted);
+    font-size: 12px;
+  }
+
+  @media (max-width: 720px) {
+    .pagination {
+      align-items: flex-start;
+    }
+
+    .pagination-info,
+    .pagination-buttons {
+      width: 100%;
+    }
+
+    .pagination-buttons {
+      justify-content: flex-end;
+      overflow-x: auto;
+      padding-bottom: 2px;
+    }
   }
 
   .product-list-head {
@@ -1176,6 +1410,13 @@
     background: #fff5df;
     color: #916000
   }
+
+  .detail-modal-card{max-width:1050px}
+  .detail-hero{display:flex;justify-content:space-between;gap:16px;align-items:flex-start;padding:18px 20px;border-bottom:1px solid var(--line);background:linear-gradient(135deg,#f8fbfb,#fff)}
+  .detail-hero h4{margin:0 0 4px;font-size:20px}.detail-hero p{margin:0;color:var(--muted);font-size:12px}
+  .detail-badge{display:inline-flex;align-items:center;padding:6px 10px;border-radius:999px;background:#e8f5f3;color:#0f766e;font-weight:900;font-size:11px}
+  .detail-body{padding:18px 20px}.detail-section{margin-bottom:18px}.detail-section h4{margin:0 0 10px;font-size:13px;text-transform:uppercase;letter-spacing:.05em}.detail-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}.detail-field{padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:#fff}.detail-field span{display:block;color:var(--muted);font-size:10px;font-weight:800;text-transform:uppercase}.detail-field strong{display:block;margin-top:3px;font-size:13px;word-break:break-word}.detail-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}.link-btn{border:0;background:none;color:#0f766e;font-weight:900;cursor:pointer;padding:0;text-decoration:underline}.product-detail-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px}.product-detail-stat{border:1px solid var(--line);border-radius:12px;padding:13px;background:#fff}.product-detail-stat span{display:block;color:var(--muted);font-size:10px;font-weight:800;text-transform:uppercase}.product-detail-stat strong{font-size:21px;display:block;margin-top:3px}.mini-table{width:100%;border-collapse:collapse}.mini-table th,.mini-table td{padding:9px;border-bottom:1px solid var(--line);text-align:left;font-size:12px;vertical-align:top}.mini-table th{font-size:10px;text-transform:uppercase;color:var(--muted)}.kardex-context{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.context-chip{padding:6px 9px;border:1px solid var(--line);border-radius:999px;background:#fff;font-size:11px}.context-chip strong{font-weight:900}.kardex-context .stock-chip{font-weight:800;border-color:#0f766e;background:#eefaf7}.kardex-context .stock-chip strong{color:#0f766e}.movement-click{cursor:pointer;color:#0f766e;font-weight:900;text-decoration:underline}.product-detail-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}.product-detail-head h4{margin:0}.empty-state{padding:24px;text-align:center;color:var(--muted)}
+  @media(max-width:800px){.detail-grid,.product-detail-stats{grid-template-columns:repeat(2,minmax(0,1fr))}.detail-hero{flex-direction:column}}
 </style>
 </head>
 
@@ -1209,10 +1450,7 @@
           <div class="eyebrow">CONTROL DE ALMACÉN</div>
           <h1 id="pageTitle">Dashboard</h1>
         </div>
-        <div class="topbar-actions">
-          <span id="systemBadge" class="badge">Cargando…</span>
-          <button class="btn btn-primary" onclick="openQuickMovement()">＋ Registrar movimiento</button>
-        </div>
+        <div class="topbar-actions"></div>
       </header>
 
       <div id="loading" class="loading-overlay">
@@ -1221,77 +1459,85 @@
       </div>
 
       <section id="section-dashboard" class="section active">
-        <div class="section-head">
+        <div class="dashboard-head">
           <div>
+            <div class="eyebrow">INDICADORES OPERATIVOS</div>
             <h2>Resumen del almacén</h2>
-            <p>Vista general del stock, alertas y movimientos recientes.</p>
+            <p>Indicadores calculados directamente desde productos, stock y Kardex.</p>
           </div>
-          <button class="btn btn-secondary" onclick="refreshApp()">⟳ Actualizar</button>
-        </div>
-        <div class="cards">
-          <div class="metric-card">
-            <div class="metric-icon">◫</div>
-            <div>
-              <div class="metric-label">SKUs activos</div>
-              <div id="mSkus" class="metric-value">0</div>
-            </div>
-          </div>
-          <div class="metric-card">
-            <div class="metric-icon">▣</div>
-            <div>
-              <div class="metric-label">Stock total</div>
-              <div id="mStock" class="metric-value">0</div>
-            </div>
-          </div>
-          <div class="metric-card warning">
-            <div class="metric-icon">⚠</div>
-            <div>
-              <div class="metric-label">Stock bajo</div>
-              <div id="mLow" class="metric-value">0</div>
-            </div>
-          </div>
-          <div class="metric-card danger">
-            <div class="metric-icon">×</div>
-            <div>
-              <div class="metric-label">Agotados</div>
-              <div id="mOut" class="metric-value">0</div>
-            </div>
+          <div class="dashboard-actions">
+            <span class="dashboard-period">Últimos 30 días</span>
+            <button class="btn btn-secondary" onclick="refreshApp()">⟳ Actualizar</button>
           </div>
         </div>
-        <div class="grid-2">
-          <div class="panel">
-            <div class="panel-head">
-              <h3>Alertas de inventario</h3><span class="muted">Stock mínimo</span>
+
+        <div class="dashboard-kpis">
+          <div class="dash-kpi">
+            <div class="dash-kpi-icon teal">📦</div>
+            <div><div class="dash-kpi-label">UNIDADES EN STOCK</div><div id="mStock" class="dash-kpi-value">0</div><div id="mStockSub" class="dash-kpi-sub">—</div></div>
+          </div>
+          <div class="dash-kpi">
+            <div class="dash-kpi-icon blue">▦</div>
+            <div><div class="dash-kpi-label">SKUs ACTIVOS</div><div id="mSkus" class="dash-kpi-value">0</div><div id="mSkuSub" class="dash-kpi-sub">—</div></div>
+          </div>
+          <div class="dash-kpi warning">
+            <div class="dash-kpi-icon amber">⚠</div>
+            <div><div class="dash-kpi-label">STOCK BAJO</div><div id="mLow" class="dash-kpi-value">0</div><div id="mLowSub" class="dash-kpi-sub">Requieren atención</div></div>
+          </div>
+          <div class="dash-kpi danger">
+            <div class="dash-kpi-icon red">×</div>
+            <div><div class="dash-kpi-label">AGOTADOS</div><div id="mOut" class="dash-kpi-value">0</div><div id="mOutSub" class="dash-kpi-sub">Sin unidades disponibles</div></div>
+          </div>
+          <div class="dash-kpi">
+            <div class="dash-kpi-icon purple">↕</div>
+            <div><div class="dash-kpi-label">MOVIMIENTOS</div><div id="mMoves30" class="dash-kpi-value">0</div><div class="dash-kpi-sub">Entradas + salidas + ajustes</div></div>
+          </div>
+        </div>
+
+        <div class="dashboard-grid top">
+          <div class="panel dashboard-panel">
+            <div class="panel-head"><div><h3>Stock por categoría</h3><div class="muted">Unidades disponibles actualmente</div></div><span class="metric-tag">Actual</span></div>
+            <div id="dashCategoryBars" class="category-bars"></div>
+          </div>
+          <div class="panel dashboard-panel">
+            <div class="panel-head"><div><h3>Estado del inventario</h3><div class="muted">Distribución de SKUs</div></div></div>
+            <div class="inventory-health">
+              <div class="health-donut" id="healthDonut"><div><strong id="healthNormalPct">0%</strong><span>NORMAL</span></div></div>
+              <div class="health-legend">
+                <div><span class="legend-dot normal"></span><span>Normal</span><strong id="healthNormal">0</strong></div>
+                <div><span class="legend-dot low"></span><span>Stock bajo</span><strong id="healthLow">0</strong></div>
+                <div><span class="legend-dot out"></span><span>Agotado</span><strong id="healthOut">0</strong></div>
+              </div>
             </div>
+          </div>
+        </div>
+
+        <div class="dashboard-grid middle">
+          <div class="panel dashboard-panel">
+            <div class="panel-head"><div><h3>Entradas vs. salidas</h3><div class="muted">Actividad registrada en el período</div></div><span id="movementBalance" class="metric-tag"></span></div>
+            <div id="dashMovementBars" class="movement-chart"></div>
+          </div>
+          <div class="panel dashboard-panel">
+            <div class="panel-head"><div><h3>Productos con mayor stock</h3><div class="muted">Concentración de unidades</div></div></div>
+            <div id="dashTopProducts" class="top-products"></div>
+          </div>
+        </div>
+
+        <div class="dashboard-grid bottom">
+          <div class="panel dashboard-panel">
+            <div class="panel-head"><div><h3>Alertas que requieren atención</h3><div class="muted">Ordenadas por menor stock</div></div><button class="link-btn" onclick="navigate('inventario')">Ver inventario →</button></div>
             <div class="table-wrap">
               <table>
-                <thead>
-                  <tr>
-                    <th>SKU</th>
-                    <th>Prenda</th>
-                    <th>Talla</th>
-                    <th>Stock</th>
-                    <th>Estado</th>
-                  </tr>
-                </thead>
+                <thead><tr><th>SKU</th><th>Producto</th><th>Stock</th><th>Punto reorden</th><th>Estado</th></tr></thead>
                 <tbody id="dashboardAlerts"></tbody>
               </table>
             </div>
           </div>
-          <div class="panel">
-            <div class="panel-head">
-              <h3>Movimientos recientes</h3><span id="mMoves30" class="muted"></span>
-            </div>
+          <div class="panel dashboard-panel">
+            <div class="panel-head"><div><h3>Últimos movimientos</h3><div id="dashboardMovesCaption" class="muted">Actividad más reciente</div></div><button class="link-btn" onclick="navigate('movimientos')">Ver todos →</button></div>
             <div class="table-wrap">
               <table>
-                <thead>
-                  <tr>
-                    <th>Fecha</th>
-                    <th>SKU</th>
-                    <th>Movimiento</th>
-                    <th>Cantidad</th>
-                  </tr>
-                </thead>
+                <thead><tr><th>Fecha</th><th>Producto</th><th>Movimiento</th><th>Cantidad</th></tr></thead>
                 <tbody id="dashboardMoves"></tbody>
               </table>
             </div>
@@ -1336,6 +1582,7 @@
               <tbody id="inventoryTable"></tbody>
             </table>
           </div>
+          <div id="inventoryPagination" class="pagination" aria-label="Paginación de inventario"></div>
         </div>
       </section>
 
@@ -1343,7 +1590,7 @@
         <div class="section-head">
           <div>
             <h2>Registrar movimiento</h2>
-            <p>Entradas, salidas y ajustes con validación de stock. Un movimiento puede incluir múltiples productos.</p>
+            <p>Entradas, salidas y ajustes con validación de stock. Un movimiento puede incluir múltiples productos. Los campos marcados con <span class="required-star">*</span> son importantes y deben completarse.</p>
           </div>
         </div>
         <div class="panel form-panel">
@@ -1352,18 +1599,18 @@
             <!-- ── CAMPOS GENERALES ─────────────────────────── -->
             <div class="form-kicker">Datos generales del movimiento</div>
             <div class="form-grid">
-              <label>Fecha<input id="mvFecha" name="fecha" class="input" type="date" required></label>
-              <label>Tipo de movimiento *<select id="mvTipo" name="tipoMovimiento" class="input select" required onchange="onMovementTypeChange()">
+              <label>Fecha <span class="required-star">*</span><input id="mvFecha" name="fecha" class="input" type="date" required></label>
+              <label>Tipo de movimiento <span class="required-star">*</span><select id="mvTipo" name="tipoMovimiento" class="input select" required onchange="onMovementTypeChange()">
                   <option value="ENTRADA">Entrada</option>
                   <option value="SALIDA">Salida</option>
                   <option value="AJUSTE_POSITIVO">Ajuste +</option>
                   <option value="AJUSTE_NEGATIVO">Ajuste −</option>
                   <option value="DEVOLUCION">Devolución</option>
                 </select></label>
-              <label>Motivo *<select id="mvMotivo" name="motivo" class="input select" required></select></label>
-              <label>Beneficiario *<input id="mvBeneficiario" name="beneficiario" class="input" placeholder="Nombre completo"></label>
+              <label>Motivo <span class="required-star">*</span><select id="mvMotivo" name="motivo" class="input select" required></select></label>
+              <label>Beneficiario <span class="required-star">*</span><input id="mvBeneficiario" name="beneficiario" class="input" placeholder="Nombre completo"></label>
               <label>DNI<input id="mvDni" name="dniBeneficiario" class="input" placeholder="Número de documento" maxlength="12"></label>
-              <label>Área / Dependencia *<input id="mvArea" name="areaDestino" list="mvAreaList" class="input" placeholder="Área o dependencia">
+              <label>Área / Dependencia <span class="required-star">*</span><input id="mvArea" name="areaDestino" list="mvAreaList" class="input" placeholder="Área o dependencia">
                 <datalist id="mvAreaList"><option value="SERENAZGO"><option value="LIMPIEZA"><option value="LOGISTICA"><option value="SEGURIDAD PATRIMONIAL"><option value="SECRETARIA GENERAL"><option value="RECURSOS HUMANOS"><option value="ADMINISTRACION"><option value="VIGILANCIA"></datalist>
               </label>
               <label>Cargo<input id="mvCargo" name="cargoBeneficiario" class="input" placeholder="Cargo del beneficiario"></label>
@@ -1417,7 +1664,7 @@
         <!-- ── HISTORIAL AGRUPADO ──────────────────────────── -->
         <div class="panel">
           <div class="panel-head">
-            <h3>Últimos movimientos</h3><span class="muted">Agrupados por operación · Máx. 150 en vista</span>
+            <h3>Últimos movimientos</h3><span class="muted">Agrupados por operación · 10 operaciones por página</span>
           </div>
           <div class="table-wrap">
             <table>
@@ -1436,6 +1683,7 @@
               <tbody id="movementsTable"></tbody>
             </table>
           </div>
+          <div id="movementsPagination" class="pagination" aria-label="Paginación de movimientos"></div>
         </div>
       </section>
 
@@ -1466,14 +1714,26 @@
             <p>Consulta el historial y saldo corrido de una variante.</p>
           </div>
         </div>
-        <div class="panel">
-          <div class="form-grid compact">
-            <label>Producto / SKU<select id="kxCodigo" class="input select"></select></label>
-            <label>Desde<input id="kxDesde" class="input" type="date"></label>
-            <label>Hasta<input id="kxHasta" class="input" type="date"></label>
-            <div class="align-end"><button class="btn btn-primary" onclick="loadKardex()">Consultar Kardex</button>
+        <div class="panel kardex-search-panel">
+          <div class="kardex-search-head">
+            <div>
+              <strong>Buscar producto</strong>
+              <span class="muted">Escribe SKU, producto, marca, color o talla. No necesitas recorrer una lista.</span>
             </div>
           </div>
+          <div class="kardex-search-row">
+            <div class="kardex-search-box">
+              <span class="kardex-search-icon">🔎</span>
+              <input id="kxSearch" class="input" autocomplete="off" placeholder="Buscar por SKU, producto, marca, color o talla…" oninput="searchKardexProducts(this.value)" onfocus="showKardexSearch()" onkeydown="handleKardexSearchKey(event)">
+              <button type="button" class="kardex-clear" id="kxSearchClear" onclick="clearKardexSearch()" title="Limpiar">×</button>
+              <input id="kxCodigo" type="hidden" value="">
+              <div id="kxSearchResults" class="kardex-search-results hidden"></div>
+            </div>
+            <label class="kardex-date-field">Desde<input id="kxDesde" class="input" type="date" onchange="reloadKardexIfSelected()"></label>
+            <label class="kardex-date-field">Hasta<input id="kxHasta" class="input" type="date" onchange="reloadKardexIfSelected()"></label>
+          </div>
+          <div id="kxRecent" class="kardex-recent"></div>
+          <div id="kxSelected" class="kardex-selected hidden"></div>
         </div>
         <div id="kardexProduct" class="product-summary hidden"></div>
         <div class="panel">
@@ -1485,10 +1745,16 @@
               <thead>
                 <tr>
                   <th>Fecha</th>
+                  <th>ID Movimiento</th>
                   <th>Movimiento</th>
                   <th>Entrada</th>
                   <th>Salida</th>
                   <th>Saldo</th>
+                  <th>Beneficiario</th>
+                  <th>DNI</th>
+                  <th>Cargo</th>
+                  <th>Área</th>
+                  <th>Documento</th>
                   <th>Motivo</th>
                   <th>Origen/Destino</th>
                   <th>Observación</th>
@@ -1496,7 +1762,7 @@
               </thead>
               <tbody id="kardexTable">
                 <tr>
-                  <td colspan="8" class="empty">Selecciona un SKU para consultar.</td>
+                  <td colspan="14" class="empty">Selecciona un SKU para consultar.</td>
                 </tr>
               </tbody>
             </table>
@@ -1510,26 +1776,30 @@
             <h2>Productos / SKUs</h2>
             <p>Catálogo preparado para <strong>vestuario, calzado, EPP, equipamiento y productos de limpieza y
                 suministros de oficina</strong>. Talla/color son opcionales; para papelería y consumibles, la variante
-              principal puede ser la presentación o contenido.</p>
+              principal puede ser la presentación o contenido. Los campos marcados con <span class="required-star">*</span>
+              son importantes y deben completarse.</p>
           </div>
         </div>
         <div class="catalog-stats">
-          <div class="catalog-stat"><span>Inventariables</span><strong id="prStatInv">0</strong><small>Prendas, calzado,
-              equipos y útiles</small></div>
-          <div class="catalog-stat"><span>Consumibles</span><strong id="prStatCons">0</strong><small>Detergente, lejía,
-              químicos y similares</small></div>
-          <div class="catalog-stat"><span>Familias</span><strong id="prStatFamilies">0</strong><small>Clasificación del
-              catálogo</small></div>
+          <button type="button" class="catalog-stat catalog-stat-action" onclick="filterProductsByNature('INVENTARIABLE')" title="Ver solo productos inventariables">
+            <span>📦 Inventariables</span><strong id="prStatInv">0</strong><small>SKUs de prendas, calzado, EPP, equipos y útiles</small>
+          </button>
+          <button type="button" class="catalog-stat catalog-stat-action" onclick="filterProductsByNature('CONSUMIBLE')" title="Ver solo productos consumibles">
+            <span>🧴 Consumibles</span><strong id="prStatCons">0</strong><small>SKUs de limpieza, químicos, papelería y suministros</small>
+          </button>
+          <button type="button" class="catalog-stat catalog-stat-action" onclick="focusProductFamilies()" title="Ver las familias utilizadas en el catálogo">
+            <span>🗂 Familias utilizadas</span><strong id="prStatFamilies">0</strong><small>Categorías que actualmente tienen productos registrados</small>
+          </button>
         </div>
         <div class="panel form-panel">
           <div class="form-kicker">1. Identificación del producto</div>
           <form id="productForm" onsubmit="submitProduct(event)">
             <input type="hidden" id="originalCodigo" name="originalCodigo">
             <div class="form-grid">
-              <label>Familia / Categoría<input id="prCategoria" list="prCategoriaList" name="categoria" class="input" placeholder="Escribe o selecciona…" required><datalist id="prCategoriaList"></datalist></label>
-              <label>Naturaleza<select id="prNaturaleza" name="naturaleza" class="input select"
+              <label>Familia / Categoría <span class="required-star">*</span><input id="prCategoria" list="prCategoriaList" name="categoria" class="input" placeholder="Escribe o selecciona…" required><datalist id="prCategoriaList"></datalist></label>
+              <label>Naturaleza <span class="required-star">*</span><select id="prNaturaleza" name="naturaleza" class="input select"
                   required></select></label>
-              <label>Tipo / Producto<input id="prTipo" list="prTipoList" name="tipo" class="input" placeholder="Escribe o selecciona…" required><datalist id="prTipoList"></datalist></label>
+              <label>Tipo / Producto <span class="required-star">*</span><input id="prTipo" list="prTipoList" name="tipo" class="input" placeholder="Escribe o selecciona…" required><datalist id="prTipoList"></datalist></label>
               <label>Modelo / Variante<input id="prModelo" name="modelo" class="input"
                   placeholder="Ej.: Institucional, Táctico, A4, Manila, Transparente…"></label>
               <label>Marca<input id="prMarca" name="marca" class="input" placeholder="Opcional"></label>
@@ -1546,19 +1816,30 @@
                   volumen, peso o empaque.</span></label>
               <label>Género / Corte<select id="prGenero" name="genero" class="input select" required></select></label>
               <label>Unidad de medida<input id="prUnidad" list="prUnidadList" name="unidad" class="input" placeholder="Escribe o selecciona…" required><datalist id="prUnidadList"></datalist></label>
-              <label>Condición de inventario<input id="prCondicion" list="prCondicionList" name="condicion" class="input" placeholder="Escribe o selecciona…" required><datalist id="prCondicionList"></datalist></label>
+              <label>Condición de inventario <span class="required-star">*</span><input id="prCondicion" list="prCondicionList" name="condicion" class="input" placeholder="Escribe o selecciona…" required><datalist id="prCondicionList"></datalist></label>
               <label>Ubicación física<input name="ubicacion" class="input"
                   placeholder="Ej.: Estante B3 - Caja 12"></label>
             </div>
             <div class="form-kicker">3. Parámetros de stock</div>
+            <div id="stockEditNotice" class="smart-hint" style="display:none;margin-bottom:10px">✏️ <strong>Modo edición:</strong> puedes corregir el stock. La diferencia no se cambia directamente: se registrará como un <strong>ajuste de inventario</strong> para conservar la trazabilidad en Kardex.</div>
             <div class="form-grid">
-              <label>Stock inicial<input name="stockInicial" class="input" type="number" min="0" step="0.01"
+              <label id="stockInicialWrap">Stock inicial <span class="required-star">*</span><input name="stockInicial" class="input" type="number" min="0" step="0.01"
                   value="0"></label>
-              <label>Stock mínimo<input name="stockMinimo" class="input" type="number" min="0" step="0.01"
+              <label id="stockActualWrap" style="display:none">Stock actual<input id="stockActualEdit" class="input" type="number" readonly></label>
+              <label id="stockNuevoWrap" style="display:none">Nuevo stock <span class="required-star">*</span><input id="stockNuevoEdit" name="stockNuevo" class="input" type="number" min="0" step="0.01"
+                  value="0"><span class="field-help">Si es diferente al stock actual, se generará un ajuste en Kardex.</span></label>
+              <div id="stockCorrectionPreview" class="smart-hint full" style="display:none;margin-top:-2px">
+                <strong>Vista previa de corrección</strong><br>
+                Stock actual: <strong id="stockPreviewActual">0</strong> ·
+                Nuevo stock: <strong id="stockPreviewNuevo">0</strong> ·
+                Ajuste: <strong id="stockPreviewDelta">0</strong><br>
+                Estado resultante: <strong id="stockPreviewEstado">🟢 NORMAL</strong>
+              </div>
+              <label>Stock mínimo <span class="required-star">*</span><input name="stockMinimo" class="input" type="number" min="0" step="0.01"
                   value="0"></label>
               <label>Punto de reorden<input name="puntoReorden" class="input" type="number" min="0" step="0.01"
                   value="0"></label>
-              <label>Stock máximo<input name="stockMaximo" class="input" type="number" min="0" step="0.01"
+              <label>Stock máximo <span class="required-star">*</span><input name="stockMaximo" class="input" type="number" min="0" step="0.01"
                   value="0"></label>
               <label class="full">Descripción / especificación<input name="descripcion" class="input"
                   placeholder="Material, características, tamaño, observaciones, etc."></label>
@@ -1572,7 +1853,7 @@
             <div id="productSmartHint" class="smart-hint">Selecciona un tipo para recibir una sugerencia de familia,
               naturaleza y unidad.</div>
             <div class="form-actions"><button type="reset" class="btn btn-secondary"
-                onclick="resetProductForm()">Limpiar</button><button type="submit" class="btn btn-primary">Crear SKU y
+                onclick="resetProductForm()">Limpiar</button><button id="productSubmitBtn" type="submit" class="btn btn-primary">Crear SKU y
                 producto</button></div>
           </form>
         </div>
@@ -1614,6 +1895,7 @@
               <tbody id="productsTable"></tbody>
             </table>
           </div>
+          <div id="productsPagination" class="pagination" aria-label="Paginación de productos"></div>
         </div>
       </section>
     </main>
@@ -1626,6 +1908,15 @@
         <h3 id="modalTitle">Registrar movimiento</h3><button class="icon-btn" onclick="closeModal()">×</button>
       </div>
       <div id="modalBody"></div>
+    </div>
+  </div>
+
+  <div id="detailModal" class="modal hidden">
+    <div class="modal-card detail-modal-card">
+      <div class="modal-head">
+        <h3 id="detailModalTitle">Detalle</h3><button class="icon-btn" onclick="closeDetailModal()">×</button>
+      </div>
+      <div id="detailModalBody"></div>
     </div>
   </div>
 
@@ -1658,10 +1949,10 @@ const DEMO_STOCK = {
 };
 
 function stockStatus(stock, reorder, max) {
-  if (stock <= 0) return 'AGOTADO';
-  if (stock <= reorder * 0.5) return 'STOCK BAJO';
-  if (stock <= reorder) return 'REORDENAR';
-  if (max > 0 && stock > max) return 'SOBRESTOCK';
+  // El estado operativo del inventario depende únicamente del stock actual
+  // y del punto de reorden. El stock máximo no cambia el estado.
+  if (Number(stock) <= 0) return 'AGOTADO';
+  if (Number(stock) <= Number(reorder || 0)) return 'STOCK BAJO';
   return 'NORMAL';
 }
 
@@ -1690,6 +1981,14 @@ const DEMO_MOVEMENTS = [
   {fecha:'2026-09-09',codigo:'BOR-INS-NEG-42',tipoMovimiento:'DEVOLUCION',cantidad:1,condicion:'USADO / REUTILIZABLE',motivo:'Devolución',origenDestino:'Serenazgo',beneficiario:'JUAN PEREZ QUISPE',dniBeneficiario:'41872874',areaDestino:'SERENAZGO',cargoBeneficiario:'AGENTE',documentoEntrega:'VALE-020',usuario:'supervisor',observacion:'Devolución de borceguí talla 42 por talla incorrecta'},
   {fecha:'2026-09-09',codigo:'BOR-INS-NEG-42',tipoMovimiento:'SALDO_INICIAL',cantidad:8,condicion:'NUEVO',motivo:'Carga inicial',origenDestino:'Almacén',beneficiario:'',dniBeneficiario:'',areaDestino:'',cargoBeneficiario:'',documentoEntrega:'',usuario:'almacenero',observacion:'Stock inicial al crear el SKU'},
 ];
+
+// Operación demo multiproducto: una sola operación, varios productos.
+(function seedDemoBatch(){
+  const id='MOV-000125';
+  const base={fecha:'2026-09-17',tipoMovimiento:'SALIDA',condicion:'NUEVO',motivo:'Entrega a personal',origenDestino:'PERSONA',beneficiario:'JUAN PEREZ QUISPE',dniBeneficiario:'41872874',areaDestino:'SERENAZGO',cargoBeneficiario:'AGENTE',documentoEntrega:'VALE-025',usuario:'almacenero',observacion:'Entrega de kit completo de uniforme y equipamiento'};
+  const items=[['CAS-INS-AZU-M',2],['CHA-TAC-VER-L',1],['GUA-PRO-GRI-M',1]];
+  items.forEach(([codigo,cantidad])=>DEMO_MOVEMENTS.unshift({...base,codigo,cantidad,movementGroupId:id}));
+})();
 
 const DEMO_LISTS = {
   tipos:['BORCEGUIES','CORREA','MANGAS','CHALECO TACTICO','CHALECO ANTIBALAS','CASACA','CHOMPA JORGE CHAVEZ','CAFARENA','POLO','SOMBRERO','POLACA','CHALECO DE FAENA','CAMISA','ZAPATO','BOTA','GUANTE','GORRA','GORRO','CINTURON','ESCOBAS','RECOGEDORES','TRAPEADORES','BALDES','TRAPOS INDUSTRIALES','DETERGENTE','LEJIA','ACIDO MURIATICO','JABON LIQUIDO','AMBIENTADOR','KRESO','ISOPO DE BAÑO','HOJAS A4','SOBRE MANILA','FOLDER MANILA','FASTER','FOLDER PLASTICO','LAPICERO','BORRADOR','CORRECTOR','RESALTADOR','MICAS','LIBRO DE ACTAS 400 HOJAS','LIBRO DE ACTAS 200 HOJAS','CUADERNO CARPETA','TABLILLAS PLASTICAS','POST ITS','GRAPAS','ENGRAPADOR','PERFORADOR','CLIP','PORTA CLIP'],
@@ -1831,20 +2130,19 @@ const google = {
         const self = this;
         setTimeout(() => {
           const p = DEMO_PRODUCTS.find(x=>x.codigo===code);
-          let moves = DEMO_MOVEMENTS.filter(m=>m.codigo===code);
-          if(from) moves = moves.filter(m=>m.fecha>=from);
-          if(to) moves = moves.filter(m=>m.fecha<=to);
-          moves.sort((a,b)=>a.fecha.localeCompare(b.fecha));
+          let allMoves = DEMO_MOVEMENTS.filter(m=>m.codigo===code);
+          allMoves.sort((a,b)=>a.fecha.localeCompare(b.fecha) || String(a.movementGroupId||'').localeCompare(String(b.movementGroupId||'')));
           let saldo=0;
-          const rows = moves.map(r=>{
-            const isEntry=['ENTRADA','SALDO_INICIAL','AJUSTE_POSITIVO'].includes(r.tipoMovimiento);
-            const entrada=isEntry?r.cantidad:0;
-            const salida=isEntry?0:r.cantidad;
+          const allRows = allMoves.map(r=>{
+            const isEntry=['ENTRADA','SALDO_INICIAL','AJUSTE_POSITIVO','DEVOLUCION'].includes(r.tipoMovimiento);
+            const entrada=isEntry?Number(r.cantidad||0):0;
+            const salida=isEntry?0:Number(r.cantidad||0);
             saldo+=entrada-salida;
-            return {fecha:r.fecha,tipoMovimiento:r.tipoMovimiento,entrada,salida,saldo,motivo:r.motivo,origenDestino:r.origenDestino,observacion:r.observacion||''};
+            return {...r,entrada,salida,saldo};
           });
-          self._onSuccess({ product: p, currentStock: DEMO_STOCK[code]||0, rows: rows });
-        }, 400);
+          const rows=allRows.filter(r=>(!from || r.fecha>=from) && (!to || r.fecha<=to));
+          self._onSuccess({ product:p, currentStock:DEMO_STOCK[code]||0, rows:rows });
+        }, 350);
         return this;
       },
       exportInventoryCsv: function() {
@@ -1859,19 +2157,33 @@ const google = {
         const self = this;
         setTimeout(() => {
           const index = DEMO_PRODUCTS.findIndex(p => p.codigo === form.originalCodigo);
-          if (index !== -1) {
-            // Update the product properties
-            Object.assign(DEMO_PRODUCTS[index], {
-              categoria:form.categoria||'',naturaleza:form.naturaleza||'INVENTARIABLE',tipo:form.tipo,modelo:form.modelo||'',marca:form.marca||'',
-              color:form.color||'',talla:form.talla||'NO APLICA',presentacion:form.presentacion||'NO APLICA',genero:form.genero||'NO APLICA',
-              ubicacion:form.ubicacion||'',unidad:form.unidad||'UNIDAD',condicion:form.condicion||'NUEVO',
-              stockMin:Number(form.stockMinimo||0),stockMax:Number(form.stockMaximo||0),descripcion:form.descripcion||''
+          if (index === -1) { self._onError({message: 'Producto no encontrado'}); return; }
+          const product = DEMO_PRODUCTS[index];
+          const oldStock = Number(DEMO_STOCK[product.codigo] || 0);
+          const newStockRaw = form.stockNuevo;
+          const newStock = newStockRaw === undefined || newStockRaw === '' ? oldStock : Number(newStockRaw);
+          if (!Number.isFinite(newStock) || newStock < 0) { self._onError({message: 'El nuevo stock debe ser un número mayor o igual a 0.'}); return; }
+
+          Object.assign(product, {
+            categoria:form.categoria||'',naturaleza:form.naturaleza||'INVENTARIABLE',tipo:form.tipo,modelo:form.modelo||'',marca:form.marca||'',
+            color:form.color||'',talla:form.talla||'NO APLICA',presentacion:form.presentacion||'NO APLICA',genero:form.genero||'NO APLICA',
+            ubicacion:form.ubicacion||'',unidad:form.unidad||'UNIDAD',condicion:form.condicion||'NUEVO',
+            stockMin:Number(form.stockMinimo||0),stockMax:Number(form.stockMaximo||0),descripcion:form.descripcion||''
+          });
+
+          const delta = newStock - oldStock;
+          if (delta !== 0) {
+            const tipo = delta > 0 ? 'AJUSTE_POSITIVO' : 'AJUSTE_NEGATIVO';
+            DEMO_STOCK[product.codigo] = newStock;
+            DEMO_MOVEMENTS.unshift({
+              movementGroupId:'AJUSTE-' + Date.now().toString(36).toUpperCase().slice(-8),
+              fecha:new Date().toISOString().slice(0,10), codigo:product.codigo, tipoMovimiento:tipo, cantidad:Math.abs(delta),
+              condicion:product.condicion||'NUEVO', motivo:'Corrección de stock desde edición del producto', origenDestino:'Almacén',
+              beneficiario:'',dniBeneficiario:'',areaDestino:'',cargoBeneficiario:'',documentoEntrega:'',usuario:'supervisor',
+              observacion:'Stock anterior: '+oldStock+' | Stock corregido: '+newStock
             });
-            // SKU generation could be reapplied here but for demo we just update properties.
-            self._onSuccess({message: 'Producto editado (demo)'});
-          } else {
-            self._onError({message: 'Producto no encontrado'});
           }
+          self._onSuccess({message: delta !== 0 ? 'Producto actualizado y stock corregido mediante ajuste de Kardex.' : 'Producto actualizado correctamente.'});
         }, 400);
         return this;
       },
@@ -1993,7 +2305,6 @@ const google = {
     populateSelectors();
     renderProducts();
     document.getElementById('sheetLink').href = state.info && state.info.spreadsheetUrl ? state.info.spreadsheetUrl : '#';
-    document.getElementById('systemBadge').textContent = state.info && state.info.configured ? 'Conectado a Google Sheets' : 'Sin configurar';
     updateProductStats();
     applyProductTypeMeta();
     updateSkuPreview();
@@ -2009,21 +2320,168 @@ const google = {
   }
 
   function renderMetrics() {
-    const m = state.metrics || {};
-    document.getElementById('mSkus').textContent = fmt(m.skus || 0);
-    document.getElementById('mStock').textContent = fmt(m.totalStock || 0);
-    document.getElementById('mLow').textContent = fmt(m.lowStock || 0);
-    document.getElementById('mOut').textContent = fmt(m.outOfStock || 0);
-    document.getElementById('mMoves30').textContent = (m.movements30d || 0) + ' en 30 días';
+    const inv = state.inventory || [];
+    const products = state.products || [];
+    const movs = state.movements || [];
+    const active = products.filter(p => p.activo !== false);
+    const totalUnits = inv.reduce((s, i) => s + Number(i.stock || 0), 0);
+    const low = inv.filter(i => i.estado === 'STOCK BAJO');
+    const out = inv.filter(i => i.estado === 'AGOTADO');
+    const normal = inv.filter(i => i.estado === 'NORMAL');
+    const entries = movs.filter(m => ['ENTRADA','SALDO_INICIAL','DEVOLUCION','AJUSTE_POSITIVO'].includes(m.tipoMovimiento));
+    const exits = movs.filter(m => ['SALIDA','AJUSTE_NEGATIVO'].includes(m.tipoMovimiento));
+    document.getElementById('mSkus').textContent = fmt(active.length);
+    document.getElementById('mStock').textContent = fmt(totalUnits);
+    document.getElementById('mLow').textContent = fmt(low.length);
+    document.getElementById('mOut').textContent = fmt(out.length);
+    document.getElementById('mMoves30').textContent = fmt(movs.length);
+    document.getElementById('mStockSub').textContent = inv.length ? `${fmt(Math.round(totalUnits / inv.length))} unidades por SKU` : 'Sin inventario';
+    document.getElementById('mSkuSub').textContent = `${fmt(inv.length)} registrados · ${fmt(normal.length)} normales`;
+    document.getElementById('mLowSub').textContent = low.length ? `${fmt(low.reduce((s,i)=>s+Number(i.stock||0),0))} unidades en nivel bajo` : 'Sin alertas de stock bajo';
+    document.getElementById('mOutSub').textContent = out.length ? `${fmt(out.length)} SKU requieren reposición` : 'Sin productos agotados';
+    return {inv,active,movs,entries,exits,normal,low,out};
   }
 
   function renderDashboard() {
+    const d = renderMetrics();
+    renderDashboardCategoryBars(d.inv);
+    renderDashboardHealth(d.inv);
+    renderDashboardMovements(d.movs);
+    renderDashboardTopProducts(d.inv);
+
     const alertBody = document.getElementById('dashboardAlerts');
-    const alerts = state.inventory.filter(i => i.stock <= i.stockMin).sort((a, b) => a.stock - b.stock).slice(0, 10);
-    alertBody.innerHTML = alerts.length ? alerts.map(rowInventory).join('') : '<tr><td colspan="5" class="empty">No hay alertas de stock.</td></tr>';
+    const alerts = d.inv.filter(i => i.estado !== 'NORMAL').sort((a,b) => (Number(a.stock||0)-Number(b.stock||0)) || String(a.tipo).localeCompare(String(b.tipo),'es')).slice(0,8);
+    alertBody.innerHTML = alerts.length ? alerts.map(i => `<tr><td><strong>${esc(i.codigo)}</strong></td><td>${esc(i.tipo || '—')}<div class="muted">${esc([i.color,i.talla].filter(Boolean).join(' · ') || '—')}</div></td><td><strong>${fmt(i.stock)}</strong> ${esc(i.unidad || '')}</td><td>${fmt(i.stockMin || i.reorderPoint || 0)}</td><td>${statusPill(i.estado)}</td></tr>`).join('') : '<tr><td colspan="5" class="empty">✓ No hay productos en stock bajo ni agotados.</td></tr>';
+
     const moveBody = document.getElementById('dashboardMoves');
-    const rows = state.movements.slice(0, 8);
-    moveBody.innerHTML = rows.length ? rows.map(m => `<tr><td>${esc(m.fecha)}</td><td><strong>${esc(m.codigo)}</strong></td><td>${moveLabel(m.tipoMovimiento)}</td><td>${qtyView(m)}</td></tr>`).join('') : '<tr><td colspan="4" class="empty">Sin movimientos.</td></tr>';
+    const rows = d.movs.slice(0,7);
+    moveBody.innerHTML = rows.length ? rows.map(m => { const p=d.inv.find(x=>x.codigo===m.codigo); return `<tr><td>${esc(m.fecha)}</td><td><strong>${esc(p?.tipo || m.codigo)}</strong><div class="muted">${esc(m.codigo)}</div></td><td>${moveLabel(m.tipoMovimiento)}</td><td>${qtyView(m)}</td></tr>`; }).join('') : '<tr><td colspan="4" class="empty">Sin movimientos.</td></tr>';
+    document.getElementById('dashboardMovesCaption').textContent = `${fmt(Math.min(7, d.movs.length))} de ${fmt(d.movs.length)} movimientos · Ver todos →`;
+  }
+
+  function renderDashboardCategoryBars(inv) {
+    const totals = {};
+    inv.forEach(i => { const k=i.categoria || 'SIN CATEGORÍA'; totals[k]=(totals[k]||0)+Number(i.stock||0); });
+    const rows = Object.entries(totals).sort((a,b)=>b[1]-a[1]).slice(0,7);
+    const max = rows[0]?.[1] || 1;
+    document.getElementById('dashCategoryBars').innerHTML = rows.length ? rows.map(([name,val]) => `<div class="cat-row"><div class="cat-name" title="${escAttr(name)}">${esc(name)}</div><div class="cat-track"><div class="cat-fill" style="width:${Math.max(3,(val/max)*100)}%"></div></div><div class="cat-value">${fmt(val)}</div></div>`).join('') : '<div class="empty-state">Sin datos.</div>';
+  }
+
+  function renderDashboardHealth(inv) {
+    const n=inv.filter(i=>i.estado==='NORMAL').length, l=inv.filter(i=>i.estado==='STOCK BAJO').length, o=inv.filter(i=>i.estado==='AGOTADO').length, total=inv.length||1;
+    const normalDeg=(n/total)*360, lowDeg=(l/total)*360;
+    const donut=document.getElementById('healthDonut');
+    donut.style.background=`conic-gradient(#19b978 0deg ${normalDeg}deg,#e8b53e ${normalDeg}deg ${normalDeg+lowDeg}deg,#df5b65 ${normalDeg+lowDeg}deg 360deg)`;
+    document.getElementById('healthNormalPct').textContent=Math.round((n/total)*100)+'%';
+    document.getElementById('healthNormal').textContent=fmt(n); document.getElementById('healthLow').textContent=fmt(l); document.getElementById('healthOut').textContent=fmt(o);
+  }
+
+  function renderDashboardMovements(movs) {
+    const map={};
+    const activityDates=[...new Set(movs.map(m=>m.fecha).filter(Boolean))].sort().slice(-7);
+    if(!activityDates.length){ document.getElementById('dashMovementBars').innerHTML='<div class="empty-state">Sin movimientos registrados.</div>'; document.getElementById('movementBalance').textContent='Sin actividad'; return; }
+    activityDates.forEach(key=>{ map[key]={in:0,out:0}; });
+    movs.forEach(m=>{ if(!map[m.fecha]) return; const q=Number(m.cantidad||0); if(['ENTRADA','SALDO_INICIAL','DEVOLUCION','AJUSTE_POSITIVO'].includes(m.tipoMovimiento)) map[m.fecha].in+=q; else map[m.fecha].out+=q; });
+    const days=activityDates.map(key=>({key,label:new Date(key+'T00:00:00').toLocaleDateString('es-PE',{day:'2-digit',month:'short'}).replace('.','')}));
+    const max=Math.max(1,...days.map(d=>Math.max(map[d.key].in,map[d.key].out)));
+    document.getElementById('dashMovementBars').innerHTML=`<div class="movement-chart-grid">${days.map(d=>`<div class="movement-day"><div class="movement-bars"><div class="movement-bar in" title="Entradas: ${fmt(map[d.key].in)}" style="height:${Math.max(3,(map[d.key].in/max)*145)}px"></div><div class="movement-bar out" title="Salidas: ${fmt(map[d.key].out)}" style="height:${Math.max(3,(map[d.key].out/max)*145)}px"></div></div><div class="movement-label">${esc(d.label)}</div></div>`).join('')}</div><div class="movement-legend"><span><i class="in"></i>Entradas ${fmt(days.reduce((s,d)=>s+map[d.key].in,0))}</span><span><i class="out"></i>Salidas ${fmt(days.reduce((s,d)=>s+map[d.key].out,0))}</span></div>`;
+    const totalIn=days.reduce((s,d)=>s+map[d.key].in,0), totalOut=days.reduce((s,d)=>s+map[d.key].out,0);
+    document.getElementById('movementBalance').textContent=`Balance: ${totalIn-totalOut>=0?'+':''}${fmt(totalIn-totalOut)} unidades`;
+  }
+
+  function renderDashboardTopProducts(inv) {
+    const rows=[...inv].sort((a,b)=>Number(b.stock||0)-Number(a.stock||0)).slice(0,6);
+    document.getElementById('dashTopProducts').innerHTML=rows.length?rows.map((p,i)=>`<div class="top-product"><div class="rank">${i+1}</div><div><div class="top-product-name">${esc(p.tipo || p.codigo)}</div><div class="top-product-meta">${esc([p.color,p.talla,p.categoria].filter(Boolean).join(' · '))}</div></div><div class="top-stock">${fmt(p.stock)}<small>${esc(p.unidad||'unid.')}</small></div></div>`).join(''):'<div class="empty-state">Sin datos.</div>';
+  }
+
+  // ═══════════════════════════════════════════════════════════
+  // PAGINACIÓN PRINCIPAL
+  // Se mantiene independiente por módulo y nunca modifica los
+  // datos originales. Primero se filtra/agrupa y después se pagina.
+  // ═══════════════════════════════════════════════════════════
+  const PAGINATION_PAGE_SIZE = 10;
+  const paginationState = {
+    inventory: { page: 1, signature: '' },
+    movements: { page: 1, signature: '' },
+    products: { page: 1, signature: '' }
+  };
+
+  function normalizePaginationSignature(value) {
+    return String(value ?? '').trim().toLowerCase();
+  }
+
+  function getPagedRows(items, key, signature) {
+    const statePage = paginationState[key];
+    const normalized = normalizePaginationSignature(signature);
+    if (statePage.signature !== normalized) {
+      statePage.signature = normalized;
+      statePage.page = 1;
+    }
+
+    const total = items.length;
+    const totalPages = Math.max(1, Math.ceil(total / PAGINATION_PAGE_SIZE));
+    statePage.page = Math.min(Math.max(1, statePage.page), totalPages);
+    const start = total ? (statePage.page - 1) * PAGINATION_PAGE_SIZE : 0;
+    const end = Math.min(start + PAGINATION_PAGE_SIZE, total);
+
+    return {
+      pageItems: items.slice(start, end),
+      total,
+      totalPages,
+      page: statePage.page,
+      start: total ? start + 1 : 0,
+      end
+    };
+  }
+
+  function setPaginationPage(key, page, renderFn) {
+    const statePage = paginationState[key];
+    statePage.page = Math.max(1, Number(page) || 1);
+    renderFn();
+  }
+
+  function paginationPageList(current, totalPages) {
+    if (totalPages <= 7) {
+      return Array.from({ length: totalPages }, (_, i) => i + 1);
+    }
+    const pages = [1];
+    const start = Math.max(2, current - 1);
+    const end = Math.min(totalPages - 1, current + 1);
+    if (start > 2) pages.push('…');
+    for (let i = start; i <= end; i++) pages.push(i);
+    if (end < totalPages - 1) pages.push('…');
+    pages.push(totalPages);
+    return pages;
+  }
+
+  function renderPagination(containerId, key, result, renderFn, label) {
+    const el = document.getElementById(containerId);
+    if (!el) return;
+
+    if (!result.total) {
+      el.innerHTML = `<div class="pagination-info"><span>Items por página</span><span class="pagination-size">${PAGINATION_PAGE_SIZE}</span><span class="pagination-range">0 de 0</span></div>`;
+      return;
+    }
+
+    const pages = paginationPageList(result.page, result.totalPages);
+    const pageButtons = pages.map(page => {
+      if (page === '…') return '<span class="pagination-ellipsis">…</span>';
+      const active = page === result.page ? ' active' : '';
+      return `<button type="button" class="pagination-btn${active}" aria-label="Página ${page}" aria-current="${page === result.page ? 'page' : 'false'}" onclick="setPaginationPage('${key}', ${page}, ${renderFn})">${page}</button>`;
+    }).join('');
+
+    el.innerHTML = `
+      <div class="pagination-info">
+        <span>Items por página</span>
+        <span class="pagination-size">${PAGINATION_PAGE_SIZE}</span>
+        <span class="pagination-range">${result.start}-${result.end} de ${result.total}</span>
+        <span class="muted">${esc(label || '')}</span>
+      </div>
+      <div class="pagination-buttons">
+        <button type="button" class="pagination-btn pagination-nav" aria-label="Página anterior" title="Página anterior" ${result.page <= 1 ? 'disabled' : ''} onclick="setPaginationPage('${key}', ${result.page - 1}, ${renderFn})">‹</button>
+        ${pageButtons}
+        <button type="button" class="pagination-btn pagination-nav" aria-label="Página siguiente" title="Página siguiente" ${result.page >= result.totalPages ? 'disabled' : ''} onclick="setPaginationPage('${key}', ${result.page + 1}, ${renderFn})">›</button>
+      </div>`;
   }
 
   function renderInventory() {
@@ -2033,16 +2491,26 @@ const google = {
       const hay = [i.codigo, i.tipo, i.modelo, i.color, i.talla, i.descripcion].join(' ').toLowerCase();
       return (!q || hay.includes(q)) && (!status || i.estado === status);
     });
-    document.getElementById('inventoryTable').innerHTML = rows.length ? rows.map(rowInventoryFull).join('') : '<tr><td colspan="10" class="empty">No se encontraron registros.</td></tr>';
+
+    const signature = `q=${q}|status=${status}`;
+    const result = getPagedRows(rows, 'inventory', signature);
+    document.getElementById('inventoryTable').innerHTML = result.pageItems.length
+      ? result.pageItems.map(rowInventoryFull).join('')
+      : '<tr><td colspan="10" class="empty">No se encontraron registros.</td></tr>';
+
+    renderPagination('inventoryPagination', 'inventory', result, 'renderInventory', 'registros');
   }
 
   function renderMovements() {
     const body = document.getElementById('movementsTable');
     if (!state.movements.length) {
       body.innerHTML = '<tr><td colspan="8" class="empty">Sin movimientos.</td></tr>';
+      renderPagination('movementsPagination', 'movements', { total: 0, totalPages: 1, page: 1, start: 0, end: 0 }, 'renderMovements', 'operaciones');
       return;
     }
-    // Group movements by movementGroupId (or treat single as own group)
+
+    // Agrupamos primero por operación. La paginación se aplica a los grupos,
+    // nunca a las líneas individuales, para no separar movimientos multiproducto.
     const groups = {};
     const groupOrder = [];
     state.movements.forEach(m => {
@@ -2050,9 +2518,15 @@ const google = {
       if (!groups[gid]) { groups[gid] = []; groupOrder.push(gid); }
       groups[gid].push(m);
     });
+
+    const grouped = groupOrder.map(gid => ({ gid, items: groups[gid] }));
+    const signature = grouped.map(g => `${g.gid}:${g.items.length}`).join('|');
+    const result = getPagedRows(grouped, 'movements', signature);
+
     let html = '';
-    groupOrder.forEach(gid => {
-      const items = groups[gid];
+    result.pageItems.forEach(group => {
+      const gid = group.gid;
+      const items = group.items;
       const first = items[0];
       const totalUnits = items.reduce((s, m) => s + Number(m.cantidad||0), 0);
       const movId = first.movementGroupId || '';
@@ -2060,14 +2534,13 @@ const google = {
       html += `<tr class="movement-group-row" onclick="toggleMovementGroup('${rowId}')">
         <td><button class="expand-btn" id="expBtn_${rowId}">▶</button></td>
         <td>${esc(first.fecha)}</td>
-        <td>${movId ? `<span class="mov-id-badge">${esc(movId)}</span>` : '<span class="muted">—</span>'}</td>
+        <td>${movId ? `<button class="link-btn" onclick="event.stopPropagation();openMovementDetail('${js(movId)}')">${esc(movId)}</button>` : '<span class="muted">—</span>'}</td>
         <td>${moveLabel(first.tipoMovimiento)}</td>
         <td>${esc(first.beneficiario||'—')}</td>
         <td><strong>${items.length}</strong> ${items.length===1?'producto':'productos'}</td>
         <td>${qtyViewSign(first, totalUnits)}</td>
         <td>${esc(first.motivo||'—')}</td>
       </tr>`;
-      // Detail rows (hidden by default)
       items.forEach(m => {
         html += `<tr class="movement-detail-row" id="det_${rowId}" style="display:none">
           <td></td>
@@ -2079,7 +2552,9 @@ const google = {
         </tr>`;
       });
     });
-    body.innerHTML = html;
+
+    body.innerHTML = html || '<tr><td colspan="8" class="empty">Sin movimientos.</td></tr>';
+    renderPagination('movementsPagination', 'movements', result, 'renderMovements', 'operaciones');
   }
 
   function toggleMovementGroup(rowId) {
@@ -2104,13 +2579,23 @@ const google = {
       const hay = [p.codigo, p.categoria, p.naturaleza, p.tipo, p.modelo, p.marca, p.color, p.talla, p.presentacion, p.genero, p.unidad, p.ubicacion, p.condicion, p.descripcion].join(' ').toLowerCase();
       return (!q || hay.includes(q)) && (!fam || p.categoria === fam) && (!nature || p.naturaleza === nature);
     });
-    document.getElementById('productsTable').innerHTML = rows.length ? rows.map(p => { const inv = state.inventory.find(i => i.codigo === p.codigo); return `<tr><td><strong>${esc(p.codigo)}</strong></td><td>${esc(p.categoria)}</td><td>${naturePill(p.naturaleza)}</td><td>${esc(p.tipo)}</td><td>${esc([p.marca, p.modelo].filter(Boolean).join(' · ') || '—')}</td><td>${esc(p.color || '—')}</td><td>${esc(p.talla || 'NO APLICA')}</td><td>${esc(p.presentacion || '—')}</td><td>${esc(p.unidad)}</td><td>${esc(p.ubicacion || '—')}</td><td>${esc(p.condicion)}</td><td><strong>${inv ? fmt(inv.stock) : '0'}</strong></td><td>${inv ? statusPill(inv.estado) : statusPill('AGOTADO')}</td><td class="actions-cell" style="white-space:nowrap;"><button class="btn btn-secondary" style="margin-right:4px;" onclick="editProduct('${js(p.codigo)}')">✏️ Editar</button><button class="btn btn-secondary" onclick="toggleProductStatus('${js(p.codigo)}')">${p.activo === false ? '▶️ Activar' : '⏸️ Desactivar'}</button></td><td class="actions-cell"><button class="btn btn-secondary" onclick="openProductCode('${js(p.codigo)}')">Código</button><button class="btn btn-secondary" onclick="openKardex('${js(p.codigo)}')">Kardex</button></td></tr>`; }).join('') : '<tr><td colspan="15" class="empty">Sin productos para los filtros seleccionados.</td></tr>';
+
+    const signature = `q=${q}|family=${fam}|nature=${nature}`;
+    const result = getPagedRows(rows, 'products', signature);
+    document.getElementById('productsTable').innerHTML = result.pageItems.length
+      ? result.pageItems.map(p => {
+          const inv = state.inventory.find(i => i.codigo === p.codigo);
+          return `<tr><td><strong>${esc(p.codigo)}</strong></td><td>${esc(p.categoria)}</td><td>${naturePill(p.naturaleza)}</td><td>${esc(p.tipo)}</td><td>${esc([p.marca, p.modelo].filter(Boolean).join(' · ') || '—')}</td><td>${esc(p.color || '—')}</td><td>${esc(p.talla || 'NO APLICA')}</td><td>${esc(p.presentacion || '—')}</td><td>${esc(p.unidad)}</td><td>${esc(p.ubicacion || '—')}</td><td>${esc(p.condicion)}</td><td><strong>${inv ? fmt(inv.stock) : '0'}</strong></td><td>${inv ? statusPill(inv.estado) : statusPill('AGOTADO')}</td><td class="actions-cell" style="white-space:nowrap;"><button class="btn btn-secondary" style="margin-right:4px;" onclick="editProduct('${js(p.codigo)}')">✏️ Editar</button><button class="btn btn-secondary" onclick="toggleProductStatus('${js(p.codigo)}')">${p.activo === false ? '▶️ Activar' : '⏸️ Desactivar'}</button></td><td class="actions-cell"><button class="btn btn-secondary" onclick="openProductCode('${js(p.codigo)}')">Código</button><button class="btn btn-secondary" onclick="openKardex('${js(p.codigo)}')">Kardex</button></td></tr>`;
+        }).join('')
+      : '<tr><td colspan="15" class="empty">Sin productos para los filtros seleccionados.</td></tr>';
+
+    renderPagination('productsPagination', 'products', result, 'renderProducts', 'productos');
   }
 
   function populateSelectors() {
     var skuOptions = state.products.map(function (p) { return '<option value="' + escAttr(p.codigo) + '">' + esc(p.codigo) + ' — ' + esc(p.tipo) + ' · ' + esc(p.modelo || p.marca || '') + ' · ' + esc(p.color || '') + ' · ' + esc(p.talla || p.presentacion || '') + '</option>'; }).join('');
-    // Only kxCodigo for Kardex — mvCodigo no longer exists (multi-product rows)
-    ['kxCodigo'].forEach(function (id) { var el = document.getElementById(id); if (el) el.innerHTML = '<option value="">Seleccionar…</option>' + skuOptions; });
+    // Kardex usa un buscador inteligente; ya no cargamos 100+ SKU en un select.
+    renderKardexRecent();
     // Refresh existing product row selects with latest products
     document.querySelectorAll('#productRowsBody .mv-product-select').forEach(function(sel) {
       var currentVal = sel.value;
@@ -2439,10 +2924,35 @@ const google = {
     }).withFailureHandler(handleError).createProduct(form);
   }
 
+  function updateStockCorrectionPreview() {
+    const sa = document.getElementById('stockActualEdit');
+    const sn = document.getElementById('stockNuevoEdit');
+    const preview = document.getElementById('stockCorrectionPreview');
+    if (!sa || !sn || !preview || preview.style.display === 'none') return;
+
+    const actual = Number(sa.value || 0);
+    const nuevo = Number(sn.value || 0);
+    const delta = nuevo - actual;
+    const reorderInput = document.querySelector('input[name="puntoReorden"]');
+    const reorder = Number(reorderInput ? reorderInput.value || 0 : 0);
+    const estado = stockStatus(nuevo, reorder, Number(document.querySelector('input[name="stockMaximo"]')?.value || 0));
+
+    const deltaEl = document.getElementById('stockPreviewDelta');
+    const estadoEl = document.getElementById('stockPreviewEstado');
+    document.getElementById('stockPreviewActual').textContent = fmt(actual);
+    document.getElementById('stockPreviewNuevo').textContent = fmt(nuevo);
+    deltaEl.textContent = (delta > 0 ? '+' : '') + fmt(delta);
+    deltaEl.style.fontWeight = '800';
+    estadoEl.textContent = estado === 'NORMAL' ? '🟢 NORMAL' : estado === 'STOCK BAJO' ? '🟡 STOCK BAJO' : '🔴 AGOTADO';
+    estadoEl.style.fontWeight = '800';
+  }
+
   function editProduct(codigo) {
     const product = state.products.find(p => p.codigo === codigo);
     if (!product) return;
-    
+    const inv = state.inventory.find(i => i.codigo === codigo);
+    const currentStock = inv ? Number(inv.stock || 0) : Number(DEMO_STOCK[codigo] || 0);
+
     // Fill the form fields with product data
     document.getElementById('originalCodigo').value = product.codigo;
     document.getElementById('prCategoria').value = product.categoria || '';
@@ -2459,10 +2969,30 @@ const google = {
     
     const ub = document.querySelector('input[name="ubicacion"]');
     if (ub) ub.value = product.ubicacion || '';
-    
-    // Navigate to the form
+
+    // Stock: se muestra y puede corregirse mediante un ajuste trazable en Kardex.
+    const sa = document.getElementById('stockActualEdit');
+    const sn = document.getElementById('stockNuevoEdit');
+    if (sa) sa.value = currentStock;
+    if (sn) sn.value = currentStock;
+    const siw = document.getElementById('stockInicialWrap');
+    const saw = document.getElementById('stockActualWrap');
+    const snw = document.getElementById('stockNuevoWrap');
+    const notice = document.getElementById('stockEditNotice');
+    const preview = document.getElementById('stockCorrectionPreview');
+    if (siw) siw.style.display = 'none';
+    if (saw) saw.style.display = '';
+    if (snw) snw.style.display = '';
+    if (notice) notice.style.display = '';
+    if (preview) preview.style.display = '';
+    updateStockCorrectionPreview();
+    const btn = document.getElementById('productSubmitBtn');
+    if (btn) btn.textContent = '💾 Guardar cambios';
+    const title = document.querySelector('#section-productos .form-kicker');
+    if (title) title.textContent = '✏️ Editando producto: ' + product.codigo;
+
     window.scrollTo({ top: 0, behavior: 'smooth' });
-    toast('Modo edición: Editando ' + product.codigo);
+    toast('Modo edición: puedes corregir datos del producto y, si es necesario, el stock.');
   }
 
   function toggleProductStatus(codigo) {
@@ -2481,28 +3011,209 @@ const google = {
     if (firstSelect) firstSelect.focus();
   }
 
-  function openKardex(code) {
-    navigate('kardex');
-    document.getElementById('kxCodigo').value = code;
+  var kardexSearchIndex = -1;
+  var kardexRecentCodes = [];
+
+  function getKardexProduct(code) {
+    return (state.products || []).find(function(p) { return p.codigo === code; });
+  }
+
+  function getKardexInventory(code) {
+    return (state.inventory || []).find(function(i) { return i.codigo === code; }) || {};
+  }
+
+  function kardexProductHaystack(p) {
+    return stripAccents([p.codigo, p.tipo, p.modelo, p.marca, p.color, p.talla, p.presentacion, p.genero, p.unidad, p.categoria, p.naturaleza, p.ubicacion].join(' ')).toLowerCase();
+  }
+
+  function searchKardexProducts(query) {
+    var q = stripAccents(String(query || '').trim()).toLowerCase();
+    var box = document.getElementById('kxSearchResults');
+    var clear = document.getElementById('kxSearchClear');
+    if (clear) clear.style.display = q ? '' : 'none';
+    kardexSearchIndex = -1;
+    if (!box) return;
+    if (!q) {
+      renderKardexRecent();
+      box.classList.add('hidden');
+      var hidden = document.getElementById('kxCodigo');
+      var selected = document.getElementById('kxSelected');
+      var productBox = document.getElementById('kardexProduct');
+      var stockBox = document.getElementById('kxStock');
+      var table = document.getElementById('kardexTable');
+      if (hidden) hidden.value = '';
+      if (selected) { selected.classList.add('hidden'); selected.innerHTML = ''; }
+      if (productBox) { productBox.classList.add('hidden'); productBox.innerHTML = ''; }
+      if (stockBox) stockBox.innerHTML = '';
+      if (table) table.innerHTML = '<tr><td colspan="14" class="empty">Busca y selecciona un producto para consultar sus movimientos.</td></tr>';
+      return;
+    }
+    var terms = q.split(/\s+/).filter(Boolean);
+    var results = (state.products || []).filter(function(p) {
+      var hay = kardexProductHaystack(p);
+      return terms.every(function(t) { return hay.includes(t); });
+    }).slice(0, 20);
+    if (!results.length) {
+      box.innerHTML = '<div class="kardex-search-empty">No encontramos productos con <strong>' + esc(query) + '</strong>.</div>';
+    } else {
+      box.innerHTML = results.map(function(p, idx) {
+        var inv = getKardexInventory(p.codigo);
+        var stock = Number(inv.stock || 0);
+        var status = inv.estado || stockStatus(stock, Number(p.puntoReorden || p.reorderPoint || 0), Number(p.stockMaximo || p.stockMax || 0));
+        return '<button type="button" class="kardex-result-item" data-index="' + idx + '" onclick="selectKardexProduct(\'' + js(p.codigo) + '\')">' +
+          '<span class="kardex-result-main"><strong>' + esc(p.codigo) + '</strong><span>' + esc([p.tipo, p.marca, p.modelo, p.color, p.talla || p.presentacion].filter(Boolean).join(' · ') || 'Producto') + '</span></span>' +
+          '<span class="kardex-result-stock"><strong>' + fmt(stock) + ' ' + esc(p.unidad || 'UNIDAD') + '</strong><span>' + statusPill(status) + '</span></span>' +
+        '</button>';
+      }).join('');
+    }
+    box.classList.remove('hidden');
+  }
+
+  function showKardexSearch() {
+    var input = document.getElementById('kxSearch');
+    if (input && input.value.trim()) searchKardexProducts(input.value);
+  }
+
+  function selectKardexProduct(code, consultNow) {
+    var p = getKardexProduct(code);
+    if (!p) { toast('Producto no encontrado.'); return; }
+    var input = document.getElementById('kxSearch');
+    var hidden = document.getElementById('kxCodigo');
+    if (hidden) hidden.value = code;
+    if (input) input.value = p.codigo + ' — ' + (p.tipo || 'Producto') + (p.color ? ' · ' + p.color : '') + (p.talla ? ' · ' + p.talla : '');
+    var box = document.getElementById('kxSearchResults');
+    if (box) box.classList.add('hidden');
+    var inv = getKardexInventory(code);
+    var stock = Number(inv.stock || 0);
+    var selected = document.getElementById('kxSelected');
+    if (selected) {
+      selected.classList.remove('hidden');
+      selected.innerHTML = 'Producto seleccionado: <strong>' + esc(p.codigo) + '</strong> · ' + esc(p.tipo || '') + ' · Stock actual: <strong>' + fmt(stock) + ' ' + esc(p.unidad || 'UNIDAD') + '</strong>';
+    }
+    kardexRecentCodes = [code].concat(kardexRecentCodes.filter(function(x) { return x !== code; })).slice(0, 5);
+    try { sessionStorage.setItem('kardexRecentCodes', JSON.stringify(kardexRecentCodes)); } catch(e) {}
+    renderKardexRecent();
+    // Al seleccionar un producto, el Kardex se consulta automáticamente.
     loadKardex();
   }
 
+  function renderKardexRecent() {
+    var wrap = document.getElementById('kxRecent');
+    if (!wrap) return;
+    try { kardexRecentCodes = JSON.parse(sessionStorage.getItem('kardexRecentCodes') || '[]'); } catch(e) { kardexRecentCodes = []; }
+    var valid = kardexRecentCodes.map(getKardexProduct).filter(Boolean);
+    kardexRecentCodes = valid.map(function(p) { return p.codigo; });
+    wrap.innerHTML = valid.length ? '<span class="kardex-recent-label">Últimos consultados</span>' + valid.map(function(p) { return '<button type="button" class="kardex-recent-chip" onclick="selectKardexProduct(\'' + js(p.codigo) + '\', true)">' + esc(p.codigo) + '</button>'; }).join('') : '';
+  }
+
+  function reloadKardexIfSelected() {
+    var code = document.getElementById('kxCodigo');
+    if (code && code.value) loadKardex();
+  }
+
+  function clearKardexSearch() {
+    var input = document.getElementById('kxSearch');
+    var hidden = document.getElementById('kxCodigo');
+    var box = document.getElementById('kxSearchResults');
+    var selected = document.getElementById('kxSelected');
+    if (input) input.value = '';
+    if (hidden) hidden.value = '';
+    if (box) box.classList.add('hidden');
+    if (selected) { selected.classList.add('hidden'); selected.innerHTML = ''; }
+    var productBox = document.getElementById('kardexProduct');
+    var stockBox = document.getElementById('kxStock');
+    var table = document.getElementById('kardexTable');
+    if (productBox) { productBox.classList.add('hidden'); productBox.innerHTML = ''; }
+    if (stockBox) stockBox.innerHTML = '';
+    if (table) table.innerHTML = '<tr><td colspan="14" class="empty">Busca y selecciona un producto para consultar sus movimientos.</td></tr>';
+    var clear = document.getElementById('kxSearchClear'); if (clear) clear.style.display = 'none';
+    if (input) input.focus();
+  }
+
+  function handleKardexSearchKey(ev) {
+    var box = document.getElementById('kxSearchResults');
+    if (!box || box.classList.contains('hidden')) return;
+    var items = box.querySelectorAll('.kardex-result-item');
+    if (ev.key === 'ArrowDown') { ev.preventDefault(); kardexSearchIndex = Math.min(kardexSearchIndex + 1, items.length - 1); }
+    else if (ev.key === 'ArrowUp') { ev.preventDefault(); kardexSearchIndex = Math.max(kardexSearchIndex - 1, 0); }
+    else if (ev.key === 'Enter' && kardexSearchIndex >= 0 && items[kardexSearchIndex]) { ev.preventDefault(); items[kardexSearchIndex].click(); return; }
+    else if (ev.key === 'Escape') { box.classList.add('hidden'); return; }
+    items.forEach(function(el, i) { el.classList.toggle('active', i === kardexSearchIndex); });
+  }
+
+  document.addEventListener('click', function(ev) {
+    var wrap = document.querySelector('.kardex-search-box');
+    var box = document.getElementById('kxSearchResults');
+    if (wrap && box && !wrap.contains(ev.target)) box.classList.add('hidden');
+  });
+
+  function openKardex(code) {
+    navigate('kardex');
+    selectKardexProduct(code, true);
+  }
+
   function loadKardex() {
-    const code = document.getElementById('kxCodigo').value;
-    const from = document.getElementById('kxDesde').value;
-    const to = document.getElementById('kxHasta').value;
-    if (!code) { toast('Selecciona un SKU.'); return; }
+    const code=document.getElementById('kxCodigo').value;
+    const from=document.getElementById('kxDesde').value;
+    const to=document.getElementById('kxHasta').value;
+    if(!code){toast('Selecciona un SKU.');return;}
     showLoading(true);
-    google.script.run.withSuccessHandler(data => {
+    google.script.run.withSuccessHandler(data=>{
       showLoading(false);
-      const p = data.product;
-      const box = document.getElementById('kardexProduct');
+      const p=data.product;
+      const box=document.getElementById('kardexProduct');
       box.classList.remove('hidden');
-      box.innerHTML = `<strong>${esc(p.codigo)}</strong> · ${esc(p.categoria || '')} · ${esc(p.naturaleza || '')} · ${esc(p.tipo || '')} · ${esc([p.marca, p.modelo].filter(Boolean).join(' · '))} · ${esc(p.color || '—')} · Talla ${esc(p.talla || 'NO APLICA')} · Presentación ${esc(p.presentacion || '—')} · ${esc(p.ubicacion || '—')} · Condición: ${esc(p.condicion || 'NUEVO')}`;
-      document.getElementById('kxStock').textContent = 'Saldo actual: ' + fmt(data.currentStock) + ' ' + esc(p.unidad || 'UNIDAD');
-      const body = document.getElementById('kardexTable');
-      body.innerHTML = data.rows.length ? data.rows.map(r => `<tr><td>${esc(r.fecha)}</td><td>${moveLabel(r.tipoMovimiento)}</td><td class="move-in">${r.entrada ? fmt(r.entrada) : '—'}</td><td class="move-out">${r.salida ? fmt(r.salida) : '—'}</td><td><strong>${fmt(r.saldo)}</strong></td><td>${esc(r.motivo)}</td><td>${esc(r.origenDestino)}</td><td>${esc(r.observacion)}</td></tr>`).join('') : '<tr><td colspan="8" class="empty">No hay movimientos en el rango seleccionado.</td></tr>';
-    }).withFailureHandler(handleError).getKardex(code, from, to);
+      const stockActual = (data.currentStock !== undefined && data.currentStock !== null) ? data.currentStock : ((state.inventory.find(i=>i.codigo===p.codigo)||{}).stock || 0);
+      box.innerHTML=`<div class="product-detail-head"><div><strong>${esc(p.codigo)}</strong> · ${esc(p.tipo||'')} · ${esc([p.marca,p.modelo].filter(Boolean).join(' · '))}<div class="kardex-context"><span class="context-chip stock-chip">Stock actual: <strong>${fmt(stockActual)} ${esc(p.unidad||'UNIDAD')}</strong></span><span class="context-chip">Color: <strong>${esc(p.color||'—')}</strong></span><span class="context-chip">Talla: <strong>${esc(p.talla||'NO APLICA')}</strong></span><span class="context-chip">Unidad: <strong>${esc(p.unidad||'UNIDAD')}</strong></span><span class="context-chip">Ubicación: <strong>${esc(p.ubicacion||'—')}</strong></span></div></div><button class="btn btn-secondary" onclick="openProductDetail('${js(p.codigo)}')">Ver detalle del producto</button></div>`;
+      document.getElementById('kxStock').innerHTML='<strong>Stock actual:</strong> '+fmt(stockActual)+' '+esc(p.unidad||'UNIDAD')+' &nbsp; · &nbsp; <strong>Ubicación:</strong> '+esc(p.ubicacion||'—');
+      const body=document.getElementById('kardexTable');
+      body.innerHTML=data.rows.length?data.rows.map(r=>{
+        const gid=r.movementGroupId||'';
+        return `<tr><td>${esc(r.fecha)}</td><td>${gid?`<button class="link-btn" onclick="openMovementDetail('${js(gid)}')">${esc(gid)}</button>`:'<span class="muted">—</span>'}</td><td>${moveLabel(r.tipoMovimiento)}</td><td class="move-in">${r.entrada?fmt(r.entrada):'—'}</td><td class="move-out">${r.salida?fmt(r.salida):'—'}</td><td><strong>${fmt(r.saldo)}</strong></td><td>${esc(r.beneficiario||'—')}</td><td>${esc(r.dniBeneficiario||'—')}</td><td>${esc(r.cargoBeneficiario||'—')}</td><td>${esc(r.areaDestino||'—')}</td><td>${esc(r.documentoEntrega||'—')}</td><td>${esc(r.motivo||'—')}</td><td>${esc(r.origenDestino||'—')}</td><td>${esc(r.observacion||'—')}</td></tr>`;
+      }).join(''):'<tr><td colspan="14" class="empty">No hay movimientos en el rango seleccionado.</td></tr>';
+    }).withFailureHandler(handleError).getKardex(code,from,to);
+  }
+
+  function closeDetailModal(){document.getElementById('detailModal').classList.add('hidden');}
+
+  function openMovementDetail(movementId){
+    if(!movementId){toast('Movimiento sin ID.');return;}
+    const items=state.movements.filter(m=>m.movementGroupId===movementId);
+    if(!items.length){toast('No se encontró la operación.');return;}
+    const first=items[0];
+    const total=items.reduce((s,m)=>s+Number(m.cantidad||0),0);
+    document.getElementById('detailModalTitle').textContent='Detalle del movimiento';
+    document.getElementById('detailModalBody').innerHTML=`
+      <div class="detail-hero"><div><h4>${esc(movementId)}</h4><p>${esc(first.fecha)} · ${esc(moveLabel(first.tipoMovimiento))} · ${items.length} producto(s) · ${fmt(total)} unidades</p></div><span class="detail-badge">${esc(moveLabel(first.tipoMovimiento).toUpperCase())}</span></div>
+      <div class="detail-body">
+        <div class="detail-section"><h4>Datos de la operación</h4><div class="detail-grid">
+          ${detailField('Fecha',first.fecha)}${detailField('Beneficiario',first.beneficiario)}${detailField('DNI',first.dniBeneficiario)}${detailField('Cargo',first.cargoBeneficiario)}
+          ${detailField('Área / Dependencia',first.areaDestino)}${detailField('Motivo',first.motivo)}${detailField('Documento',first.documentoEntrega)}${detailField('Destino',first.origenDestino)}${detailField('Observación',first.observacion)}
+        </div></div>
+        <div class="detail-section"><h4>Productos incluidos</h4><div class="table-wrap"><table class="mini-table"><thead><tr><th>Código</th><th>Producto</th><th>Cantidad</th><th>Condición</th><th></th></tr></thead><tbody>${items.map(m=>{const p=state.products.find(x=>x.codigo===m.codigo)||{};return `<tr><td><strong>${esc(m.codigo)}</strong></td><td>${esc(p.tipo||m.codigo)}${p.modelo?' · '+esc(p.modelo):''}</td><td>${qtyView(m)}</td><td>${esc(m.condicion||'—')}</td><td><button class="btn btn-secondary" onclick="openProductDetail('${js(m.codigo)}')">Producto</button></td></tr>`}).join('')}</tbody></table></div></div>
+        <div class="detail-actions"><button class="btn btn-secondary" onclick="closeDetailModal()">Cerrar</button>${items.length?`<button class="btn btn-primary" onclick="openKardex('${js(items[0].codigo)}');closeDetailModal()">Ver Kardex de un producto</button>`:''}</div>
+      </div>`;
+    document.getElementById('detailModal').classList.remove('hidden');
+  }
+
+  function detailField(label,value){return `<div class="detail-field"><span>${esc(label)}</span><strong>${esc(value||'—')}</strong></div>`;}
+
+  function openProductDetail(code){
+    const p=state.products.find(x=>x.codigo===code);
+    const inv=state.inventory.find(x=>x.codigo===code)||{stock:DEMO_STOCK[code]||0,stockMin:p?.reorderPoint||0,estado:stockStatus(DEMO_STOCK[code]||0,p?.reorderPoint||0,p?.stockMax||0)};
+    if(!p){toast('Producto no encontrado.');return;}
+    const moves=state.movements.filter(m=>m.codigo===code).sort((a,b)=>b.fecha.localeCompare(a.fecha)).slice(0,8);
+    const uniqueGroups=[...new Set(moves.map(m=>m.movementGroupId).filter(Boolean))].length;
+    document.getElementById('detailModalTitle').textContent='Detalle del producto';
+    document.getElementById('detailModalBody').innerHTML=`
+      <div class="detail-hero"><div><h4>${esc(p.tipo||p.codigo)}</h4><p>${esc(p.codigo)} · ${esc([p.marca,p.modelo].filter(Boolean).join(' · '))}</p></div>${statusPill(inv.estado)}</div>
+      <div class="detail-body">
+        <div class="product-detail-stats"><div class="product-detail-stat"><span>Stock actual</span><strong>${fmt(inv.stock)}</strong></div><div class="product-detail-stat"><span>Stock mínimo</span><strong>${fmt(inv.stockMin||0)}</strong></div><div class="product-detail-stat"><span>Movimientos</span><strong>${fmt(state.movements.filter(m=>m.codigo===code).length)}</strong></div><div class="product-detail-stat"><span>Operaciones</span><strong>${fmt(uniqueGroups)}</strong></div></div>
+        <div class="detail-section"><h4>Información del producto</h4><div class="detail-grid">${detailField('Código',p.codigo)}${detailField('Categoría',p.categoria)}${detailField('Naturaleza',p.naturaleza)}${detailField('Modelo',p.modelo)}${detailField('Marca',p.marca)}${detailField('Color',p.color)}${detailField('Talla',p.talla||'NO APLICA')}${detailField('Presentación',p.presentacion||'NO APLICA')}${detailField('Unidad',p.unidad)}${detailField('Ubicación',p.ubicacion)}${detailField('Condición',p.condicion)}${detailField('Descripción',p.descripcion)}</div></div>
+        <div class="detail-section"><h4>Últimos movimientos</h4>${moves.length?`<div class="table-wrap"><table class="mini-table"><thead><tr><th>Fecha</th><th>ID Movimiento</th><th>Tipo</th><th>Cantidad</th><th>Beneficiario</th><th>Documento</th></tr></thead><tbody>${moves.map(m=>`<tr><td>${esc(m.fecha)}</td><td>${m.movementGroupId?`<button class="link-btn" onclick="openMovementDetail('${js(m.movementGroupId)}')">${esc(m.movementGroupId)}</button>`:'—'}</td><td>${moveLabel(m.tipoMovimiento)}</td><td>${qtyView(m)}</td><td>${esc(m.beneficiario||'—')}</td><td>${esc(m.documentoEntrega||'—')}</td></tr>`).join('')}</tbody></table></div>`:'<div class="empty-state">Este producto todavía no tiene movimientos registrados.</div>'}</div>
+        <div class="detail-actions"><button class="btn btn-secondary" onclick="closeDetailModal()">Cerrar</button><button class="btn btn-primary" onclick="openKardex('${js(code)}');closeDetailModal()">Ver Kardex completo</button></div>
+      </div>`;
+    document.getElementById('detailModal').classList.remove('hidden');
   }
 
   function downloadInventory() {
@@ -2543,20 +3254,65 @@ const google = {
     return [token(type, mapType, 'TIP'), token(model, mapModel, 'GEN'), token(color, mapColor, 'GEN'), variant].join('-');
   }
   function stripAccents(v) { return String(v || '').normalize('NFD').replace(/[\u0300-\u036f]/g, ''); }
-  function resetProductForm() { const f = document.getElementById('productForm'); if (f) { const n = document.getElementById('prNaturaleza'); if (n) n.value = 'INVENTARIABLE'; const g = document.getElementById('prGenero'); if (g) g.value = 'NO APLICA'; const p = document.getElementById('prPresentacion'); if (p) p.value = 'NO APLICA'; const t = document.getElementById('prTalla'); if (t) t.value = 'NO APLICA'; } setTimeout(() => { applyProductTypeMeta(); updateSkuPreview(); }, 20); }
+  function resetProductForm() {
+    const f = document.getElementById('productForm');
+    if (f) {
+      const n = document.getElementById('prNaturaleza'); if (n) n.value = 'INVENTARIABLE';
+      const g = document.getElementById('prGenero'); if (g) g.value = 'NO APLICA';
+      const p = document.getElementById('prPresentacion'); if (p) p.value = 'NO APLICA';
+      const t = document.getElementById('prTalla'); if (t) t.value = 'NO APLICA';
+    }
+    const oc = document.getElementById('originalCodigo'); if (oc) oc.value = '';
+    const siw = document.getElementById('stockInicialWrap'); if (siw) siw.style.display = '';
+    const saw = document.getElementById('stockActualWrap'); if (saw) saw.style.display = 'none';
+    const snw = document.getElementById('stockNuevoWrap'); if (snw) snw.style.display = 'none';
+    const notice = document.getElementById('stockEditNotice'); if (notice) notice.style.display = 'none';
+    const preview = document.getElementById('stockCorrectionPreview'); if (preview) preview.style.display = 'none';
+    const btn = document.getElementById('productSubmitBtn'); if (btn) btn.textContent = 'Crear SKU y producto';
+    setTimeout(() => { applyProductTypeMeta(); updateSkuPreview(); }, 20);
+  }
+
+  document.addEventListener('input', function(ev) {
+    if (ev.target && ['stockNuevoEdit', 'puntoReorden', 'stockMaximo'].includes(ev.target.id || ev.target.name)) {
+      updateStockCorrectionPreview();
+    }
+  });
 
   function updateProductStats() {
-    const m = state.metrics || {}; const fam = new Set(state.products.map(p => p.categoria).filter(Boolean)).size;
-    const a = document.getElementById('prStatInv'); if (a) a.textContent = fmt(m.inventariables || 0);
-    const b = document.getElementById('prStatCons'); if (b) b.textContent = fmt(m.consumibles || 0);
-    const c = document.getElementById('prStatFamilies'); if (c) c.textContent = fmt(fam);
+    // Las tarjetas cuentan productos/SKUs realmente registrados en el catálogo.
+    // No cuentan las opciones disponibles del formulario.
+    const products = Array.isArray(state.products) ? state.products : [];
+    const inventariables = products.filter(p => String(p.naturaleza || '').toUpperCase() === 'INVENTARIABLE').length;
+    const consumibles = products.filter(p => String(p.naturaleza || '').toUpperCase() === 'CONSUMIBLE').length;
+    const families = new Set(products.map(p => String(p.categoria || '').trim()).filter(Boolean)).size;
+    const a = document.getElementById('prStatInv'); if (a) a.textContent = fmt(inventariables);
+    const b = document.getElementById('prStatCons'); if (b) b.textContent = fmt(consumibles);
+    const c = document.getElementById('prStatFamilies'); if (c) c.textContent = fmt(families);
+  }
+
+  function filterProductsByNature(nature) {
+    const select = document.getElementById('productNatureFilter');
+    const search = document.getElementById('productSearch');
+    if (select) select.value = nature || '';
+    if (search) search.value = '';
+    renderProducts();
+    const panel = document.getElementById('productsTable');
+    if (panel) panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  function focusProductFamilies() {
+    const select = document.getElementById('productFamilyFilter');
+    if (select) {
+      select.focus();
+      select.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
   }
 
   function rowInventory(i) {
     return `<tr><td><strong>${esc(i.codigo)}</strong></td><td>${esc(i.tipo)}</td><td>${esc(i.talla)}</td><td>${fmt(i.stock)}</td><td>${statusPill(i.estado)}</td></tr>`;
   }
   function rowInventoryFull(i) {
-    return `<tr><td><strong>${esc(i.codigo)}</strong></td><td>${esc(i.tipo)}</td><td>${esc(i.modelo)}</td><td>${esc(i.color)}</td><td>${esc(i.talla)}</td><td>${esc(i.unidad)}</td><td><strong>${fmt(i.stock)}</strong></td><td>${fmt(i.stockMin)}</td><td>${statusPill(i.estado)}</td><td><button class="btn btn-secondary" onclick="openKardex('${js(i.codigo)}')">Ver</button></td></tr>`;
+    return `<tr><td><strong>${esc(i.codigo)}</strong></td><td>${esc(i.tipo)}</td><td>${esc(i.modelo)}</td><td>${esc(i.color)}</td><td>${esc(i.talla)}</td><td>${esc(i.unidad)}</td><td><strong>${fmt(i.stock)}</strong></td><td>${fmt(i.stockMin)}</td><td>${statusPill(i.estado)}</td><td><button class="btn btn-secondary" onclick="openProductDetail('${js(i.codigo)}')">Ver detalle</button></td></tr>`;
   }
   function naturePill(s) { const cls = s === 'CONSUMIBLE' ? 'nature-consumible' : 'nature-inventariable'; return `<span class="nature-pill ${cls}">${esc(s || 'INVENTARIABLE')}</span>`; }
   function statusPill(s) { const cls = s === 'NORMAL' ? 'normal' : (s === 'SOBRESTOCK' ? 'over' : (['REORDENAR', 'STOCK BAJO'].includes(s) ? 'low' : 'out')); return `<span class="status ${cls}">${esc(s)}</span>`; }

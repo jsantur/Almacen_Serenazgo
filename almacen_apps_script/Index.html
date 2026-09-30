@@ -1,15 +1,14 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
   <base target="_top">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <?!= include('Stylesheet'); ?>
 </head>
-
 <body>
-  <div id="appShell" class="app-shell">
+<div id="appShell" class="app-shell">
+
     <aside class="sidebar">
       <div class="brand">
         <div class="brand-mark">AP</div>
@@ -37,10 +36,7 @@
           <div class="eyebrow">CONTROL DE ALMACÉN</div>
           <h1 id="pageTitle">Dashboard</h1>
         </div>
-        <div class="topbar-actions">
-          <span id="systemBadge" class="badge">Cargando…</span>
-          <button class="btn btn-primary" onclick="openQuickMovement()">＋ Registrar movimiento</button>
-        </div>
+        <div class="topbar-actions"></div>
       </header>
 
       <div id="loading" class="loading-overlay">
@@ -49,77 +45,85 @@
       </div>
 
       <section id="section-dashboard" class="section active">
-        <div class="section-head">
+        <div class="dashboard-head">
           <div>
+            <div class="eyebrow">INDICADORES OPERATIVOS</div>
             <h2>Resumen del almacén</h2>
-            <p>Vista general del stock, alertas y movimientos recientes.</p>
+            <p>Indicadores calculados directamente desde productos, stock y Kardex.</p>
           </div>
-          <button class="btn btn-secondary" onclick="refreshApp()">⟳ Actualizar</button>
-        </div>
-        <div class="cards">
-          <div class="metric-card">
-            <div class="metric-icon">◫</div>
-            <div>
-              <div class="metric-label">SKUs activos</div>
-              <div id="mSkus" class="metric-value">0</div>
-            </div>
-          </div>
-          <div class="metric-card">
-            <div class="metric-icon">▣</div>
-            <div>
-              <div class="metric-label">Stock total</div>
-              <div id="mStock" class="metric-value">0</div>
-            </div>
-          </div>
-          <div class="metric-card warning">
-            <div class="metric-icon">⚠</div>
-            <div>
-              <div class="metric-label">Stock bajo</div>
-              <div id="mLow" class="metric-value">0</div>
-            </div>
-          </div>
-          <div class="metric-card danger">
-            <div class="metric-icon">×</div>
-            <div>
-              <div class="metric-label">Agotados</div>
-              <div id="mOut" class="metric-value">0</div>
-            </div>
+          <div class="dashboard-actions">
+            <span class="dashboard-period">Últimos 30 días</span>
+            <button class="btn btn-secondary" onclick="refreshApp()">⟳ Actualizar</button>
           </div>
         </div>
-        <div class="grid-2">
-          <div class="panel">
-            <div class="panel-head">
-              <h3>Alertas de inventario</h3><span class="muted">Stock mínimo</span>
+
+        <div class="dashboard-kpis">
+          <div class="dash-kpi">
+            <div class="dash-kpi-icon teal">📦</div>
+            <div><div class="dash-kpi-label">UNIDADES EN STOCK</div><div id="mStock" class="dash-kpi-value">0</div><div id="mStockSub" class="dash-kpi-sub">—</div></div>
+          </div>
+          <div class="dash-kpi">
+            <div class="dash-kpi-icon blue">▦</div>
+            <div><div class="dash-kpi-label">SKUs ACTIVOS</div><div id="mSkus" class="dash-kpi-value">0</div><div id="mSkuSub" class="dash-kpi-sub">—</div></div>
+          </div>
+          <div class="dash-kpi warning">
+            <div class="dash-kpi-icon amber">⚠</div>
+            <div><div class="dash-kpi-label">STOCK BAJO</div><div id="mLow" class="dash-kpi-value">0</div><div id="mLowSub" class="dash-kpi-sub">Requieren atención</div></div>
+          </div>
+          <div class="dash-kpi danger">
+            <div class="dash-kpi-icon red">×</div>
+            <div><div class="dash-kpi-label">AGOTADOS</div><div id="mOut" class="dash-kpi-value">0</div><div id="mOutSub" class="dash-kpi-sub">Sin unidades disponibles</div></div>
+          </div>
+          <div class="dash-kpi">
+            <div class="dash-kpi-icon purple">↕</div>
+            <div><div class="dash-kpi-label">MOVIMIENTOS</div><div id="mMoves30" class="dash-kpi-value">0</div><div class="dash-kpi-sub">Entradas + salidas + ajustes</div></div>
+          </div>
+        </div>
+
+        <div class="dashboard-grid top">
+          <div class="panel dashboard-panel">
+            <div class="panel-head"><div><h3>Stock por categoría</h3><div class="muted">Unidades disponibles actualmente</div></div><span class="metric-tag">Actual</span></div>
+            <div id="dashCategoryBars" class="category-bars"></div>
+          </div>
+          <div class="panel dashboard-panel">
+            <div class="panel-head"><div><h3>Estado del inventario</h3><div class="muted">Distribución de SKUs</div></div></div>
+            <div class="inventory-health">
+              <div class="health-donut" id="healthDonut"><div><strong id="healthNormalPct">0%</strong><span>NORMAL</span></div></div>
+              <div class="health-legend">
+                <div><span class="legend-dot normal"></span><span>Normal</span><strong id="healthNormal">0</strong></div>
+                <div><span class="legend-dot low"></span><span>Stock bajo</span><strong id="healthLow">0</strong></div>
+                <div><span class="legend-dot out"></span><span>Agotado</span><strong id="healthOut">0</strong></div>
+              </div>
             </div>
+          </div>
+        </div>
+
+        <div class="dashboard-grid middle">
+          <div class="panel dashboard-panel">
+            <div class="panel-head"><div><h3>Entradas vs. salidas</h3><div class="muted">Actividad registrada en el período</div></div><span id="movementBalance" class="metric-tag"></span></div>
+            <div id="dashMovementBars" class="movement-chart"></div>
+          </div>
+          <div class="panel dashboard-panel">
+            <div class="panel-head"><div><h3>Productos con mayor stock</h3><div class="muted">Concentración de unidades</div></div></div>
+            <div id="dashTopProducts" class="top-products"></div>
+          </div>
+        </div>
+
+        <div class="dashboard-grid bottom">
+          <div class="panel dashboard-panel">
+            <div class="panel-head"><div><h3>Alertas que requieren atención</h3><div class="muted">Ordenadas por menor stock</div></div><button class="link-btn" onclick="navigate('inventario')">Ver inventario →</button></div>
             <div class="table-wrap">
               <table>
-                <thead>
-                  <tr>
-                    <th>SKU</th>
-                    <th>Prenda</th>
-                    <th>Talla</th>
-                    <th>Stock</th>
-                    <th>Estado</th>
-                  </tr>
-                </thead>
+                <thead><tr><th>SKU</th><th>Producto</th><th>Stock</th><th>Punto reorden</th><th>Estado</th></tr></thead>
                 <tbody id="dashboardAlerts"></tbody>
               </table>
             </div>
           </div>
-          <div class="panel">
-            <div class="panel-head">
-              <h3>Movimientos recientes</h3><span id="mMoves30" class="muted"></span>
-            </div>
+          <div class="panel dashboard-panel">
+            <div class="panel-head"><div><h3>Últimos movimientos</h3><div id="dashboardMovesCaption" class="muted">Actividad más reciente</div></div><button class="link-btn" onclick="navigate('movimientos')">Ver todos →</button></div>
             <div class="table-wrap">
               <table>
-                <thead>
-                  <tr>
-                    <th>Fecha</th>
-                    <th>SKU</th>
-                    <th>Movimiento</th>
-                    <th>Cantidad</th>
-                  </tr>
-                </thead>
+                <thead><tr><th>Fecha</th><th>Producto</th><th>Movimiento</th><th>Cantidad</th></tr></thead>
                 <tbody id="dashboardMoves"></tbody>
               </table>
             </div>
@@ -137,8 +141,8 @@
               class="btn btn-primary" onclick="openQuickMovement()">＋ Movimiento</button></div>
         </div>
         <div class="toolbar"><input id="inventorySearch" class="input"
-            placeholder="Buscar código, prenda, modelo, color o talla…" oninput="renderInventory()"><select
-            id="inventoryStatus" class="input select" onchange="renderInventory()">
+            placeholder="Buscar código, prenda, modelo, color o talla…" oninput="onInventoryFilterChange()"><select
+            id="inventoryStatus" class="input select" onchange="onInventoryFilterChange()">
             <option value="">Todos los estados</option>
             <option value="NORMAL">Normal</option>
             <option value="STOCK BAJO">Stock bajo</option>
@@ -164,6 +168,7 @@
               <tbody id="inventoryTable"></tbody>
             </table>
           </div>
+          <div id="inventoryPagination" class="pagination-bar"></div>
         </div>
       </section>
 
@@ -171,7 +176,7 @@
         <div class="section-head">
           <div>
             <h2>Registrar movimiento</h2>
-            <p>Entradas, salidas y ajustes con validación de stock. Un movimiento puede incluir múltiples productos.</p>
+            <p>Entradas, salidas y ajustes con validación de stock. Un movimiento puede incluir múltiples productos. Los campos marcados con <span class="required-star">*</span> son importantes y deben completarse.</p>
           </div>
         </div>
         <div class="panel form-panel">
@@ -180,18 +185,18 @@
             <!-- ── CAMPOS GENERALES ─────────────────────────── -->
             <div class="form-kicker">Datos generales del movimiento</div>
             <div class="form-grid">
-              <label>Fecha<input id="mvFecha" name="fecha" class="input" type="date" required></label>
-              <label>Tipo de movimiento *<select id="mvTipo" name="tipoMovimiento" class="input select" required onchange="onMovementTypeChange()">
+              <label>Fecha <span class="required-star">*</span><input id="mvFecha" name="fecha" class="input" type="date" required></label>
+              <label>Tipo de movimiento <span class="required-star">*</span><select id="mvTipo" name="tipoMovimiento" class="input select" required onchange="onMovementTypeChange()">
                   <option value="ENTRADA">Entrada</option>
                   <option value="SALIDA">Salida</option>
                   <option value="AJUSTE_POSITIVO">Ajuste +</option>
                   <option value="AJUSTE_NEGATIVO">Ajuste −</option>
                   <option value="DEVOLUCION">Devolución</option>
                 </select></label>
-              <label>Motivo *<select id="mvMotivo" name="motivo" class="input select" required></select></label>
-              <label>Beneficiario<input id="mvBeneficiario" name="beneficiario" class="input" placeholder="Nombre completo"></label>
+              <label>Motivo <span class="required-star">*</span><select id="mvMotivo" name="motivo" class="input select" required></select></label>
+              <label>Beneficiario <span class="required-star">*</span><input id="mvBeneficiario" name="beneficiario" class="input" placeholder="Nombre completo"></label>
               <label>DNI<input id="mvDni" name="dniBeneficiario" class="input" placeholder="Número de documento" maxlength="12"></label>
-              <label>Área / Dependencia<input id="mvArea" name="areaDestino" list="mvAreaList" class="input" placeholder="Área o dependencia">
+              <label>Área / Dependencia <span class="required-star">*</span><input id="mvArea" name="areaDestino" list="mvAreaList" class="input" placeholder="Área o dependencia">
                 <datalist id="mvAreaList"><option value="SERENAZGO"><option value="LIMPIEZA"><option value="LOGISTICA"><option value="SEGURIDAD PATRIMONIAL"><option value="SECRETARIA GENERAL"><option value="RECURSOS HUMANOS"><option value="ADMINISTRACION"><option value="VIGILANCIA"></datalist>
               </label>
               <label>Cargo<input id="mvCargo" name="cargoBeneficiario" class="input" placeholder="Cargo del beneficiario"></label>
@@ -221,11 +226,13 @@
                     <th style="width:40px"></th>
                   </tr>
                 </thead>
-                <tbody id="productRowsBody"></tbody>
+                <tbody id="productRowsBody">
+                  <!-- Rows injected by addProductRow() -->
+                </tbody>
               </table>
             </div>
 
-            <button type="button" class="add-product-btn" onclick="addProductRow()">+ Agregar producto</button>
+            <button type="button" class="add-product-btn" onclick="addProductRow()">＋ Agregar producto</button>
 
             <!-- ── OBSERVACIÓN ─────────────────────────────── -->
             <hr class="section-divider">
@@ -243,7 +250,7 @@
         <!-- ── HISTORIAL AGRUPADO ──────────────────────────── -->
         <div class="panel">
           <div class="panel-head">
-            <h3>Últimos movimientos</h3><span class="muted">Agrupados por operación · Máx. 150 en vista</span>
+            <h3>Últimos movimientos</h3><span class="muted">Agrupados por operación</span>
           </div>
           <div class="table-wrap">
             <table>
@@ -262,8 +269,29 @@
               <tbody id="movementsTable"></tbody>
             </table>
           </div>
+          <div id="movementsPagination" class="pagination-bar"></div>
         </div>
       </section>
+
+      <!-- ── MODAL RESUMEN MOVIMIENTO ───────────────────────── -->
+      <div id="movementSummaryModal" class="modal hidden">
+        <div class="summary-modal-card">
+          <div class="summary-head">
+            <h3>📋 Resumen del movimiento</h3>
+            <button class="icon-btn" style="color:#fff" onclick="cancelMovementSummary()">×</button>
+          </div>
+          <div class="summary-body">
+            <dl class="summary-meta" id="summaryMeta"></dl>
+            <div class="products-section-label" style="margin-bottom:8px">Productos</div>
+            <div class="summary-products" id="summaryProducts"></div>
+            <div class="summary-totals" id="summaryTotals"></div>
+            <div class="summary-actions">
+              <button class="btn btn-secondary" onclick="cancelMovementSummary()">Cancelar</button>
+              <button class="btn btn-primary" id="confirmSaveBtn" onclick="confirmSaveMovement()">Guardar movimiento</button>
+            </div>
+          </div>
+        </div>
+      </div>
 
       <section id="section-kardex" class="section">
         <div class="section-head">
@@ -272,14 +300,26 @@
             <p>Consulta el historial y saldo corrido de una variante.</p>
           </div>
         </div>
-        <div class="panel">
-          <div class="form-grid compact">
-            <label>Producto / SKU<select id="kxCodigo" class="input select"></select></label>
-            <label>Desde<input id="kxDesde" class="input" type="date"></label>
-            <label>Hasta<input id="kxHasta" class="input" type="date"></label>
-            <div class="align-end"><button class="btn btn-primary" onclick="loadKardex()">Consultar Kardex</button>
+        <div class="panel kardex-search-panel">
+          <div class="kardex-search-head">
+            <div>
+              <strong>Buscar producto</strong>
+              <span class="muted">Escribe SKU, producto, marca, color o talla. No necesitas recorrer una lista.</span>
             </div>
           </div>
+          <div class="kardex-search-row">
+            <div class="kardex-search-box">
+              <span class="kardex-search-icon">🔎</span>
+              <input id="kxSearch" class="input" autocomplete="off" placeholder="Buscar por SKU, producto, marca, color o talla…" oninput="searchKardexProducts(this.value)" onfocus="showKardexSearch()" onkeydown="handleKardexSearchKey(event)">
+              <button type="button" class="kardex-clear" id="kxSearchClear" onclick="clearKardexSearch()" title="Limpiar">×</button>
+              <input id="kxCodigo" type="hidden" value="">
+              <div id="kxSearchResults" class="kardex-search-results hidden"></div>
+            </div>
+            <label class="kardex-date-field">Desde<input id="kxDesde" class="input" type="date" onchange="reloadKardexIfSelected()"></label>
+            <label class="kardex-date-field">Hasta<input id="kxHasta" class="input" type="date" onchange="reloadKardexIfSelected()"></label>
+          </div>
+          <div id="kxRecent" class="kardex-recent"></div>
+          <div id="kxSelected" class="kardex-selected hidden"></div>
         </div>
         <div id="kardexProduct" class="product-summary hidden"></div>
         <div class="panel">
@@ -291,10 +331,16 @@
               <thead>
                 <tr>
                   <th>Fecha</th>
+                  <th>ID Movimiento</th>
                   <th>Movimiento</th>
                   <th>Entrada</th>
                   <th>Salida</th>
                   <th>Saldo</th>
+                  <th>Beneficiario</th>
+                  <th>DNI</th>
+                  <th>Cargo</th>
+                  <th>Área</th>
+                  <th>Documento</th>
                   <th>Motivo</th>
                   <th>Origen/Destino</th>
                   <th>Observación</th>
@@ -302,7 +348,7 @@
               </thead>
               <tbody id="kardexTable">
                 <tr>
-                  <td colspan="8" class="empty">Selecciona un SKU para consultar.</td>
+                  <td colspan="14" class="empty">Selecciona un SKU para consultar.</td>
                 </tr>
               </tbody>
             </table>
@@ -316,26 +362,30 @@
             <h2>Productos / SKUs</h2>
             <p>Catálogo preparado para <strong>vestuario, calzado, EPP, equipamiento y productos de limpieza y
                 suministros de oficina</strong>. Talla/color son opcionales; para papelería y consumibles, la variante
-              principal puede ser la presentación o contenido.</p>
+              principal puede ser la presentación o contenido. Los campos marcados con <span class="required-star">*</span>
+              son importantes y deben completarse.</p>
           </div>
         </div>
         <div class="catalog-stats">
-          <div class="catalog-stat"><span>Inventariables</span><strong id="prStatInv">0</strong><small>Prendas, calzado,
-              equipos y útiles</small></div>
-          <div class="catalog-stat"><span>Consumibles</span><strong id="prStatCons">0</strong><small>Detergente, lejía,
-              químicos y similares</small></div>
-          <div class="catalog-stat"><span>Familias</span><strong id="prStatFamilies">0</strong><small>Clasificación del
-              catálogo</small></div>
+          <button type="button" class="catalog-stat catalog-stat-action" onclick="filterProductsByNature('INVENTARIABLE')" title="Ver solo productos inventariables">
+            <span>📦 Inventariables</span><strong id="prStatInv">0</strong><small>SKUs de prendas, calzado, EPP, equipos y útiles</small>
+          </button>
+          <button type="button" class="catalog-stat catalog-stat-action" onclick="filterProductsByNature('CONSUMIBLE')" title="Ver solo productos consumibles">
+            <span>🧴 Consumibles</span><strong id="prStatCons">0</strong><small>SKUs de limpieza, químicos, papelería y suministros</small>
+          </button>
+          <button type="button" class="catalog-stat catalog-stat-action" onclick="focusProductFamilies()" title="Ver las familias utilizadas en el catálogo">
+            <span>🗂 Familias utilizadas</span><strong id="prStatFamilies">0</strong><small>Categorías que actualmente tienen productos registrados</small>
+          </button>
         </div>
         <div class="panel form-panel">
           <div class="form-kicker">1. Identificación del producto</div>
           <form id="productForm" onsubmit="submitProduct(event)">
             <input type="hidden" id="originalCodigo" name="originalCodigo">
             <div class="form-grid">
-              <label>Familia / Categoría<input id="prCategoria" list="prCategoriaList" name="categoria" class="input" placeholder="Escribe o selecciona…" required><datalist id="prCategoriaList"></datalist></label>
-              <label>Naturaleza<select id="prNaturaleza" name="naturaleza" class="input select"
+              <label>Familia / Categoría <span class="required-star">*</span><input id="prCategoria" list="prCategoriaList" name="categoria" class="input" placeholder="Escribe o selecciona…" required><datalist id="prCategoriaList"></datalist></label>
+              <label>Naturaleza <span class="required-star">*</span><select id="prNaturaleza" name="naturaleza" class="input select"
                   required></select></label>
-              <label>Tipo / Producto<input id="prTipo" list="prTipoList" name="tipo" class="input" placeholder="Escribe o selecciona…" required><datalist id="prTipoList"></datalist></label>
+              <label>Tipo / Producto <span class="required-star">*</span><input id="prTipo" list="prTipoList" name="tipo" class="input" placeholder="Escribe o selecciona…" required><datalist id="prTipoList"></datalist></label>
               <label>Modelo / Variante<input id="prModelo" name="modelo" class="input"
                   placeholder="Ej.: Institucional, Táctico, A4, Manila, Transparente…"></label>
               <label>Marca<input id="prMarca" name="marca" class="input" placeholder="Opcional"></label>
@@ -352,19 +402,30 @@
                   volumen, peso o empaque.</span></label>
               <label>Género / Corte<select id="prGenero" name="genero" class="input select" required></select></label>
               <label>Unidad de medida<input id="prUnidad" list="prUnidadList" name="unidad" class="input" placeholder="Escribe o selecciona…" required><datalist id="prUnidadList"></datalist></label>
-              <label>Condición de inventario<input id="prCondicion" list="prCondicionList" name="condicion" class="input" placeholder="Escribe o selecciona…" required><datalist id="prCondicionList"></datalist></label>
+              <label>Condición de inventario <span class="required-star">*</span><input id="prCondicion" list="prCondicionList" name="condicion" class="input" placeholder="Escribe o selecciona…" required><datalist id="prCondicionList"></datalist></label>
               <label>Ubicación física<input name="ubicacion" class="input"
                   placeholder="Ej.: Estante B3 - Caja 12"></label>
             </div>
             <div class="form-kicker">3. Parámetros de stock</div>
+            <div id="stockEditNotice" class="smart-hint" style="display:none;margin-bottom:10px">✏️ <strong>Modo edición:</strong> puedes corregir el stock. La diferencia no se cambia directamente: se registrará como un <strong>ajuste de inventario</strong> para conservar la trazabilidad en Kardex.</div>
             <div class="form-grid">
-              <label>Stock inicial<input name="stockInicial" class="input" type="number" min="0" step="0.01"
+              <label id="stockInicialWrap">Stock inicial <span class="required-star">*</span><input name="stockInicial" class="input" type="number" min="0" step="0.01"
                   value="0"></label>
-              <label>Stock mínimo<input name="stockMinimo" class="input" type="number" min="0" step="0.01"
+              <label id="stockActualWrap" style="display:none">Stock actual<input id="stockActualEdit" class="input" type="number" readonly></label>
+              <label id="stockNuevoWrap" style="display:none">Nuevo stock <span class="required-star">*</span><input id="stockNuevoEdit" name="stockNuevo" class="input" type="number" min="0" step="0.01"
+                  value="0"><span class="field-help">Si es diferente al stock actual, se generará un ajuste en Kardex.</span></label>
+              <div id="stockCorrectionPreview" class="smart-hint full" style="display:none;margin-top:-2px">
+                <strong>Vista previa de corrección</strong><br>
+                Stock actual: <strong id="stockPreviewActual">0</strong> ·
+                Nuevo stock: <strong id="stockPreviewNuevo">0</strong> ·
+                Ajuste: <strong id="stockPreviewDelta">0</strong><br>
+                Estado resultante: <strong id="stockPreviewEstado">🟢 NORMAL</strong>
+              </div>
+              <label>Stock mínimo <span class="required-star">*</span><input name="stockMinimo" class="input" type="number" min="0" step="0.01"
                   value="0"></label>
               <label>Punto de reorden<input name="puntoReorden" class="input" type="number" min="0" step="0.01"
                   value="0"></label>
-              <label>Stock máximo<input name="stockMaximo" class="input" type="number" min="0" step="0.01"
+              <label>Stock máximo <span class="required-star">*</span><input name="stockMaximo" class="input" type="number" min="0" step="0.01"
                   value="0"></label>
               <label class="full">Descripción / especificación<input name="descripcion" class="input"
                   placeholder="Material, características, tamaño, observaciones, etc."></label>
@@ -378,7 +439,7 @@
             <div id="productSmartHint" class="smart-hint">Selecciona un tipo para recibir una sugerencia de familia,
               naturaleza y unidad.</div>
             <div class="form-actions"><button type="reset" class="btn btn-secondary"
-                onclick="resetProductForm()">Limpiar</button><button type="submit" class="btn btn-primary">Crear SKU y
+                onclick="resetProductForm()">Limpiar</button><button id="productSubmitBtn" type="submit" class="btn btn-primary">Crear SKU y
                 producto</button></div>
           </form>
         </div>
@@ -389,12 +450,12 @@
                 atributo. El stock se calcula desde el Kardex.</span>
             </div>
             <div class="product-filters"><select id="productFamilyFilter" class="input select small"
-                onchange="renderProducts()">
+                onchange="onProductFilterChange()">
                 <option value="">Todas las familias</option>
-              </select><select id="productNatureFilter" class="input select small" onchange="renderProducts()">
+              </select><select id="productNatureFilter" class="input select small" onchange="onProductFilterChange()">
                 <option value="">Todas</option>
               </select><input id="productSearch" class="input small" placeholder="Buscar SKU, producto, marca, talla…"
-                oninput="renderProducts()"></div>
+                oninput="onProductFilterChange()"></div>
           </div>
           <div class="table-wrap">
             <table>
@@ -420,6 +481,7 @@
               <tbody id="productsTable"></tbody>
             </table>
           </div>
+          <div id="productsPagination" class="pagination-bar"></div>
         </div>
       </section>
     </main>
@@ -435,27 +497,16 @@
     </div>
   </div>
 
-  <!-- ── MODAL RESUMEN MOVIMIENTO ───────────────────────── -->
-  <div id="movementSummaryModal" class="modal hidden">
-    <div class="summary-modal-card">
-      <div class="summary-head">
-        <h3>📋 Resumen del movimiento</h3>
-        <button class="icon-btn" style="color:#fff" onclick="cancelMovementSummary()">×</button>
+  <div id="detailModal" class="modal hidden">
+    <div class="modal-card detail-modal-card">
+      <div class="modal-head">
+        <h3 id="detailModalTitle">Detalle</h3><button class="icon-btn" onclick="closeDetailModal()">×</button>
       </div>
-      <div class="summary-body">
-        <dl class="summary-meta" id="summaryMeta"></dl>
-        <div class="products-section-label" style="margin-bottom:8px">Productos</div>
-        <div class="summary-products" id="summaryProducts"></div>
-        <div class="summary-totals" id="summaryTotals"></div>
-        <div class="summary-actions">
-          <button class="btn btn-secondary" onclick="cancelMovementSummary()">Cancelar</button>
-          <button class="btn btn-primary" id="confirmSaveBtn" onclick="confirmSaveMovement()">Guardar movimiento</button>
-        </div>
-      </div>
+      <div id="detailModalBody"></div>
     </div>
   </div>
 
+  
   <?!= include('JavaScript'); ?>
 </body>
-
 </html>
